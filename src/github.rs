@@ -10,7 +10,7 @@ pub struct GitHub {
 
 enum AuthMethod {
     OAuthToken,
-    SSO
+    Sso
 }
 
 impl GitHub {
@@ -30,7 +30,7 @@ impl GitHub {
         Self {
             api_key: token.to_owned(),
             username: None,
-            auth_method: AuthMethod::SSO
+            auth_method: AuthMethod::Sso
         }
     }
 
