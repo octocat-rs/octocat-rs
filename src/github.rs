@@ -10,7 +10,7 @@ pub struct GitHub {
 
 enum AuthMethod {
     OAuthToken,
-    Sso
+    Sso,
 }
 
 impl GitHub {
@@ -19,7 +19,7 @@ impl GitHub {
         Self {
             api_key: token.to_owned(),
             username: Some(username.to_owned()),
-            auth_method: AuthMethod::OAuthToken
+            auth_method: AuthMethod::OAuthToken,
         }
     }
 
@@ -30,7 +30,7 @@ impl GitHub {
         Self {
             api_key: token.to_owned(),
             username: None,
-            auth_method: AuthMethod::Sso
+            auth_method: AuthMethod::Sso,
         }
     }
 
@@ -40,10 +40,12 @@ impl GitHub {
         panic::set_hook(Box::new(|msg| {
             match msg.payload().downcast_ref::<&str>() {
                 Some(msg) => error!("Panicked at: {}", msg),
-                _ => error!("Error occurred")
+                _ => error!("Error occurred"),
             }
 
-            if let Some(loc) = msg.location() { error!("Location: {}:{}:{}", loc.file(), loc.line(), loc.column()) }
+            if let Some(loc) = msg.location() {
+                error!("Location: {}:{}:{}", loc.file(), loc.line(), loc.column())
+            }
 
             process::exit(1);
         }));
