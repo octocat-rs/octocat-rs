@@ -34,6 +34,8 @@ jobs:
         with:
           name: octocat-rs
           path: |
+            target/release/basic
+            target/release/basic-sso
             target/release/liboctocat_rs.d
             target/release/liboctocat_rs.rlib
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
