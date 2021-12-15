@@ -1,14 +1,36 @@
 use std::{panic, process};
 
+/// An API client for github.
+#[allow(dead_code)]
 pub struct GitHub {
-    #[allow(dead_code)]
     api_key: String,
+    username: Option<String>,
+    auth_method: AuthMethod,
+}
+
+enum AuthMethod {
+    OAuthToken,
+    SSO
 }
 
 impl GitHub {
-    pub fn new(api_key: &str) -> Self {
+    /// Basic username + OAuth token authentication.
+    pub fn new(username: &str, token: &str) -> Self {
         Self {
-            api_key: api_key.to_owned()
+            api_key: token.to_owned(),
+            username: Some(username.to_owned()),
+            auth_method: AuthMethod::OAuthToken
+        }
+    }
+
+    /// For accessing organizations that enforce SAML SSO with a personal access token.
+    ///
+    /// Further reading: <https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso>
+    pub fn new_with_sso(token: &str) -> Self {
+        Self {
+            api_key: token.to_owned(),
+            username: None,
+            auth_method: AuthMethod::SSO
         }
     }
 
