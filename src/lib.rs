@@ -1,12 +1,8 @@
 //! A GitHub API client written in Rust.
 //!
-//! To get started, take a look at the documentation for the [`GitHub`] struct.
+//! To get started, take a look at the documentation for the [`GitHub`] trait.
 //!
-//! [`GitHub`]: crate::github::GitHub
-
-extern crate pretty_env_logger;
-#[macro_use]
-extern crate log;
+//! [`GitHub`]: crate::github::GitHubApplication
 
 pub mod github;
 

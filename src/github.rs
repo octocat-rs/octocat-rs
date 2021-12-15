@@ -1,55 +1,36 @@
-use std::{panic, process};
+use anyhow::Result;
+use async_trait::async_trait;
 
-/// An API client for github.
-#[allow(dead_code)]
-pub struct GitHub {
-    api_key: String,
-    username: Option<String>,
-    auth_method: AuthMethod,
-}
-
-enum AuthMethod {
+#[derive(Debug, Copy, Clone)]
+pub enum AuthMethod {
     OAuthToken,
     Sso,
 }
 
-impl GitHub {
+// TODO: Work out how requests will be handled; will probably be done with some sort of util module
+
+/// A trait to be implemented by you, the user.
+#[async_trait]
+pub trait GitHubApplication {
     /// Basic username + OAuth token authentication.
-    pub fn new(username: &str, token: &str) -> Self {
-        Self {
-            api_key: token.to_owned(),
-            username: Some(username.to_owned()),
-            auth_method: AuthMethod::OAuthToken,
-        }
-    }
+    fn new(username: &str, token: &str) -> Self;
 
     /// For accessing organizations that enforce SAML SSO with a personal access token.
     ///
     /// Further reading: <https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso>
-    pub fn new_with_sso(token: &str) -> Self {
-        Self {
-            api_key: token.to_owned(),
-            username: None,
-            auth_method: AuthMethod::Sso,
-        }
-    }
+    fn new_with_sso(token: &str) -> Self;
 
-    pub async fn run(&self) {
-        pretty_env_logger::init();
+    /// Helper function for getting the current authorization method.
+    fn current_auth_method(&self) -> AuthMethod;
 
-        panic::set_hook(Box::new(|msg| {
-            match msg.payload().downcast_ref::<&str>() {
-                Some(msg) => error!("Panicked at: {}", msg),
-                _ => error!("Error occurred"),
-            }
+    /// The code that is run when your application starts. Called by [`start`].
+    ///
+    /// [`start`]: GitHubApplication::start
+    async fn run(&self) -> Result<()>;
 
-            if let Some(loc) = msg.location() {
-                error!("Location: {}:{}:{}", loc.file(), loc.line(), loc.column())
-            }
-
-            process::exit(1);
-        }));
-
-        todo!()
+    // TODO: Settings interface
+    async fn start(&self) -> Result<()> {
+        // TODO: Proper logging etc
+        self.run().await
     }
 }

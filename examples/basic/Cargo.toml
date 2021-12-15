@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 tokio = { version = "1", features = ["full"] }
 octocat-rs = { path = "../../" }
+async-trait = "0.1.52"
+anyhow = "1.0.51"
+reqwest = "0.11.7"
