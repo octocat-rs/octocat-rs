@@ -1,40 +1,28 @@
 [package]
-name = "octocat-rs"
-version = "0.0.0"
-edition = "2021"
-authors = ["Proudmuslim <proudmuslim-dev@protonmail.com>", "Tricked <tricked@duck.com>"]
-license = "MIT"
-description = """
-(WIP) A GitHub API client.
-"""
+name = "octocat-wasm-playground"
+version = "0.1.0"
+authors = ["Proudmuslim <proudmuslim-dev@protonmail.com>"]
+edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook"]
 
 [dependencies]
-## Async
-tokio = { version = "1", features = ["full"] }
-futures = "0.3"
-
-## Serialization/Deserialization
-serde_with = { version = "1.10.0", features = ["json", "macros"] }
+cfg-if = "0.1.2"
+worker = "0.0.9"
+serde_json = "1.0.67"
+strum = { version = "0.24", features = ["derive"] }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1.0"
 
-## Error Handling
-thiserror = "1.0.30"
-anyhow = "1.0.51"
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.1", optional = true }
 
-## Logging
-pretty_env_logger = "0.4"
-log = "0.4"
-
-## Util
-lazy_static = "1.4.0"
-strum_macros = "0.23"
-strum = "0.23.0"
-reqwest = "0.11"
-
-[workspace]
-members = [
-    "examples/basic"
-]
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"
