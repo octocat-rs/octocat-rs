@@ -33,7 +33,7 @@ log = "0.4"
 lazy_static = "1.4.0"
 strum_macros = "0.23"
 strum = "0.23.0"
-reqwest = "0.11"
+reqwest = "0.11.7"
 
 [workspace]
 members = [
