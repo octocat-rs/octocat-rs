@@ -1,0 +1,4 @@
+# Run cargo +nightly fmt
+max_width = 80
+comment_width = 80
+wrap_comments = true

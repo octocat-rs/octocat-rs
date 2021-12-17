@@ -1,31 +1,44 @@
 use reqwest::{
-    header::{HeaderMap, USER_AGENT},
+    header::{HeaderMap, AUTHORIZATION, USER_AGENT},
     RequestBuilder,
 };
 
 use anyhow::Result;
 use async_trait::async_trait;
 
-/// Used to represent the current [authorization method](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication).
+/// A simple, pre-made implementation of [`GitHubApplication`] for personal
+/// access tokens.
+pub struct GitHubPersonalClient {
+    client: reqwest::Client,
+    auth: Authorization,
+}
+
+/// Used to hold the credentials for [`GitHubPersonalClient`].
 #[derive(Debug, Clone)]
 pub enum Authorization {
     Personal {
         username: String,
         access_token: String,
     },
-    OAuth(String),
-    Sso(String),
 }
-
-/// A simple implementation of [`GitHubApplication`], intended for use in small applications.
-pub struct GitHub {
-    client: reqwest::Client,
-    auth: Authorization,
-}
-
 #[async_trait]
-impl GitHubApplication for GitHub {
-    fn new(username: &str, access_token: &str) -> Self {
+impl GitHubApplication for GitHubPersonalClient {
+    async fn run(&self) -> Result<()> {
+        let res = self
+            .http_request(self.client.get("https://api.github.com/user"))
+            .send()
+            .await?
+            .text()
+            .await?;
+
+        dbg!(res);
+        todo!()
+    }
+}
+
+impl GitHubPersonalClient {
+    /// Basic username + personal access token authentication.
+    pub fn new(username: &str, access_token: &str) -> Self {
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mr. Wu Han".parse().unwrap()); // I'm a comedian
 
@@ -43,56 +56,53 @@ impl GitHubApplication for GitHub {
         }
     }
 
-    fn new_with_sso(_token: &str) -> Self {
-        todo!()
-    }
-
-    fn current_auth_method(&self) -> Authorization {
-        todo!()
-    }
-
-    fn http_request(&self, builder: RequestBuilder) -> RequestBuilder {
+    /// Wrapper function for getting an HTTP client; GitHub API requires the
+    /// user agent header to be set.
+    pub fn http_request(&self, builder: RequestBuilder) -> RequestBuilder {
         match self.auth.clone() {
             Authorization::Personal {
                 username,
                 access_token,
             } => builder.basic_auth(username, Some(access_token)),
-            _ => todo!(),
         }
     }
+}
 
+/// An implementation of [`GitHubApplication`] for accessing organizations that
+/// enforce SAML SSO with a personal access token.
+///
+/// Further reading: <https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso>
+pub struct GitHubSsoClient {
+    client: reqwest::Client,
+}
+
+#[async_trait]
+impl GitHubApplication for GitHubSsoClient {
     async fn run(&self) -> Result<()> {
-        let res = self
-            .http_request(self.client.get("https://api.github.com/user"))
-            .send()
-            .await?
-            .text()
-            .await?;
-
-        dbg!(res);
         todo!()
     }
 }
 
-// TODO: Work out how requests will be handled; will probably be done with some sort of util module
+impl GitHubSsoClient {
+    pub fn new(token: &str) -> Self {
+        let token = format!("token {}", token);
 
+        let mut headers = HeaderMap::new();
+        headers.insert(AUTHORIZATION, token.parse().unwrap());
+
+        Self {
+            client: reqwest::ClientBuilder::new()
+                .default_headers(headers)
+                .build()
+                .unwrap(),
+        }
+    }
+}
+
+// TODO: Shared request methods
 /// A trait to be implemented by you, the user.
 #[async_trait]
 pub trait GitHubApplication {
-    /// Basic username + OAuth token authentication.
-    fn new(username: &str, token: &str) -> Self;
-
-    /// For accessing organizations that enforce SAML SSO with a personal access token.
-    ///
-    /// Further reading: <https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso>
-    fn new_with_sso(token: &str) -> Self;
-
-    /// Helper function for getting the current authorization method.
-    fn current_auth_method(&self) -> Authorization;
-
-    /// Wrapper function for getting an HTTP client; GitHub API requires the user agent header to be set.
-    fn http_request(&self, builder: reqwest::RequestBuilder) -> reqwest::RequestBuilder;
-
     /// The code that is run when your application starts. Called by [`start`].
     ///
     /// [`start`]: GitHubApplication::start
