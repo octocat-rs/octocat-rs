@@ -1,5 +1,5 @@
 use reqwest::{
-    header::{HeaderMap, AUTHORIZATION, USER_AGENT},
+    header::{HeaderMap, USER_AGENT},
     RequestBuilder,
 };
 
@@ -8,12 +8,12 @@ use async_trait::async_trait;
 
 /// A simple, pre-made implementation of [`GitHubApplication`] for personal
 /// access tokens.
-pub struct GitHubPersonalClient {
+pub struct PersonalClient {
     client: reqwest::Client,
     auth: Authorization,
 }
 
-/// Used to hold the credentials for [`GitHubPersonalClient`].
+/// Used to hold the credentials for [`PersonalClient`].
 #[derive(Debug, Clone)]
 pub enum Authorization {
     Personal {
@@ -22,7 +22,7 @@ pub enum Authorization {
     },
 }
 #[async_trait]
-impl GitHubApplication for GitHubPersonalClient {
+impl GitHubApplication for PersonalClient {
     async fn run(&self) -> Result<()> {
         let res = self
             .http_request(self.client.get("https://api.github.com/user"))
@@ -36,7 +36,7 @@ impl GitHubApplication for GitHubPersonalClient {
     }
 }
 
-impl GitHubPersonalClient {
+impl PersonalClient {
     /// Basic username + personal access token authentication.
     pub fn new(username: &str, access_token: &str) -> Self {
         let mut headers = HeaderMap::new();
@@ -64,37 +64,6 @@ impl GitHubPersonalClient {
                 username,
                 access_token,
             } => builder.basic_auth(username, Some(access_token)),
-        }
-    }
-}
-
-/// An implementation of [`GitHubApplication`] for accessing organizations that
-/// enforce SAML SSO with a personal access token.
-///
-/// Further reading: <https://docs.github.com/en/rest/overview/other-authentication-methods#authenticating-for-saml-sso>
-pub struct GitHubSsoClient {
-    client: reqwest::Client,
-}
-
-#[async_trait]
-impl GitHubApplication for GitHubSsoClient {
-    async fn run(&self) -> Result<()> {
-        todo!()
-    }
-}
-
-impl GitHubSsoClient {
-    pub fn new(token: &str) -> Self {
-        let token = format!("token {}", token);
-
-        let mut headers = HeaderMap::new();
-        headers.insert(AUTHORIZATION, token.parse().unwrap());
-
-        Self {
-            client: reqwest::ClientBuilder::new()
-                .default_headers(headers)
-                .build()
-                .unwrap(),
         }
     }
 }

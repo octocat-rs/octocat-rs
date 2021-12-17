@@ -6,14 +6,11 @@
 //!
 //! * [`GitHubPersonalClient`]
 //!    - For authenticating with your username + personal access token.
-//! * [`GitHubSsoClient`]
-//!    - For accessing organizations that enforce SAML SSO.
 //! * [`GitHubApplication`]
 //!     - This trait is implemented by all clients, and can be used if you want
 //!       to build your own from scratch using Octocat.
 //!
 //! [`GitHubPersonalClient`]: crate::github::GitHubPersonalClient
-//! [`GitHubSsoClient`]: crate::github::GitHubSsoClient
 //! [`GitHubApplication`]: crate::github::GitHubApplication
 
 pub mod github;
