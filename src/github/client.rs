@@ -3,6 +3,7 @@ use reqwest::{
     RequestBuilder,
 };
 
+use crate::github::{traits::GitHubApplication, Authorization};
 use anyhow::Result;
 use async_trait::async_trait;
 
@@ -13,14 +14,6 @@ pub struct PersonalClient {
     auth: Authorization,
 }
 
-/// Used to hold the credentials for [`PersonalClient`].
-#[derive(Debug, Clone)]
-pub enum Authorization {
-    Personal {
-        username: String,
-        access_token: String,
-    },
-}
 #[async_trait]
 impl GitHubApplication for PersonalClient {
     async fn run(&self) -> Result<()> {
@@ -65,21 +58,5 @@ impl PersonalClient {
                 access_token,
             } => builder.basic_auth(username, Some(access_token)),
         }
-    }
-}
-
-// TODO: Shared request methods
-/// A trait to be implemented by you, the user.
-#[async_trait]
-pub trait GitHubApplication {
-    /// The code that is run when your application starts. Called by [`start`].
-    ///
-    /// [`start`]: GitHubApplication::start
-    async fn run(&self) -> Result<()>;
-
-    // TODO: Settings interface
-    async fn start(&self) -> Result<()> {
-        // TODO: Proper logging etc
-        self.run().await
     }
 }
