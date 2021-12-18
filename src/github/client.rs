@@ -35,10 +35,7 @@ impl PersonalClient {
         let mut headers = HeaderMap::new();
         headers.insert(USER_AGENT, "Mr. Wu Han".parse().unwrap()); // I'm a comedian
 
-        let client = reqwest::Client::builder()
-            .default_headers(headers)
-            .build()
-            .unwrap();
+        let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
 
         Self {
             client,
@@ -53,10 +50,7 @@ impl PersonalClient {
     /// user agent header to be set.
     pub fn http_request(&self, builder: RequestBuilder) -> RequestBuilder {
         match self.auth.clone() {
-            Authorization::Personal {
-                username,
-                access_token,
-            } => builder.basic_auth(username, Some(access_token)),
+            Authorization::Personal { username, access_token } => builder.basic_auth(username, Some(access_token)),
         }
     }
 }

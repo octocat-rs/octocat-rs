@@ -14,10 +14,7 @@ pub enum Authentication {
 /// Used to hold the credentials for [`PersonalClient`].
 #[derive(Debug, Clone)]
 pub enum Authorization {
-    Personal {
-        username: String,
-        access_token: String,
-    },
+    Personal { username: String, access_token: String },
 }
 
 /// This struct contains code adapted from the [`Command`](https://github.com/iced-rs/iced/blob/0.3/futures/src/command.rs) struct written in the [iced](https://github.com/iced-rs/iced) library. It is currently nearly identical to the aforementioned struct, however more modifications will be made to fit our needs with time.
@@ -45,10 +42,7 @@ impl<T> Command<T> {
     }
 
     #[allow(clippy::redundant_closure)]
-    pub fn map<A>(
-        mut self,
-        f: impl Fn(T) -> A + 'static + Send + Sync,
-    ) -> Command<A>
+    pub fn map<A>(mut self, f: impl Fn(T) -> A + 'static + Send + Sync) -> Command<A>
     where
         T: 'static,
     {
@@ -61,16 +55,13 @@ impl<T> Command<T> {
                 .map(|future| {
                     let f = f.clone();
 
-                    Box::pin(future.map(move |result| f(result)))
-                        as BoxFuture<A>
+                    Box::pin(future.map(move |result| f(result))) as BoxFuture<A>
                 })
                 .collect(),
         }
     }
 
-    pub fn perform_many(
-        commands: impl IntoIterator<Item = Command<T>>,
-    ) -> Self {
+    pub fn perform_many(commands: impl IntoIterator<Item = Command<T>>) -> Self {
         Self {
             to_be_performed: commands
                 .into_iter()

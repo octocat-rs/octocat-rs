@@ -33,10 +33,7 @@ impl<T> PersonalClientBuilder<T> {
                 handler,
                 credentials: None,
             },
-            Config::Configured { credentials, .. } => Config::Configured {
-                handler,
-                credentials,
-            },
+            Config::Configured { credentials, .. } => Config::Configured { handler, credentials },
         };
 
         Self { config }
@@ -50,10 +47,7 @@ impl<T> PersonalClientBuilder<T> {
                 handler: None,
                 credentials,
             },
-            Config::Configured { handler, .. } => Config::Configured {
-                handler,
-                credentials,
-            },
+            Config::Configured { handler, .. } => Config::Configured { handler, credentials },
         };
 
         Self { config }

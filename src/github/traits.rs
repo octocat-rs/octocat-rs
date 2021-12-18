@@ -29,6 +29,5 @@ pub trait Handler {
     fn webhook_url(&self) -> &str;
 
     // Example
-    async fn comment_reaction_received(&self)
-        -> github::Command<Self::Message>;
+    async fn comment_reaction_received(&self) -> github::Command<Self::Message>;
 }
