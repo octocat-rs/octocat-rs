@@ -1,61 +1,76 @@
-use crate::github::traits::Handler;
+use crate::github::{handler::EventHandler, util::Authorization, Client};
 
-type EventHandler<T> = Box<dyn Handler<Message = T>>;
-
-#[derive(Default)]
-pub struct PersonalClientBuilder<T> {
-    config: Config<T>,
-}
-
-pub enum Config<T> {
+/// A builder for [`Client`]
+pub enum ClientBuilder<T>
+where
+    T: std::fmt::Debug + EventHandler,
+{
     Unconfigured,
     Configured {
-        handler: Option<EventHandler<T>>,
-        credentials: Option<Credentials>,
+        handler: Option<T>,
+        auth: Option<Authorization>,
     },
 }
 
-pub enum Credentials {
-    File(String),
-}
-
-impl<T> PersonalClientBuilder<T> {
+impl<T> ClientBuilder<T>
+where
+    T: std::fmt::Debug + EventHandler + Send,
+{
+    /// Creates a new [`ClientBuilder`]
     pub fn new() -> Self {
-        Self {
-            config: Config::default(),
+        Self::Unconfigured
+    }
+
+    /// Adds an [`EventHandler`] to the current builder.
+    pub fn event_handler(self, event_handler: T) -> Self {
+        match self {
+            ClientBuilder::Unconfigured => ClientBuilder::Configured {
+                handler: Some(event_handler),
+                auth: None,
+            },
+            ClientBuilder::Configured { auth, .. } => ClientBuilder::Configured {
+                auth,
+                handler: Some(event_handler),
+            },
         }
     }
 
-    pub fn event_handler(self, event_handler: EventHandler<T>) -> Self {
-        let handler = Some(event_handler);
-        let config = match self.config {
-            Config::Unconfigured => Config::Configured {
-                handler,
-                credentials: None,
-            },
-            Config::Configured { credentials, .. } => Config::Configured { handler, credentials },
-        };
-
-        Self { config }
+    /// Adds an [`Authorization`] instance to the current builder using input
+    /// from a file.
+    #[allow(unused_variables)]
+    pub fn credentials_file(self, file: &str) -> Self {
+        todo!("This logic is a little annoying so I won't write it just yet")
     }
 
-    pub fn credentials_file(self, file: &str) -> Self {
-        let credentials = Some(Credentials::File(file.to_owned()));
+    /// Adds an [`Authorization`] instance to the current builder using input
+    /// from an environment variable.
+    #[allow(unused_variables)]
+    pub fn credentials_env_var(self, username_var: &str, token_var: &str) -> Self {
+        todo!("This logic is a little annoying so I won't write it just yet");
+        todo!("Expand this method once other auth methods are supported")
+    }
 
-        let config = match self.config {
-            Config::Unconfigured => Config::Configured {
-                handler: None,
-                credentials,
-            },
-            Config::Configured { handler, .. } => Config::Configured { handler, credentials },
-        };
+    /// Adds an [`Authorization`] instance to the current builder.
+    pub fn personal_auth(self, username: String, token: String) -> Self {
+        let auth = Some(Authorization::PersonalToken { username, token });
+        match self {
+            ClientBuilder::Unconfigured => ClientBuilder::Configured { handler: None, auth },
+            ClientBuilder::Configured { handler, .. } => ClientBuilder::Configured { handler, auth },
+        }
+    }
 
-        Self { config }
+    /// Builds the current builder. In other words, this turns a
+    /// [`ClientBuilder`] into a [`Client`]
+    pub fn build(self) -> Client<T> {
+        todo!("Actually let the builder build")
     }
 }
 
-impl<T> Default for Config<T> {
+impl<T> Default for ClientBuilder<T>
+where
+    T: std::fmt::Debug + EventHandler + Send,
+{
     fn default() -> Self {
-        Self::Unconfigured
+        Self::new()
     }
 }
