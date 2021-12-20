@@ -2,6 +2,7 @@ use futures::future;
 
 pub type BoxFuture<T> = future::BoxFuture<'static, T>;
 
+#[allow(dead_code)]
 pub struct Command<T>
 where
     T: std::fmt::Debug + Send,

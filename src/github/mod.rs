@@ -14,10 +14,15 @@ pub mod util;
 mod tests {
     use async_trait::async_trait;
 
-    use crate::github::{command::Command, handler::EventHandler, ClientBuilder};
+    use crate::github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler};
 
     #[test]
-    fn testing() {
+    fn default_everything() {
+        let _client = ClientBuilder::build_unconfigured();
+    }
+
+    #[test]
+    fn custom_handler() {
         #[derive(Debug)]
         struct Handler;
 
@@ -25,8 +30,8 @@ mod tests {
         impl EventHandler for Handler {
             type Message = ();
 
-            fn webhook_url(&self) -> &str {
-                unimplemented!()
+            fn webhook_url(&self) -> Option<&str> {
+                None
             }
 
             async fn comment_reaction_received(&self) -> Command<Self::Message> {
@@ -34,6 +39,13 @@ mod tests {
             }
         }
 
-        let _builder = ClientBuilder::new().event_handler(Handler);
+        let _client = ClientBuilder::new().event_handler(Handler).build().unwrap();
+    }
+
+    #[test]
+    fn auth_no_handler() {
+        let _client = ClientBuilder::<DefaultEventHandler>::new()
+            .personal_auth("", "")
+            .build_no_handler();
     }
 }
