@@ -1,6 +1,6 @@
 //! A GitHub API client written in Rust.
 //!
-//! Getting started? Take a look at the [examples](https://github.com/proudmuslim-dev/octocat-rs/tree/main/examples) folder in the project repository!
+//! Getting started? Take a look at the [examples](https://github.com/octocat-rs/octocat-rs/tree/main/examples) folder in the project repository!
 
 pub mod github;
 
