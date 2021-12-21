@@ -3,7 +3,8 @@ use async_trait::async_trait;
 use crate::github::command::Command;
 
 /// An event handler that is used in all clients. For end users, this is passed
-/// to [`ClientBuilder`] when creating the client in your main function.
+/// to a [`ClientBuilder`] instance when creating the client in your main
+/// function.
 ///
 /// [`ClientBuilder`]: crate::github::ClientBuilder
 #[async_trait]

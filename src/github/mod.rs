@@ -12,17 +12,48 @@ pub mod util;
 
 #[cfg(test)]
 mod tests {
+    use anyhow::Result;
     use async_trait::async_trait;
 
-    use crate::github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler};
+    use crate::github::{
+        client::GitHubClient, command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler,
+    };
 
     #[test]
     fn default_everything() {
         let _client = ClientBuilder::build_unconfigured();
     }
 
-    #[test]
-    fn custom_handler() {
+    #[tokio::test]
+    async fn standard() -> Result<()> {
+        #[derive(Debug)]
+        struct Handler {}
+
+        #[async_trait]
+        impl EventHandler for Handler {
+            type Message = ();
+
+            fn webhook_url(&self) -> Option<&str> {
+                Some("https://example.com/hook")
+            }
+
+            // Default behavior for all paths
+            async fn comment_reaction_received(&self) -> Command<Self::Message> {
+                Command::none()
+            }
+        }
+
+        ClientBuilder::new()
+            .event_handler(Handler {})
+            .credentials_file("octocat.toml") // Currently fails, I'll fix it soon™
+            .build()
+            .unwrap()
+            .start()
+            .await
+    }
+
+    #[tokio::test]
+    async fn custom_handler() {
         #[derive(Debug)]
         struct Handler;
 
@@ -39,7 +70,12 @@ mod tests {
             }
         }
 
-        let _client = ClientBuilder::new().event_handler(Handler).build().unwrap();
+        let _client = ClientBuilder::new()
+            .event_handler(Handler)
+            .build()
+            .unwrap()
+            .start()
+            .await;
     }
 
     #[test]

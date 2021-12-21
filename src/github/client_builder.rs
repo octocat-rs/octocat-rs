@@ -1,11 +1,16 @@
+use std::{
+    fs::File,
+    io::{prelude::*, BufReader},
+};
+
 use anyhow::{Error, Result};
 
-use crate::github::{handler::EventHandler, util::Authorization, BuildError, Client, DefaultEventHandler};
+use crate::github::{handler::EventHandler, util::*, Client, DefaultEventHandler};
 
 /// A builder for [`Client`]
 pub enum ClientBuilder<T>
 where
-    T: std::fmt::Debug + EventHandler,
+    T: std::fmt::Debug + EventHandler + Send,
 {
     Unconfigured,
     Configured {
@@ -39,16 +44,31 @@ where
 
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from a file.
-    #[allow(unused_variables)]
     pub fn credentials_file(self, file: &str) -> Self {
-        todo!("This logic is a little annoying so I won't write it just yet")
+        let f = File::open(file).unwrap_or_else(|e| panic!("{}", e));
+        let mut buf_reader = BufReader::new(f);
+        let mut contents = "".to_owned();
+
+        buf_reader
+            .read_to_string(&mut contents)
+            .expect("ClientBuilder: Reading file");
+
+        let auth: Option<Authorization> = Some(
+            toml::from_str::<OctocatConfig>(contents.as_str())
+                .expect("ClientBuilder: Parsing config file")
+                .to_personal_auth(),
+        );
+
+        match self {
+            ClientBuilder::Unconfigured => ClientBuilder::Configured { handler: None, auth },
+            ClientBuilder::Configured { handler, .. } => ClientBuilder::Configured { handler, auth },
+        }
     }
 
     // TODO: Minimize code duplication, other cleanup
 
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from an environment variable.
-    #[allow(unused_variables)]
     pub fn credentials_env_var(self, username_var: &str, token_var: &str) -> Self {
         let username = match std::env::var(username_var) {
             Ok(u) => u,
@@ -74,6 +94,7 @@ where
             username: username.to_owned(),
             token: token.to_owned(),
         });
+
         match self {
             ClientBuilder::Unconfigured => ClientBuilder::Configured { handler: None, auth },
             ClientBuilder::Configured { handler, .. } => ClientBuilder::Configured { handler, auth },

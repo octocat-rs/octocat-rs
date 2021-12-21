@@ -1,4 +1,26 @@
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
+
+/// Used to represent the default Octocat configuration file format.
+///
+/// ```toml
+/// username = "USERNAME"
+/// access_token = "TOKEN"
+/// ```
+#[derive(Serialize, Deserialize)]
+pub struct OctocatConfig {
+    username: String,
+    access_token: String,
+}
+
+impl OctocatConfig {
+    pub fn to_personal_auth(self) -> Authorization {
+        Authorization::PersonalToken {
+            username: self.username,
+            token: self.access_token,
+        }
+    }
+}
 
 /// Used in [`Client`] to represent the authorization method
 ///
@@ -10,8 +32,8 @@ pub enum Authorization {
 impl Default for Authorization {
     fn default() -> Self {
         Authorization::PersonalToken {
-            username: String::new(),
-            token: String::new(),
+            username: "".to_owned(),
+            token: "".to_owned(),
         }
     }
 }
