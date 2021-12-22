@@ -11,6 +11,10 @@ description = """
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+## GitHub
+github-rest = { git = "https://github.com/octocat-rs/github-rest" }
+github-api = { git = "https://github.com/octocat-rs/github-api" }
+
 ## Async
 tokio = { version = "1", features = ["full"] }
 async-trait = "0.1.52"
@@ -33,7 +37,7 @@ log = "0.4"
 ## Util
 lazy_static = "1.4.0"
 strum_macros = "0.23"
-reqwest = "0.11.7"
+reqwest = "^0.11.8"
 strum = "0.23.0"
 
 [workspace]
