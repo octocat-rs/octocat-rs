@@ -1,9 +1,11 @@
-use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler};
 use anyhow::Result;
 use async_trait::async_trait;
 
+use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
+
 #[async_trait]
 pub trait GitHubClient {
+    /// The code that the implementer wants to be run at startup.
     async fn run(&self) -> Result<()>;
 
     async fn start(&self) -> Result<()> {
@@ -20,7 +22,7 @@ where
     T: std::fmt::Debug + EventHandler + Send,
 {
     handler: T,
-    authorization: Authorization,
+    http_client: HttpClient,
 }
 
 #[async_trait]
@@ -37,17 +39,19 @@ impl<T> Client<T>
 where
     T: std::fmt::Debug + EventHandler + Send,
 {
+    /// Creates a new [`Client`].
     pub fn new(handler: T, auth: Authorization) -> Self {
         Self {
             handler,
-            authorization: auth,
+            http_client: HttpClient::new(auth),
         }
     }
 
+    /// Updates the authorization parameter in the current [`Client`] instance.
     pub fn set_auth(self, auth: Authorization) -> Self {
         Self {
             handler: self.handler,
-            authorization: auth,
+            http_client: HttpClient::new(auth),
         }
     }
 }
@@ -56,7 +60,7 @@ impl Default for Client<DefaultEventHandler> {
     fn default() -> Client<DefaultEventHandler> {
         Client {
             handler: DefaultEventHandler,
-            authorization: Authorization::default(),
+            http_client: HttpClient::new(Authorization::default()),
         }
     }
 }

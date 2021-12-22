@@ -2,12 +2,14 @@ pub use client::*;
 pub use client_builder::*;
 pub use command::*;
 pub use handler::*;
+pub use http::*;
 pub use util::*;
 
 pub mod client;
 pub mod client_builder;
 pub mod command;
 pub mod handler;
+pub mod http;
 pub mod util;
 
 #[cfg(test)]
@@ -45,7 +47,7 @@ mod tests {
 
         ClientBuilder::new()
             .event_handler(Handler {})
-            .credentials_file("octocat.toml") // Currently fails, I'll fix it soon™
+            .credentials_file("examples/octocat.example.toml")
             .build()
             .unwrap()
             .start()

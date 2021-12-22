@@ -25,6 +25,7 @@ impl OctocatConfig {
 /// Used in [`Client`] to represent the authorization method
 ///
 /// [`Client`]: crate::github::Client
+#[derive(Clone)]
 pub enum Authorization {
     PersonalToken { username: String, token: String },
 }
