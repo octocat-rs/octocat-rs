@@ -14,6 +14,8 @@ pub struct OctocatConfig {
 }
 
 impl OctocatConfig {
+    /// Converts the current [`OctocatConfig`] instance into an
+    /// [`Authorization`] instance.
     pub fn to_personal_auth(self) -> Authorization {
         Authorization::PersonalToken {
             username: self.username,
