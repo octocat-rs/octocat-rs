@@ -12,8 +12,8 @@ description = """
 
 [dependencies]
 ## GitHub
-github-rest = { git = "https://github.com/octocat-rs/github-rest" }
-github-api = { git = "https://github.com/octocat-rs/github-api" }
+github-rest = { git = "https://github.com/octocat-rs/github-rest", rev = "67ee66c" }
+github-api = { git = "https://github.com/octocat-rs/github-api", rev = "6863a23" }
 
 ## Async
 tokio = { version = "1", features = ["full"] }
@@ -22,8 +22,8 @@ futures = "0.3"
 
 ## Serialization/Deserialization
 serde_with = { version = "1.10.0", features = ["json", "macros"] }
-serde = { version = "1", features = ["derive"] }
-serde_json = "1.0"
+serde = { version = "^1", features = ["derive"] }
+serde_json = "^1"
 toml = "0.5.8"
 
 ## Error Handling
