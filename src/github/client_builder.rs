@@ -108,7 +108,6 @@ where
             ClientBuilder::Unconfigured => Err(Error::from(BuildError::NotConfigured)),
             ClientBuilder::Configured { handler, auth } => {
                 let handler = handler.unwrap();
-                let auth = auth.unwrap_or_default();
                 Ok(Client::<T>::new(handler, auth))
             }
         }

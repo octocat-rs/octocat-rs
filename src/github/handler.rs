@@ -12,6 +12,7 @@ pub trait EventHandler {
     type Message: std::fmt::Debug + Send;
 
     /// Utility function for getting the current webhook URL.
+    // TODO: Decide on other methods of receiving updates
     fn webhook_url(&self) -> Option<&str>;
 
     /// Example function for what events may look like

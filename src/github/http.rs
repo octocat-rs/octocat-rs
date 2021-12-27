@@ -1,4 +1,3 @@
-use crate::github::Authorization;
 use async_trait::async_trait;
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -12,16 +11,20 @@ use reqwest::{
 use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
 
+use crate::github::Authorization;
+
 /// An implementor of the [`Requester`] trait.
 ///
 /// [`Requester`]: github_rest::Requester
 pub struct HttpClient {
     client: reqwest::Client,
-    auth: Authorization,
+    auth: Option<Authorization>,
 }
 
 impl HttpClient {
-    pub fn new(auth: Authorization) -> Self {
+    // TODO: Allow setting custom UA (will require refactoring outside of this
+    // module)
+    pub fn new(auth: Option<Authorization>) -> Self {
         let mut headers = HeaderMap::new();
         headers.insert(header::USER_AGENT, HeaderValue::from_str("Octocat-rs").unwrap());
         headers.insert(
@@ -39,15 +42,24 @@ impl HttpClient {
         }
     }
 
-    fn http_client(&self, req: RequestBuilder) -> RequestBuilder {
-        match &self.auth {
-            Authorization::PersonalToken { username, token } => req.basic_auth(username, Some(token)),
+    pub fn set_auth(&mut self, auth: Authorization) {
+        self.auth = Some(auth);
+    }
+
+    fn auth_headers(&self, req: RequestBuilder) -> RequestBuilder {
+        if let Some(auth) = &self.auth {
+            match auth {
+                Authorization::PersonalToken { username, token } => req.basic_auth(username, Some(token)),
+            }
+        } else {
+            req
         }
     }
 }
 
 #[async_trait]
 impl github_rest::Requester for HttpClient {
+    /// Returns the API response as a [`String`].
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + Send + Sync,
@@ -56,11 +68,11 @@ impl github_rest::Requester for HttpClient {
         let path = format!("https://api.github.com{}", url.path());
 
         let mut req = match url.method() {
-            Methods::Get => self.http_client(self.client.get(path)),
-            Methods::Post => self.http_client(self.client.post(path)),
-            Methods::Put => self.http_client(self.client.put(path)),
-            Methods::Patch => self.http_client(self.client.patch(path)),
-            Methods::Delete => self.http_client(self.client.delete(path)),
+            Methods::Get => self.auth_headers(self.client.get(path)),
+            Methods::Post => self.auth_headers(self.client.post(path)),
+            Methods::Put => self.auth_headers(self.client.put(path)),
+            Methods::Patch => self.auth_headers(self.client.patch(path)),
+            Methods::Delete => self.auth_headers(self.client.delete(path)),
         };
 
         if let Some(query) = query {
