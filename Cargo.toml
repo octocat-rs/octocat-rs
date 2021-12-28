@@ -12,7 +12,7 @@ description = """
 
 [dependencies]
 ## GitHub
-github-rest = { git = "https://github.com/octocat-rs/github-rest", rev = "6e2dd8b" }
+github-rest = { git = "https://github.com/octocat-rs/github-rest", rev = "3a7f9e4" }
 github-api = { git = "https://github.com/octocat-rs/github-api", rev = "6863a23" }
 
 ## Async
