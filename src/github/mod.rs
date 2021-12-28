@@ -54,36 +54,9 @@ mod tests {
             .await
     }
 
-    #[tokio::test]
-    async fn custom_handler() {
-        #[derive(Debug)]
-        struct Handler;
-
-        #[async_trait]
-        impl EventHandler for Handler {
-            type Message = ();
-
-            fn webhook_url(&self) -> Option<&str> {
-                None
-            }
-
-            async fn comment_reaction_received(&self) -> Command<Self::Message> {
-                Command::none()
-            }
-        }
-
-        let _client = ClientBuilder::new()
-            .event_handler(Handler)
-            .build()
-            .unwrap()
-            .start()
-            .await;
-    }
-
     #[test]
-    fn auth_no_handler() {
+    fn no_auth_no_handler() {
         let _client = ClientBuilder::<DefaultEventHandler>::new()
-            .personal_auth("", "")
             .build_no_handler();
     }
 }
