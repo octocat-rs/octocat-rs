@@ -7,8 +7,6 @@ use futures::{
 
 pub type BoxFuture<T> = future::BoxFuture<'static, T>;
 
-// TODO: Complete this
-
 /// This struct contains code adapted from the [`Command`](https://github.com/iced-rs/iced/blob/0.3/futures/src/command.rs) struct written in the [iced](https://github.com/iced-rs/iced) library. It is currently identical to the aforementioned struct, however modifications will be made to fit our needs with time.
 ///
 /// Kudos to Hecrj for his awesome system- I don't know where I'd be without it
@@ -74,5 +72,17 @@ where
     /// Drops the current [`Command`] instance and returns its futures.
     pub fn into_futures(self) -> Vec<BoxFuture<T>> {
         self.to_be_performed
+    }
+}
+
+impl<T, A> From<A> for Command<T>
+where
+    A: Future<Output = T> + Send + 'static,
+    T: Debug + Send,
+{
+    fn from(future: A) -> Self {
+        Self {
+            to_be_performed: vec![future.boxed()],
+        }
     }
 }

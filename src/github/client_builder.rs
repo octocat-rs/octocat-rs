@@ -16,8 +16,12 @@ where
     Configured {
         handler: Option<T>,
         auth: Option<Authorization>,
+        user_agent: Option<String>,
     },
 }
+
+// TODO: Figure out how to make this better, it's garbage...
+// Might move it to a struct since everything would be much cleaner that way
 
 impl<T> ClientBuilder<T>
 where
@@ -34,10 +38,34 @@ where
             ClientBuilder::Unconfigured => ClientBuilder::Configured {
                 handler: Some(event_handler),
                 auth: None,
+                user_agent: None,
             },
-            ClientBuilder::Configured { auth, .. } => ClientBuilder::Configured {
-                auth,
+            ClientBuilder::Configured { auth, user_agent, .. } => ClientBuilder::Configured {
                 handler: Some(event_handler),
+                auth,
+                user_agent,
+            },
+        }
+    }
+
+    /// Sets a custom user agent for your application. Default is "Octocat-rs".
+    ///
+    /// See also: [`HttpClient::set_ua`]
+    ///
+    /// [`HttpClient::set_ua`]: crate::github::HttpClient::set_ua
+    pub fn user_agent(self, user_agent: String) -> Self {
+        let user_agent = Some(user_agent);
+
+        match self {
+            ClientBuilder::Unconfigured => ClientBuilder::Configured {
+                handler: None,
+                auth: None,
+                user_agent,
+            },
+            ClientBuilder::Configured { handler, auth, .. } => ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
             },
         }
     }
@@ -60,12 +88,20 @@ where
         );
 
         match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured { handler: None, auth },
-            ClientBuilder::Configured { handler, .. } => ClientBuilder::Configured { handler, auth },
+            ClientBuilder::Unconfigured => ClientBuilder::Configured {
+                handler: None,
+                auth,
+                user_agent: None,
+            },
+            ClientBuilder::Configured {
+                handler, user_agent, ..
+            } => ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
+            },
         }
     }
-
-    // TODO: Minimize code duplication, other cleanup
 
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from an environment variable.
@@ -83,8 +119,18 @@ where
         let auth = Some(Authorization::PersonalToken { username, token });
 
         match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured { handler: None, auth },
-            ClientBuilder::Configured { handler, .. } => ClientBuilder::Configured { handler, auth },
+            ClientBuilder::Unconfigured => ClientBuilder::Configured {
+                handler: None,
+                auth,
+                user_agent: None,
+            },
+            ClientBuilder::Configured {
+                handler, user_agent, ..
+            } => ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
+            },
         }
     }
 
@@ -96,8 +142,18 @@ where
         });
 
         match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured { handler: None, auth },
-            ClientBuilder::Configured { handler, .. } => ClientBuilder::Configured { handler, auth },
+            ClientBuilder::Unconfigured => ClientBuilder::Configured {
+                handler: None,
+                auth,
+                user_agent: None,
+            },
+            ClientBuilder::Configured {
+                handler, user_agent, ..
+            } => ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
+            },
         }
     }
 
@@ -106,9 +162,13 @@ where
     pub fn build(self) -> Result<Client<T>> {
         match self {
             ClientBuilder::Unconfigured => Err(Error::from(BuildError::NotConfigured)),
-            ClientBuilder::Configured { handler, auth } => {
+            ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
+            } => {
                 let handler = handler.unwrap();
-                Ok(Client::<T>::new(handler, auth))
+                Ok(Client::<T>::new(handler, auth, user_agent))
             }
         }
     }

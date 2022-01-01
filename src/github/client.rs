@@ -92,19 +92,17 @@ where
     T: std::fmt::Debug + EventHandler + Send,
 {
     /// Creates a new [`Client`].
-    pub fn new(handler: T, auth: Option<Authorization>) -> Self {
+    pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>) -> Self {
         Self {
             handler,
-            http_client: HttpClient::new(auth),
+            http_client: HttpClient::new(auth, user_agent),
         }
     }
 
     /// Updates the authorization parameter in the current [`Client`] instance.
-    pub fn set_auth(self, auth: Authorization) -> Self {
-        Self {
-            handler: self.handler,
-            http_client: HttpClient::new(Some(auth)),
-        }
+    pub fn set_auth(mut self, auth: Authorization) -> Self {
+        self.http_client.set_auth(auth);
+        self
     }
 }
 
@@ -112,7 +110,7 @@ impl Default for Client<DefaultEventHandler> {
     fn default() -> Client<DefaultEventHandler> {
         Client {
             handler: DefaultEventHandler,
-            http_client: HttpClient::new(None),
+            http_client: HttpClient::new(None, None),
         }
     }
 }

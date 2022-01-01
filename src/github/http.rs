@@ -13,7 +13,7 @@ use tokio::time::Duration;
 
 use crate::github::Authorization;
 
-/// An implementor of the [`Requester`] trait.
+/// An implementer of the [`Requester`] trait.
 ///
 /// [`Requester`]: github_rest::Requester
 pub struct HttpClient {
@@ -22,11 +22,15 @@ pub struct HttpClient {
 }
 
 impl HttpClient {
-    // TODO: Allow setting custom UA (will require refactoring outside of this
-    // module)
-    pub fn new(auth: Option<Authorization>) -> Self {
+    pub fn new(auth: Option<Authorization>, user_agent: Option<String>) -> Self {
         let mut headers = HeaderMap::new();
-        headers.insert(header::USER_AGENT, HeaderValue::from_str("Octocat-rs").unwrap());
+
+        let user_agent = match user_agent {
+            Some(s) => s,
+            None => "Octocat-rs".to_owned(),
+        };
+
+        headers.insert(header::USER_AGENT, HeaderValue::from_str(user_agent.as_str()).unwrap());
         headers.insert(
             header::ACCEPT,
             HeaderValue::from_str("application/vnd.github.v3+json").unwrap(),
@@ -42,8 +46,26 @@ impl HttpClient {
         }
     }
 
+    /// Updates the authorization used by the current client.
     pub fn set_auth(&mut self, auth: Authorization) {
         self.auth = Some(auth);
+    }
+
+    /// Set the user agent used by the current client.
+    pub fn set_ua(&mut self, user_agent: String) {
+        let mut headers = HeaderMap::new();
+
+        headers.insert(header::USER_AGENT, HeaderValue::from_str(user_agent.as_str()).unwrap());
+        headers.insert(
+            header::ACCEPT,
+            HeaderValue::from_str("application/vnd.github.v3+json").unwrap(),
+        );
+
+        self.client = reqwest::ClientBuilder::new()
+            .default_headers(headers)
+            .timeout(Duration::from_secs(30))
+            .build()
+            .unwrap()
     }
 
     fn auth_headers(&self, req: RequestBuilder) -> RequestBuilder {
