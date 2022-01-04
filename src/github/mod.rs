@@ -41,7 +41,7 @@ mod tests {
         impl EventHandler for Handler {
             type Message = Message;
 
-            fn webhook_port(&self) -> Option<&str> {
+            fn webhook_port(&self) -> Option<&'static str> {
                 Some("https://example.com/hook")
             }
 
