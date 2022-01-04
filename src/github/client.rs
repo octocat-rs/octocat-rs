@@ -2,17 +2,21 @@ use anyhow::Result;
 use async_trait::async_trait;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    structs::{Commits, Issues, Pulls},
+    structs::{Commit, Issues, Pulls},
     GithubRestError, Requester,
 };
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
+// TODO: Fix the issues on github-rest so that this alias is unnecessary
+pub type Commits = Vec<Commit>;
+
 #[async_trait]
 pub trait GitHubClient {
     type HttpClient: Requester + Send + Sync;
 
-    /// The code that the implementer wants to be run at startup.
+    /// Code that the implementer wishes to be run *before* the event listener
+    /// is started.
     async fn run(&self) -> Result<()>;
 
     async fn start(&self) -> Result<()> {

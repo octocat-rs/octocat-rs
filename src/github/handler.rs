@@ -1,5 +1,8 @@
 use async_trait::async_trait;
-use github_rest::{structs::Commit, Requester};
+use github_rest::{
+    structs::{nested::Comment, Commit},
+    Requester,
+};
 
 use crate::github::command::Command;
 
@@ -13,17 +16,36 @@ use crate::github::command::Command;
 pub trait EventHandler {
     type Message: std::fmt::Debug + Send;
 
-    /// Utility function for getting the current webhook URL.
-    // TODO: Decide on other methods of receiving updates
-    fn webhook_url(&self) -> Option<&str> {
+    /// Utility function for getting the port used by the webhook.
+    // TODO: Webserver for port (actix) & types
+    fn webhook_port(&self) -> Option<&'static str> {
         None
     }
 
-    /// Example function for what events may look like
+    /// The route at which the listener should listen for payloads from GitHub.
+    fn route(&self) -> &'static str {
+        "/payload"
+    }
+
+    /// Commit pushed to a repository.
+    ///
+    /// See also: [`Commit`]
     async fn commit_pushed(
         &self,
         http_client: &'static (impl Requester + Sync),
         commit: &'static Commit,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Comment added to a repository commit.
+    ///
+    /// See also: [`Commit`], [`Comment`]
+    async fn commit_comment_added(
+        &self,
+        http_client: &'static (impl Requester + Sync),
+        commit: &'static Commit,
+        comment: &'static Comment,
     ) -> Command<Self::Message> {
         Command::none()
     }

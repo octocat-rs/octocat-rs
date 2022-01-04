@@ -1,0 +1,13 @@
+[alias]
+b = "build"
+c = "clippy"
+d = "doc"
+t = "test"
+r = "run --package examples/basic"
+rr = "run --release --package examples/basic"
+# space_example = ["run", "--release", "--", "\"command list\""]
+
+[build]
+rustdoc = "rustdoc"
+rustdocflags = ["--default-theme=ayu"]
+
