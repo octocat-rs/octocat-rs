@@ -1,11 +1,11 @@
 use std::{
     fs::File,
-    io::{prelude::*, BufReader},
+    io::{BufReader, prelude::*},
 };
 
 use anyhow::{Error, Result};
 
-use crate::github::{handler::EventHandler, util::*, Client, DefaultEventHandler};
+use crate::github::{Client, DefaultEventHandler, handler::EventHandler, util::*};
 
 /// A builder for [`Client`]
 pub enum ClientBuilder<T>
@@ -73,17 +73,18 @@ where
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from a file.
     pub fn credentials_file(self, file: &str) -> Self {
-        let f = File::open(file).unwrap_or_else(|e| panic!("{}", e));
+        let f = File::open(file).expect("ClientBuilder: Opening authorization file");
+        // TODO: Decide on whether BufReader is really needed here.
         let mut buf_reader = BufReader::new(f);
         let mut contents = "".to_owned();
 
         buf_reader
             .read_to_string(&mut contents)
-            .expect("ClientBuilder: Reading file");
+            .expect("ClientBuilder: Reading authorization file");
 
         let auth: Option<Authorization> = Some(
             toml::from_str::<OctocatConfig>(contents.as_str())
-                .expect("ClientBuilder: Parsing config file")
+                .expect("ClientBuilder: Parsing authorization file")
                 .to_personal_auth(),
         );
 

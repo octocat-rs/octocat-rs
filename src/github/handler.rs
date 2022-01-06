@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use github_rest::{
-    structs::{nested::Comment, Commit},
     Requester,
+    structs::{Commit, nested::Comment},
 };
 
 use crate::github::command::Command;
@@ -17,9 +17,9 @@ pub trait EventHandler {
     type Message: std::fmt::Debug + Send;
 
     /// Utility function for getting the port used by the webhook.
-    // TODO: Webserver for port (actix) & types
-    fn webhook_port(&self) -> Option<&'static str> {
-        None
+    // TODO: Webserver for port (rocket) & types
+    fn webhook_port(&self) -> u32 {
+        8080
     }
 
     /// The route at which the listener should listen for payloads from GitHub.

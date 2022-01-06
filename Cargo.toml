@@ -20,6 +20,9 @@ tokio = { version = "1", features = ["full"] }
 async-trait = "0.1.52"
 futures = "0.3"
 
+## Webserver
+rocket = "0.5.0-rc.1"
+
 ## Serialization/Deserialization
 serde_with = { version = "1.10.0", features = ["json", "macros"] }
 serde = { version = "^1", features = ["derive"] }

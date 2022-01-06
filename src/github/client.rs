@@ -1,12 +1,13 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use github_rest::{
+    GithubRestError,
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    structs::{Commit, Issues, Pulls},
-    GithubRestError, Requester,
+    Requester, structs::{Commit, Issues, Pulls},
 };
+use serde_json::Value;
 
-use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
+use crate::github::{DefaultEventHandler, handler::EventHandler, HttpClient, util::Authorization};
 
 // TODO: Fix the issues on github-rest so that this alias is unnecessary
 pub type Commits = Vec<Commit>;
@@ -14,6 +15,7 @@ pub type Commits = Vec<Commit>;
 #[async_trait]
 pub trait GitHubClient {
     type HttpClient: Requester + Send + Sync;
+    type EventHandler: EventHandler + Send + Sync;
 
     /// Code that the implementer wishes to be run *before* the event listener
     /// is started.
@@ -21,30 +23,52 @@ pub trait GitHubClient {
 
     async fn start(&self) -> Result<()> {
         // TODO: Runtime
-        self.run().await
+        self.run().await.expect("Starting application: User-defined code");
+
+        self.listener().await
+    }
+
+    // TODO: Rocket config (logs, max payload size, ...)
+    // TODO: Webhook types
+    async fn listener(&self) -> Result<()> {
+        let figment = rocket::Config::figment().merge(("port", self.event_handler().webhook_port()));
+
+        #[post("/", format = "application/json", data = "<testing>")]
+        async fn tester(testing: String) {
+            dbg!(serde_json::from_str::<'_, Value>(testing.as_str()).unwrap());
+        }
+
+        rocket::custom(figment)
+            .mount(self.event_handler().route(), routes![tester])
+            .launch()
+            .await?;
+
+        Ok(())
     }
 
     fn http_client(&self) -> &Self::HttpClient;
 
+    fn event_handler(&self) -> &Self::EventHandler;
+
     /// Gets all commits from a repository.
     ///
     /// See also: [`get_commits`]
-    async fn get_all_commits(&self, owner: &str, repo: &str) -> std::result::Result<Commits, GithubRestError> {
-        get_commits(self.http_client(), owner.to_owned(), repo.to_owned(), None).await
+    async fn get_all_commits(&self, owner: String, repo: String) -> std::result::Result<Commits, GithubRestError> {
+        get_commits(self.http_client(), owner, repo, None).await
     }
 
     /// Gets all issues from a repository.
     ///
     /// See also: [`get_issues`]
-    async fn get_all_issues(&self, owner: &str, repo: &str) -> std::result::Result<Issues, GithubRestError> {
-        get_issues(self.http_client(), owner.to_owned(), repo.to_owned(), None).await
+    async fn get_all_issues(&self, owner: String, repo: String) -> std::result::Result<Issues, GithubRestError> {
+        get_issues(self.http_client(), owner, repo, None).await
     }
 
     /// Gets all pull requests from a repository.
     ///
     /// See also: [`get_pulls`]
-    async fn get_all_pulls(&self, owner: &str, repo: &str) -> std::result::Result<Pulls, GithubRestError> {
-        get_pulls(self.http_client(), owner.to_owned(), repo.to_owned(), None).await
+    async fn get_all_pulls(&self, owner: String, repo: String) -> std::result::Result<Pulls, GithubRestError> {
+        get_pulls(self.http_client(), owner, repo, None).await
     }
 
     /// Gets all the endpoint categories that the REST API supports.
@@ -64,7 +88,7 @@ pub trait GitHubClient {
     }
 }
 
-// TODO: HTTP client, Client trait, method impls
+// TODO: Method impls
 /// Where the magic happens.
 #[allow(dead_code)]
 pub struct Client<T>
@@ -81,6 +105,7 @@ where
     T: std::fmt::Debug + EventHandler + Send + Sync,
 {
     type HttpClient = HttpClient;
+    type EventHandler = T;
 
     async fn run(&self) -> Result<()> {
         Ok(())
@@ -88,6 +113,10 @@ where
 
     fn http_client(&self) -> &Self::HttpClient {
         &self.http_client
+    }
+
+    fn event_handler(&self) -> &T {
+        &self.handler
     }
 }
 

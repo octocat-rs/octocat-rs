@@ -1,17 +1,20 @@
 use async_trait::async_trait;
 use github_rest::{
-    methods::prelude::{EndPoints, Methods},
     GithubRestError,
+    methods::prelude::{EndPoints, Methods},
 };
 use reqwest::{
+    Body,
     header,
-    header::{HeaderMap, HeaderValue},
-    Body, RequestBuilder,
+    header::{HeaderMap, HeaderValue}, RequestBuilder,
 };
 use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
 
 use crate::github::Authorization;
+
+const USER_AGENT_PARSE_ERROR: &str = "HttpClient: Parsing user agent";
+const ACCEPT_HEADER_PARSE_ERROR: &str = "HttpClient: Parsing accept header";
 
 /// An implementer of the [`Requester`] trait.
 ///
@@ -30,10 +33,13 @@ impl HttpClient {
             None => "Octocat-rs".to_owned(),
         };
 
-        headers.insert(header::USER_AGENT, HeaderValue::from_str(user_agent.as_str()).unwrap());
+        headers.insert(
+            header::USER_AGENT,
+            HeaderValue::from_str(user_agent.as_str()).expect(USER_AGENT_PARSE_ERROR),
+        );
         headers.insert(
             header::ACCEPT,
-            HeaderValue::from_str("application/vnd.github.v3+json").unwrap(),
+            HeaderValue::from_str("application/vnd.github.v3+json").expect(ACCEPT_HEADER_PARSE_ERROR),
         );
 
         Self {
@@ -55,10 +61,13 @@ impl HttpClient {
     pub fn set_ua(&mut self, user_agent: String) {
         let mut headers = HeaderMap::new();
 
-        headers.insert(header::USER_AGENT, HeaderValue::from_str(user_agent.as_str()).unwrap());
+        headers.insert(
+            header::USER_AGENT,
+            HeaderValue::from_str(user_agent.as_str()).expect(USER_AGENT_PARSE_ERROR),
+        );
         headers.insert(
             header::ACCEPT,
-            HeaderValue::from_str("application/vnd.github.v3+json").unwrap(),
+            HeaderValue::from_str("application/vnd.github.v3+json").expect(ACCEPT_HEADER_PARSE_ERROR),
         );
 
         self.client = reqwest::ClientBuilder::new()
@@ -68,7 +77,7 @@ impl HttpClient {
             .unwrap()
     }
 
-    fn auth_headers(&self, req: RequestBuilder) -> RequestBuilder {
+    fn http_auth(&self, req: RequestBuilder) -> RequestBuilder {
         if let Some(auth) = &self.auth {
             match auth {
                 Authorization::PersonalToken { username, token } => req.basic_auth(username, Some(token)),
@@ -90,11 +99,11 @@ impl github_rest::Requester for HttpClient {
         let path = format!("https://api.github.com{}", url.path());
 
         let mut req = match url.method() {
-            Methods::Get => self.auth_headers(self.client.get(path)),
-            Methods::Post => self.auth_headers(self.client.post(path)),
-            Methods::Put => self.auth_headers(self.client.put(path)),
-            Methods::Patch => self.auth_headers(self.client.patch(path)),
-            Methods::Delete => self.auth_headers(self.client.delete(path)),
+            Methods::Get => self.http_auth(self.client.get(path)),
+            Methods::Post => self.http_auth(self.client.post(path)),
+            Methods::Put => self.http_auth(self.client.put(path)),
+            Methods::Patch => self.http_auth(self.client.patch(path)),
+            Methods::Delete => self.http_auth(self.client.delete(path)),
         };
 
         if let Some(query) = query {
