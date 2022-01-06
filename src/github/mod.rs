@@ -16,10 +16,10 @@ pub mod util;
 mod tests {
     use anyhow::Result;
     use async_trait::async_trait;
-    use github_rest::{GithubRestError, methods::prelude::Comment, Requester, structs::Commit};
+    use github_rest::{methods::prelude::Comment, structs::Commit, GithubRestError, Requester};
 
     use crate::github::{
-        client::GitHubClient, ClientBuilder, command::Command, DefaultEventHandler, handler::EventHandler,
+        client::GitHubClient, command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler,
     };
 
     #[test]

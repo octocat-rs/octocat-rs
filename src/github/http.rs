@@ -1,12 +1,12 @@
 use async_trait::async_trait;
 use github_rest::{
-    GithubRestError,
     methods::prelude::{EndPoints, Methods},
+    GithubRestError,
 };
 use reqwest::{
-    Body,
     header,
-    header::{HeaderMap, HeaderValue}, RequestBuilder,
+    header::{HeaderMap, HeaderValue},
+    Body, RequestBuilder,
 };
 use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;

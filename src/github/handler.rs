@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use github_rest::{
+    structs::{nested::Comment, Commit},
     Requester,
-    structs::{Commit, nested::Comment},
 };
 
 use crate::github::command::Command;

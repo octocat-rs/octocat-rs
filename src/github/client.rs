@@ -1,13 +1,13 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use github_rest::{
-    GithubRestError,
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    Requester, structs::{Commit, Issues, Pulls},
+    structs::{Commit, Issues, Pulls},
+    GithubRestError, Requester,
 };
 use serde_json::Value;
 
-use crate::github::{DefaultEventHandler, handler::EventHandler, HttpClient, util::Authorization};
+use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
 // TODO: Fix the issues on github-rest so that this alias is unnecessary
 pub type Commits = Vec<Commit>;

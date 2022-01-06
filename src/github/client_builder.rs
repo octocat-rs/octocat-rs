@@ -1,11 +1,11 @@
 use std::{
     fs::File,
-    io::{BufReader, prelude::*},
+    io::{prelude::*, BufReader},
 };
 
 use anyhow::{Error, Result};
 
-use crate::github::{Client, DefaultEventHandler, handler::EventHandler, util::*};
+use crate::github::{handler::EventHandler, util::*, Client, DefaultEventHandler};
 
 /// A builder for [`Client`]
 pub enum ClientBuilder<T>
