@@ -16,10 +16,10 @@ pub mod util;
 mod tests {
     use anyhow::Result;
     use async_trait::async_trait;
-    use github_rest::{methods::prelude::Comment, structs::Commit, GithubRestError, Requester};
+    use github_rest::{GithubRestError, methods::prelude::Comment, Requester, structs::Commit};
 
     use crate::github::{
-        client::GitHubClient, command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler,
+        client::GitHubClient, ClientBuilder, command::Command, DefaultEventHandler, handler::EventHandler,
     };
 
     #[test]
@@ -41,8 +41,8 @@ mod tests {
         impl EventHandler for Handler {
             type Message = Message;
 
-            fn webhook_port(&self) -> Option<&'static str> {
-                Some("https://example.com/hook")
+            fn webhook_port(&self) -> u32 {
+                8080
             }
 
             /// Example for how [`Command::perform`] should be used in practice.
