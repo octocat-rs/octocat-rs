@@ -115,13 +115,10 @@ where
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from a file.
     pub fn credentials_file(self, file: &str) -> Self {
-        let f = File::open(file).expect("ClientBuilder: Opening authorization file");
-        // TODO: Decide on whether BufReader is really needed here.
-        let mut buf_reader = BufReader::new(f);
+        let mut f = File::open(file).expect("ClientBuilder: Opening authorization file");
         let mut contents = "".to_owned();
 
-        buf_reader
-            .read_to_string(&mut contents)
+        f.read_to_string(&mut contents)
             .expect("ClientBuilder: Reading authorization file");
 
         let auth: Option<Authorization> = Some(
