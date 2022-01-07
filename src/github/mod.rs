@@ -18,9 +18,7 @@ mod tests {
     use async_trait::async_trait;
     use github_rest::{methods::prelude::Comment, structs::Commit, GithubRestError, Requester};
 
-    use crate::github::{
-        client::GitHubClient, command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler,
-    };
+    use crate::github::{command::Command, handler::EventHandler, Client, ClientBuilder, DefaultEventHandler};
 
     #[test]
     fn default_everything() {
@@ -28,7 +26,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn standard() -> Result<()> {
+    async fn standard() -> Result<Client> {
         #[derive(Debug)]
         struct Handler {}
 
