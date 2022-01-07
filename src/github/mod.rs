@@ -63,8 +63,6 @@ mod tests {
             .credentials_file("examples/octocat.example.toml")
             .build()
             .unwrap()
-            .start()
-            .await
     }
 
     #[test]

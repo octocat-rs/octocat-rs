@@ -17,6 +17,7 @@ where
         handler: Option<T>,
         auth: Option<Authorization>,
         user_agent: Option<String>,
+        payload_size: Option<u64>,
     },
 }
 
@@ -39,11 +40,44 @@ where
                 handler: Some(event_handler),
                 auth: None,
                 user_agent: None,
+                payload_size: None,
             },
-            ClientBuilder::Configured { auth, user_agent, .. } => ClientBuilder::Configured {
+            ClientBuilder::Configured {
+                auth,
+                user_agent,
+                payload_size,
+                ..
+            } => ClientBuilder::Configured {
                 handler: Some(event_handler),
                 auth,
                 user_agent,
+                payload_size,
+            },
+        }
+    }
+
+    /// Sets the maximum payload size that the listener can recieve from GitHub
+    /// in MiB. Default: 8.
+    pub fn payload_size(self, size: u64) -> Self {
+        let payload_size = Some(size);
+
+        match self {
+            ClientBuilder::Unconfigured => ClientBuilder::Configured {
+                handler: None,
+                auth: None,
+                user_agent: None,
+                payload_size,
+            },
+            ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
+                ..
+            } => ClientBuilder::Configured {
+                handler,
+                auth,
+                user_agent,
+                payload_size,
             },
         }
     }
@@ -61,11 +95,19 @@ where
                 handler: None,
                 auth: None,
                 user_agent,
+                payload_size: None,
             },
-            ClientBuilder::Configured { handler, auth, .. } => ClientBuilder::Configured {
+
+            ClientBuilder::Configured {
+                handler,
+                auth,
+                payload_size,
+                ..
+            } => ClientBuilder::Configured {
                 handler,
                 auth,
                 user_agent,
+                payload_size,
             },
         }
     }
@@ -93,13 +135,18 @@ where
                 handler: None,
                 auth,
                 user_agent: None,
+                payload_size: None,
             },
             ClientBuilder::Configured {
-                handler, user_agent, ..
+                handler,
+                user_agent,
+                payload_size,
+                ..
             } => ClientBuilder::Configured {
                 handler,
                 auth,
                 user_agent,
+                payload_size,
             },
         }
     }
@@ -124,13 +171,18 @@ where
                 handler: None,
                 auth,
                 user_agent: None,
+                payload_size: None,
             },
             ClientBuilder::Configured {
-                handler, user_agent, ..
+                handler,
+                user_agent,
+                payload_size,
+                ..
             } => ClientBuilder::Configured {
                 handler,
                 auth,
                 user_agent,
+                payload_size,
             },
         }
     }
@@ -147,13 +199,18 @@ where
                 handler: None,
                 auth,
                 user_agent: None,
+                payload_size: None,
             },
             ClientBuilder::Configured {
-                handler, user_agent, ..
+                handler,
+                user_agent,
+                payload_size,
+                ..
             } => ClientBuilder::Configured {
                 handler,
                 auth,
                 user_agent,
+                payload_size,
             },
         }
     }
@@ -167,9 +224,10 @@ where
                 handler,
                 auth,
                 user_agent,
+                payload_size,
             } => {
                 let handler = handler.unwrap();
-                Ok(Client::<T>::new(handler, auth, user_agent))
+                Ok(Client::<T>::new(handler, auth, user_agent, payload_size))
             }
         }
     }

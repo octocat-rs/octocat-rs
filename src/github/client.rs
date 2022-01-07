@@ -5,11 +5,15 @@ use github_rest::{
     structs::{Commit, Issues, Pulls},
     GithubRestError, Requester,
 };
+use rocket::{
+    config::LogLevel,
+    data::{ByteUnit, Limits, ToByteUnit},
+};
 use serde_json::Value;
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
-// TODO: Fix the issues on github-rest so that this alias is unnecessary
+// TODO: Fix the issues in github-rest so that this alias is unnecessary
 pub type Commits = Vec<Commit>;
 
 #[async_trait]
@@ -22,33 +26,42 @@ pub trait GitHubClient {
     async fn run(&self) -> Result<()>;
 
     async fn start(&self) -> Result<()> {
-        // TODO: Runtime
         self.run().await.expect("Starting application: User-defined code");
 
         self.listener().await
     }
 
-    // TODO: Rocket config (logs, max payload size, ...)
-    // TODO: Webhook types
+    // TODO: User-facing API to set limit
     async fn listener(&self) -> Result<()> {
-        let figment = rocket::Config::figment().merge(("port", self.event_handler().webhook_port()));
+        let figment = rocket::Config::figment()
+            .merge(("port", self.event_handler().webhook_port()))
+            .merge(("log_level", LogLevel::Critical))
+            .merge(("limits", Limits::default().limit("json", self.payload_size())));
 
-        #[post("/", format = "application/json", data = "<testing>")]
-        async fn tester(testing: String) {
-            dbg!(serde_json::from_str::<'_, Value>(testing.as_str()).unwrap());
+        // TODO: Webhook types, request guards
+        #[post("/", format = "application/json", data = "<payload>")]
+        async fn handler(payload: String) {
+            dbg!(serde_json::from_str::<'_, Value>(payload.as_str()).unwrap());
         }
 
         rocket::custom(figment)
-            .mount(self.event_handler().route(), routes![tester])
+            .mount(self.event_handler().route(), routes![handler])
             .launch()
             .await?;
 
         Ok(())
     }
 
+    /// Helper function for use in instances where one needs to pass an http
+    /// client
     fn http_client(&self) -> &Self::HttpClient;
 
     fn event_handler(&self) -> &Self::EventHandler;
+
+    /// Helper function to set the maximum payload size. Default is 8 MiB.
+    fn payload_size(&self) -> ByteUnit {
+        8.mebibytes()
+    }
 
     /// Gets all commits from a repository.
     ///
@@ -90,12 +103,12 @@ pub trait GitHubClient {
 
 // TODO: Method impls
 /// Where the magic happens.
-#[allow(dead_code)]
 pub struct Client<T>
 where
     T: std::fmt::Debug + EventHandler + Send,
 {
     handler: T,
+    max_payload_size: ByteUnit,
     http_client: HttpClient,
 }
 
@@ -107,6 +120,7 @@ where
     type HttpClient = HttpClient;
     type EventHandler = T;
 
+    // TODO: User-facing API to set this
     async fn run(&self) -> Result<()> {
         Ok(())
     }
@@ -118,6 +132,10 @@ where
     fn event_handler(&self) -> &T {
         &self.handler
     }
+
+    fn payload_size(&self) -> ByteUnit {
+        self.max_payload_size.mebibytes()
+    }
 }
 
 impl<T> Client<T>
@@ -125,9 +143,10 @@ where
     T: std::fmt::Debug + EventHandler + Send,
 {
     /// Creates a new [`Client`].
-    pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>) -> Self {
+    pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>, payload_size: Option<u64>) -> Self {
         Self {
             handler,
+            max_payload_size: payload_size.unwrap_or(8).mebibytes(),
             http_client: HttpClient::new(auth, user_agent),
         }
     }
@@ -143,6 +162,7 @@ impl Default for Client<DefaultEventHandler> {
     fn default() -> Client<DefaultEventHandler> {
         Client {
             handler: DefaultEventHandler,
+            max_payload_size: 8.mebibytes(),
             http_client: HttpClient::new(None, None),
         }
     }

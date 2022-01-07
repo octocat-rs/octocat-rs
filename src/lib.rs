@@ -9,6 +9,8 @@ extern crate rocket;
 
 pub mod github;
 
+pub use github::*;
+
 #[cfg(test)]
 mod tests {
     #[test]
