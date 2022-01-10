@@ -59,7 +59,8 @@ pub trait GitHubClient {
 
     /// Helper function to set the maximum payload size. Default is 8 MiB.
     fn payload_size(&self) -> ByteUnit {
-        8.mebibytes()
+        8.mebibytes() // TODO: Figure out why on earth this sets the limit to 8
+                      // TiB
     }
 
     /// Gets all commits from a repository.

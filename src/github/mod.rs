@@ -14,11 +14,10 @@ pub mod util;
 
 #[cfg(test)]
 mod tests {
-    use anyhow::Result;
     use async_trait::async_trait;
     use github_rest::{methods::prelude::Comment, structs::Commit, GithubRestError, Requester};
 
-    use crate::github::{command::Command, handler::EventHandler, Client, ClientBuilder, DefaultEventHandler};
+    use crate::github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler};
 
     #[test]
     fn default_everything() {
@@ -26,7 +25,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn standard() -> Result<Client> {
+    async fn standard() {
         #[derive(Debug)]
         struct Handler {}
 
@@ -60,7 +59,7 @@ mod tests {
             .event_handler(Handler {})
             .credentials_file("examples/octocat.example.toml")
             .build()
-            .unwrap()
+            .unwrap();
     }
 
     #[test]
