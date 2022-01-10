@@ -46,6 +46,6 @@ impl Default for Authorization {
 /// [`ClientBuilder`]: crate::github::ClientBuilder
 #[derive(Error, Debug)]
 pub enum BuildError {
-    #[error("Call build_unconfigured instead!")]
-    NotConfigured,
+    #[error("Call build_no_handler instead!")]
+    NoHandler,
 }

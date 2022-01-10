@@ -17,7 +17,6 @@ pub trait EventHandler {
     type Message: std::fmt::Debug + Send;
 
     /// Utility function for getting the port used by the webhook.
-    // TODO: Webserver for port (rocket) & types
     fn webhook_port(&self) -> u32 {
         8080
     }

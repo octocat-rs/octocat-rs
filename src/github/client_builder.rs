@@ -1,28 +1,19 @@
-use std::{
-    fs::File,
-    io::{prelude::*, BufReader},
-};
+use std::{fs::File, io::prelude::*};
 
 use anyhow::{Error, Result};
 
 use crate::github::{handler::EventHandler, util::*, Client, DefaultEventHandler};
 
 /// A builder for [`Client`]
-pub enum ClientBuilder<T>
+pub struct ClientBuilder<T>
 where
     T: std::fmt::Debug + EventHandler + Send,
 {
-    Unconfigured,
-    Configured {
-        handler: Option<T>,
-        auth: Option<Authorization>,
-        user_agent: Option<String>,
-        payload_size: Option<u64>,
-    },
+    handler: Option<T>,
+    auth: Option<Authorization>,
+    user_agent: Option<String>,
+    payload_size: Option<u64>,
 }
-
-// TODO: Figure out how to make this better, it's garbage...
-// Might move it to a struct since everything would be much cleaner that way
 
 impl<T> ClientBuilder<T>
 where
@@ -30,56 +21,25 @@ where
 {
     /// Creates a new [`ClientBuilder`]
     pub fn new() -> Self {
-        Self::Unconfigured
+        Self {
+            handler: None,
+            auth: None,
+            user_agent: None,
+            payload_size: None,
+        }
     }
 
     /// Adds an [`EventHandler`] to the current builder.
-    pub fn event_handler(self, event_handler: T) -> Self {
-        match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured {
-                handler: Some(event_handler),
-                auth: None,
-                user_agent: None,
-                payload_size: None,
-            },
-            ClientBuilder::Configured {
-                auth,
-                user_agent,
-                payload_size,
-                ..
-            } => ClientBuilder::Configured {
-                handler: Some(event_handler),
-                auth,
-                user_agent,
-                payload_size,
-            },
-        }
+    pub fn event_handler(mut self, event_handler: T) -> Self {
+        self.handler = Some(event_handler);
+        self
     }
 
     /// Sets the maximum payload size that the listener can recieve from GitHub
     /// in MiB. Default: 8.
-    pub fn payload_size(self, size: u64) -> Self {
-        let payload_size = Some(size);
-
-        match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured {
-                handler: None,
-                auth: None,
-                user_agent: None,
-                payload_size,
-            },
-            ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                ..
-            } => ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                payload_size,
-            },
-        }
+    pub fn payload_size(mut self, size: u64) -> Self {
+        self.payload_size = Some(size);
+        self
     }
 
     /// Sets a custom user agent for your application. Default is "Octocat-rs".
@@ -87,29 +47,9 @@ where
     /// See also: [`HttpClient::set_ua`]
     ///
     /// [`HttpClient::set_ua`]: crate::github::HttpClient::set_ua
-    pub fn user_agent(self, user_agent: String) -> Self {
-        let user_agent = Some(user_agent);
-
-        match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured {
-                handler: None,
-                auth: None,
-                user_agent,
-                payload_size: None,
-            },
-
-            ClientBuilder::Configured {
-                handler,
-                auth,
-                payload_size,
-                ..
-            } => ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                payload_size,
-            },
-        }
+    pub fn user_agent(mut self, user_agent: String) -> Self {
+        self.user_agent = Some(user_agent);
+        self
     }
 
     /// Adds an [`Authorization`] instance to the current builder using input
@@ -127,25 +67,7 @@ where
                 .to_personal_auth(),
         );
 
-        match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured {
-                handler: None,
-                auth,
-                user_agent: None,
-                payload_size: None,
-            },
-            ClientBuilder::Configured {
-                handler,
-                user_agent,
-                payload_size,
-                ..
-            } => ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                payload_size,
-            },
-        }
+        self.set_auth(auth)
     }
 
     /// Adds an [`Authorization`] instance to the current builder using input
@@ -163,25 +85,7 @@ where
 
         let auth = Some(Authorization::PersonalToken { username, token });
 
-        match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured {
-                handler: None,
-                auth,
-                user_agent: None,
-                payload_size: None,
-            },
-            ClientBuilder::Configured {
-                handler,
-                user_agent,
-                payload_size,
-                ..
-            } => ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                payload_size,
-            },
-        }
+        self.set_auth(auth)
     }
 
     /// Adds an [`Authorization`] instance to the current builder.
@@ -191,42 +95,27 @@ where
             token: token.to_owned(),
         });
 
-        match self {
-            ClientBuilder::Unconfigured => ClientBuilder::Configured {
-                handler: None,
-                auth,
-                user_agent: None,
-                payload_size: None,
-            },
-            ClientBuilder::Configured {
-                handler,
-                user_agent,
-                payload_size,
-                ..
-            } => ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                payload_size,
-            },
-        }
+        self.set_auth(auth)
+    }
+
+    fn set_auth(mut self, auth: Option<Authorization>) -> Self {
+        self.auth = auth;
+        self
     }
 
     /// Builds the current builder. In other words, this turns a
     /// [`ClientBuilder`] into a [`Client`]. Requires a handler to be set.
     pub fn build(self) -> Result<Client<T>> {
-        match self {
-            ClientBuilder::Unconfigured => Err(Error::from(BuildError::NotConfigured)),
-            ClientBuilder::Configured {
-                handler,
-                auth,
-                user_agent,
-                payload_size,
-            } => {
-                let handler = handler.unwrap();
-                Ok(Client::<T>::new(handler, auth, user_agent, payload_size))
-            }
+        if self.handler.is_none() {
+            return Err(Error::from(BuildError::NoHandler));
         }
+
+        Ok(Client::new(
+            self.handler.unwrap(),
+            self.auth,
+            self.user_agent,
+            self.payload_size,
+        ))
     }
 }
 
@@ -240,10 +129,12 @@ impl ClientBuilder<DefaultEventHandler> {
     ///
     /// Requires T to be set to [`DefaultEventHandler`].
     pub fn build_no_handler(self) -> Result<Client<DefaultEventHandler>> {
-        match self {
-            ClientBuilder::Unconfigured => Err(Error::from(BuildError::NotConfigured)),
-            ClientBuilder::Configured { auth, .. } => Ok(Client::default().set_auth(auth.unwrap())),
-        }
+        Ok(Client::new(
+            DefaultEventHandler::new(),
+            self.auth,
+            self.user_agent,
+            self.payload_size,
+        ))
     }
 }
 

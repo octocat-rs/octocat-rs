@@ -31,7 +31,6 @@ pub trait GitHubClient {
         self.listener().await
     }
 
-    // TODO: User-facing API to set limit
     async fn listener(&self) -> Result<()> {
         let figment = rocket::Config::figment()
             .merge(("port", self.event_handler().webhook_port()))
