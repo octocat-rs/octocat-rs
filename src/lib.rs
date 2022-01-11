@@ -7,9 +7,9 @@
 #[macro_use]
 extern crate rocket;
 
-pub mod github;
-
 pub use github::*;
+
+pub mod github;
 
 #[cfg(test)]
 mod tests {

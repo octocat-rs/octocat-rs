@@ -15,7 +15,7 @@ pub mod util;
 #[cfg(test)]
 mod tests {
     use async_trait::async_trait;
-    use github_rest::{methods::prelude::Comment, structs::Commit, GithubRestError, Requester};
+    use github_rest::{methods::prelude::Comment, model::Commit, GithubRestError, Requester};
 
     use crate::github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler};
 

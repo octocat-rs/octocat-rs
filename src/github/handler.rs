@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use github_rest::{
-    structs::{nested::Comment, Commit},
+    model::{nested::Comment, Commit},
     Requester,
 };
 

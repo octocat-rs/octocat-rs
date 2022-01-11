@@ -1,15 +1,19 @@
+use std::str::FromStr;
+
 use anyhow::Result;
 use async_trait::async_trait;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    structs::{Commit, Issues, Pulls},
+    model::{Commit, EventTypes, Issues, Pulls},
     GithubRestError, Requester,
 };
 use rocket::{
     config::LogLevel,
     data::{ByteUnit, Limits, ToByteUnit},
+    http::Status,
+    request::{FromRequest, Outcome},
+    Request,
 };
-use serde_json::Value;
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
@@ -32,19 +36,72 @@ pub trait GitHubClient {
     }
 
     async fn listener(&self) -> Result<()> {
+        struct EventType(EventTypes);
+
+        #[async_trait]
+        impl<'a> FromRequest<'a> for EventType {
+            type Error = EventHeaderError;
+
+            async fn from_request(request: &'a Request<'_>) -> Outcome<Self, Self::Error> {
+                let val = match request.headers().get_one("x-github-event") {
+                    Some(s) => s,
+                    None => return Outcome::Failure((Status::BadRequest, EventHeaderError::MissingEventHeader)),
+                };
+
+                match EventTypes::from_str(val) {
+                    Ok(e) => Outcome::Success(Self(e)),
+                    Err(_) => Outcome::Failure((Status::BadRequest, EventHeaderError::UnimplementedEventType)),
+                }
+            }
+        }
+
+        #[derive(Debug, Copy, Clone)]
+        enum EventHeaderError {
+            UnimplementedEventType,
+            MissingEventHeader,
+        }
+
+        #[catch(default)]
+        fn default(status: Status, req: &Request) -> String {
+            format!("{} ({})", status, req.uri())
+        }
+
+        // TODO(github-rest): Complete webhook types
+        #[post("/", format = "application/json", data = "<payload>")]
+        async fn handler(payload: String, ev: EventType) -> Status {
+            dbg!(&payload);
+
+            // TODO: Further sorting, delegate to handler instance
+            match ev.0 {
+                EventTypes::CheckRun => {}
+                EventTypes::CheckSuite => {}
+                EventTypes::Create => {}
+                EventTypes::Delete => {}
+                EventTypes::Fork => {}
+                EventTypes::IssueComment => {}
+                EventTypes::Issues => {}
+                EventTypes::Ping => {}
+                EventTypes::PullRequest => {}
+                EventTypes::Push => {}
+                EventTypes::Release => {}
+                EventTypes::Star => {}
+                EventTypes::Watch => {}
+                EventTypes::WorkflowJob => {}
+                EventTypes::WorkflowRun => {}
+                _ => {}
+            }
+
+            Status::Ok
+        }
+
         let figment = rocket::Config::figment()
             .merge(("port", self.event_handler().webhook_port()))
             .merge(("log_level", LogLevel::Critical))
             .merge(("limits", Limits::default().limit("json", self.payload_size())));
 
-        // TODO: Webhook types, request guards
-        #[post("/", format = "application/json", data = "<payload>")]
-        async fn handler(payload: String) {
-            dbg!(serde_json::from_str::<'_, Value>(payload.as_str()).unwrap());
-        }
-
         rocket::custom(figment)
             .mount(self.event_handler().route(), routes![handler])
+            .register("/", catchers![default])
             .launch()
             .await?;
 
@@ -59,8 +116,8 @@ pub trait GitHubClient {
 
     /// Helper function to set the maximum payload size. Default is 8 MiB.
     fn payload_size(&self) -> ByteUnit {
-        8.mebibytes() // TODO: Figure out why on earth this sets the limit to 8
-                      // TiB
+        8.mebibytes() // TODO: Figure out why on earth this sets the limit to
+                      // 8TiB
     }
 
     /// Gets all commits from a repository.

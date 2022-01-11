@@ -1,7 +1,8 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use github_rest::{structs::Commit, Requester};
-use octocat_rs::{ClientBuilder, Command, EventHandler, GitHubClient};
+use github_rest::{model::Commit, Requester};
+
+use octocat_rs::{client::GitHubClient, handler::EventHandler, ClientBuilder, Command};
 
 #[tokio::main]
 async fn main() -> Result<()> {

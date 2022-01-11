@@ -3,8 +3,8 @@ b = "build"
 c = "clippy"
 d = "doc"
 t = "test"
-r = "run --package examples/basic"
-rr = "run --release --package examples/basic"
+r = "run --package basic"
+rr = "run --release --package basic"
 # space_example = ["run", "--release", "--", "\"command list\""]
 
 [build]
