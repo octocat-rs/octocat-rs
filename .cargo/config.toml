@@ -1,6 +1,6 @@
 [alias]
 b = "build"
-c = "clippy"
+c = "clippy --tests"
 d = "doc"
 t = "test"
 r = "run --package basic"
