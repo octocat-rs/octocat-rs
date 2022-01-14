@@ -66,14 +66,52 @@ pub trait GitHubClient {
             format!("{} ({})", status, req.uri())
         }
 
-        // TODO(github-rest): Complete webhook types
         #[post("/", format = "application/json", data = "<payload>")]
         async fn handler(payload: String, ev: EventType) -> Status {
             dbg!(&payload);
 
             // TODO: Further sorting, delegate to handler instance
             match ev.0 {
+                EventTypes::BranchProtectionRule => {}
+                EventTypes::CodeScanningAlert => {}
+                EventTypes::CommitComment => {}
+                EventTypes::DeployKey => {}
+                EventTypes::Deployment => {}
+                EventTypes::DeploymentStatus => {}
                 EventTypes::CheckRun => {}
+                EventTypes::Discussion => {}
+                EventTypes::DiscussionComment => {}
+                EventTypes::GithubAppAuthorization => {}
+                EventTypes::Gollum => {}
+                EventTypes::Installation => {}
+                EventTypes::InstallationRepositories => {}
+                EventTypes::Label => {}
+                EventTypes::MarketplacePurchase => {}
+                EventTypes::Member => {}
+                EventTypes::Membership => {}
+                EventTypes::Meta => {}
+                EventTypes::Milestone => {}
+                EventTypes::Organization => {}
+                EventTypes::OrgBlock => {}
+                EventTypes::Package => {}
+                EventTypes::PageBuild => {}
+                EventTypes::Project => {}
+                EventTypes::ProjectCard => {}
+                EventTypes::ProjectColumn => {}
+                EventTypes::Public => {}
+                EventTypes::PullRequestReview => {}
+                EventTypes::PullRequestReviewComment => {}
+                EventTypes::RepositoryDispatch => {}
+                EventTypes::Repository => {}
+                EventTypes::RepositoryImport => {}
+                EventTypes::RepositoryVulnerabilityAlert => {}
+                EventTypes::SecretScanningAlert => {}
+                EventTypes::SecurityAdvisory => {}
+                EventTypes::Sponsorship => {}
+                EventTypes::Status => {}
+                EventTypes::Team => {}
+                EventTypes::TeamAdd => {}
+                EventTypes::WorkflowDispatch => {}
                 EventTypes::CheckSuite => {}
                 EventTypes::Create => {}
                 EventTypes::Delete => {}
@@ -88,7 +126,6 @@ pub trait GitHubClient {
                 EventTypes::Watch => {}
                 EventTypes::WorkflowJob => {}
                 EventTypes::WorkflowRun => {}
-                _ => {}
             }
 
             Status::Ok
@@ -177,7 +214,7 @@ where
     type HttpClient = HttpClient;
     type EventHandler = T;
 
-    // TODO: User-facing API to set this
+    // TODO: User-facing API to set this?
     async fn run(&self) -> Result<()> {
         Ok(())
     }
