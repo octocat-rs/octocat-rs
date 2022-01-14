@@ -109,7 +109,7 @@ pub struct Links {
     pub comments: Comments,
     pub review_comments: ReviewComments,
     pub review_comment: ReviewComment,
-    pub commits: Commits,
+    pub commits: IncludedCommits,
     pub statuses: Statuses,
 }
 
@@ -144,7 +144,7 @@ pub struct ReviewComment {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Commits {
+pub struct IncludedCommits {
     pub href: String,
 }
 

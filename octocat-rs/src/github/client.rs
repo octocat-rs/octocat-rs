@@ -4,7 +4,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    model::{Commit, EventTypes, Issues, Pulls},
+    model::{Commit, Commits, EventTypes, Issues, Pulls},
     GithubRestError, Requester,
 };
 use rocket::{
@@ -16,9 +16,6 @@ use rocket::{
 };
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
-
-// TODO: Fix the issues in github-rest so that this alias is unnecessary
-pub type Commits = Vec<Commit>;
 
 #[async_trait]
 pub trait GitHubClient {
