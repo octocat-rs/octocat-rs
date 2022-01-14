@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use github_rest::{
-    model::{nested::Comment, Commit},
+    model::{nested::CommitComment, Commit},
     Requester,
 };
 
@@ -39,12 +39,12 @@ pub trait EventHandler {
 
     /// Comment added to a repository commit.
     ///
-    /// See also: [`Commit`], [`Comment`]
+    /// See also: [`Commit`], [`CommitComment`]
     async fn commit_comment_added(
         &self,
         http_client: &'static (impl Requester + Sync),
         commit: &'static Commit,
-        comment: &'static Comment,
+        comment: &'static CommitComment,
     ) -> Command<Self::Message> {
         Command::none()
     }

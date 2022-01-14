@@ -7,8 +7,8 @@ edition = "2021"
 
 [dependencies]
 ## GitHub
-octocat-rs = { path = "../../" }
-github-rest = { git = "https://github.com/octocat-rs/github-rest", rev = "3ef5bb1" }
+octocat-rs = { path = "../../octocat-rs" }
+github-rest = { path = "../../github-rest" }
 
 ## Async
 tokio = { version = "1", features = ["full"] }

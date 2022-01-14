@@ -1,4 +1,5 @@
-/target
-.idea/
-Cargo.lock
-cargo-timing*.html
+.env
+.idea
+.vscode
+target
+*.html

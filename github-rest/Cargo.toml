@@ -1,0 +1,29 @@
+[package]
+name = "github-rest"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+## HTTP
+github-api = { git = "https://github.com/octocat-rs/github-api" }
+reqwest = { version = "0.11.8" }
+
+## Serialization/Deserialization
+strum = { version = "0.23", features = ["derive"] }
+serde = { version = "^1", features = ["derive"] }
+serde_json = "^1"
+
+# Misc
+async-trait = "0.1.52"
+
+[features]
+default = ["builders"]
+full = ["builders", "client"]
+builders = []
+client = []
+
+
+[dev-dependencies]
+tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }

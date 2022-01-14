@@ -1,0 +1,45 @@
+[package]
+name = "octocat-rs"
+version = "0.0.0"
+edition = "2021"
+authors = ["Proudmuslim <proudmuslim-dev@protonmail.com>", "Tricked <tricked@duck.com>"]
+#license = ""
+description = """
+(WIP) A GitHub API client.
+"""
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+## GitHub
+github-rest = { path = "../github-rest"}
+github-api = { git = "https://github.com/octocat-rs/github-api" }
+
+## Async
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1.52"
+futures = "0.3"
+
+## Webserver
+rocket = "0.5.0-rc.1"
+
+## Serialization/Deserialization
+serde_with = { version = "1.10.0", features = ["json", "macros"] }
+serde = { version = "^1", features = ["derive"] }
+serde_json = "^1"
+toml = "0.5.8"
+
+## Error Handling
+thiserror = "1.0.30"
+anyhow = "1.0.51"
+
+## Logging
+pretty_env_logger = "0.4"
+log = "0.4"
+
+## Util
+lazy_static = "1.4.0"
+strum_macros = "0.23"
+reqwest = "^0.11.8"
+strum = "0.23.0"
+
