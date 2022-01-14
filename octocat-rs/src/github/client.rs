@@ -4,7 +4,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    model::{Commit, Commits, EventTypes, Issues, Pulls},
+    model::{Commits, EventTypes, Issues, Pulls},
     GithubRestError, Requester,
 };
 use rocket::{

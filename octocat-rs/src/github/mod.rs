@@ -15,7 +15,10 @@ pub mod util;
 #[cfg(test)]
 mod tests {
     use async_trait::async_trait;
-    use github_rest::{methods::prelude::Comment, model::Commit, GithubRestError, Requester};
+    use github_rest::{
+        model::{nested::CommitComment, Commit},
+        GithubRestError, Requester,
+    };
 
     use crate::github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler};
 
@@ -31,7 +34,7 @@ mod tests {
 
         #[derive(Debug)]
         enum Message {
-            CommentPosted(std::result::Result<Comment, GithubRestError>),
+            CommentPosted(std::result::Result<CommitComment, GithubRestError>),
         }
 
         #[async_trait]
@@ -57,7 +60,7 @@ mod tests {
 
         ClientBuilder::new()
             .event_handler(Handler {})
-            .credentials_file("examples/octocat.example.toml")
+            .credentials_file("../examples/octocat.example.toml")
             .build()
             .unwrap();
     }
