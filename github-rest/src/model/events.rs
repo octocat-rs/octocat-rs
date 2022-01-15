@@ -5,7 +5,7 @@ use strum::{EnumString, EnumVariantNames};
 /// with all webhook payloads.
 ///
 /// See also: <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads>
-#[derive(Deserialize, EnumString, EnumVariantNames)]
+#[derive(Deserialize, EnumString, EnumVariantNames, Debug)]
 #[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
 pub enum EventTypes {

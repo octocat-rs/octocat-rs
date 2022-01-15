@@ -1,8 +1,4 @@
 use async_trait::async_trait;
-use github_rest::{
-    methods::prelude::{EndPoints, Methods},
-    GithubRestError,
-};
 use reqwest::{
     header,
     header::{HeaderMap, HeaderValue},
@@ -10,6 +6,11 @@ use reqwest::{
 };
 use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
+
+use github_rest::{
+    methods::prelude::{EndPoints, Methods},
+    GithubRestError,
+};
 
 use crate::github::Authorization;
 

@@ -14,13 +14,21 @@ pub mod util;
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
     use async_trait::async_trait;
+    use futures::FutureExt;
+
     use github_rest::{
         model::{nested::CommitComment, Commit},
-        GithubRestError, Requester,
+        GithubRestError,
     };
 
-    use crate::github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler};
+    use crate::{
+        client::GitHubClient,
+        github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler},
+        Client,
+    };
 
     #[test]
     fn default_everything() {
@@ -40,21 +48,25 @@ mod tests {
         #[async_trait]
         impl EventHandler for Handler {
             type Message = Message;
+            type GitHubClient = Client<Self>;
 
-            fn webhook_port(&self) -> u32 {
+            fn webhook_port(&self) -> u16 {
                 8080
             }
 
             /// Example for how [`Command::perform`] should be used in practice.
             async fn commit_pushed(
                 &self,
-                http_client: &'static (impl Requester + Sync),
-                commit: &'static Commit,
+                github_client: Arc<Self::GitHubClient>,
+                commit: Commit,
             ) -> Command<Self::Message> {
-                Command::perform(
-                    commit.add_comment(http_client, "".to_owned(), None, None),
-                    Message::CommentPosted,
-                )
+                let task = tokio::spawn(async move {
+                    commit
+                        .add_comment(github_client.http_client(), "".to_owned(), None, None)
+                        .await
+                });
+
+                Command::perform(task.map(|res| res.unwrap()), Message::CommentPosted)
             }
         }
 

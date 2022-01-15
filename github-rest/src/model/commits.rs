@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 
 use super::User;
 use crate::{
@@ -21,6 +22,18 @@ pub struct Commit {
 }
 
 impl Commit {
+    pub async fn add_comment_arc<T>(
+        &self,
+        client: Arc<&T>,
+        body: String,
+        path: Option<String>,
+        position: Option<String>,
+    ) -> Result<CommitComment, GithubRestError>
+    where
+        T: Requester,
+    {
+        self.add_comment(*client, body, path, position).await
+    }
     /// Adds a comment to the current instance.
     pub async fn add_comment<T>(
         &self,

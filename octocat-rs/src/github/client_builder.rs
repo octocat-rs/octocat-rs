@@ -7,7 +7,7 @@ use crate::github::{handler::EventHandler, util::*, Client, DefaultEventHandler}
 /// A builder for [`Client`]
 pub struct ClientBuilder<T>
 where
-    T: std::fmt::Debug + EventHandler + Send,
+    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
     handler: Option<T>,
     auth: Option<Authorization>,
@@ -17,7 +17,7 @@ where
 
 impl<T> ClientBuilder<T>
 where
-    T: std::fmt::Debug + EventHandler + Send,
+    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
     /// Creates a new [`ClientBuilder`]
     pub fn new() -> Self {
@@ -140,7 +140,7 @@ impl ClientBuilder<DefaultEventHandler> {
 
 impl<T> Default for ClientBuilder<T>
 where
-    T: std::fmt::Debug + EventHandler + Send,
+    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
     fn default() -> Self {
         Self::new()

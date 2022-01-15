@@ -1,18 +1,14 @@
-use std::str::FromStr;
+use std::sync::Arc;
 
 use anyhow::Result;
 use async_trait::async_trait;
+use rocket::data::{ByteUnit, ToByteUnit};
+use warp::Filter;
+
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    model::{Commits, EventTypes, Issues, Pulls},
+    model::{Commit, Commits, EventTypes, Issues, Pulls},
     GithubRestError, Requester,
-};
-use rocket::{
-    config::LogLevel,
-    data::{ByteUnit, Limits, ToByteUnit},
-    http::Status,
-    request::{FromRequest, Outcome},
-    Request,
 };
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
@@ -26,122 +22,6 @@ pub trait GitHubClient {
     /// is started.
     async fn run(&self) -> Result<()>;
 
-    async fn start(&self) -> Result<()> {
-        self.run().await.expect("Starting application: User-defined code");
-
-        self.listener().await
-    }
-
-    async fn listener(&self) -> Result<()> {
-        struct EventType(EventTypes);
-
-        #[async_trait]
-        impl<'a> FromRequest<'a> for EventType {
-            type Error = EventHeaderError;
-
-            async fn from_request(request: &'a Request<'_>) -> Outcome<Self, Self::Error> {
-                let val = match request.headers().get_one("x-github-event") {
-                    Some(s) => s,
-                    None => return Outcome::Failure((Status::BadRequest, EventHeaderError::MissingEventHeader)),
-                };
-
-                match EventTypes::from_str(val) {
-                    Ok(e) => Outcome::Success(Self(e)),
-                    Err(_) => Outcome::Failure((Status::BadRequest, EventHeaderError::UnimplementedEventType)),
-                }
-            }
-        }
-
-        #[derive(Debug, Copy, Clone)]
-        enum EventHeaderError {
-            UnimplementedEventType,
-            MissingEventHeader,
-        }
-
-        #[catch(default)]
-        fn default(status: Status, req: &Request) -> String {
-            format!("{} ({})", status, req.uri())
-        }
-
-        #[post("/", format = "application/json", data = "<payload>")]
-        async fn handler(payload: String, ev: EventType) -> Status {
-            dbg!(&payload);
-
-            // TODO: Further sorting, delegate to handler instance
-            match ev.0 {
-                EventTypes::BranchProtectionRule => {}
-                EventTypes::CodeScanningAlert => {}
-                EventTypes::CommitComment => {}
-                EventTypes::DeployKey => {}
-                EventTypes::Deployment => {}
-                EventTypes::DeploymentStatus => {}
-                EventTypes::CheckRun => {}
-                EventTypes::Discussion => {}
-                EventTypes::DiscussionComment => {}
-                EventTypes::GithubAppAuthorization => {}
-                EventTypes::Gollum => {}
-                EventTypes::Installation => {}
-                EventTypes::InstallationRepositories => {}
-                EventTypes::Label => {}
-                EventTypes::MarketplacePurchase => {}
-                EventTypes::Member => {}
-                EventTypes::Membership => {}
-                EventTypes::Meta => {}
-                EventTypes::Milestone => {}
-                EventTypes::Organization => {}
-                EventTypes::OrgBlock => {}
-                EventTypes::Package => {}
-                EventTypes::PageBuild => {}
-                EventTypes::Project => {}
-                EventTypes::ProjectCard => {}
-                EventTypes::ProjectColumn => {}
-                EventTypes::Public => {}
-                EventTypes::PullRequestReview => {}
-                EventTypes::PullRequestReviewComment => {}
-                EventTypes::RepositoryDispatch => {}
-                EventTypes::Repository => {}
-                EventTypes::RepositoryImport => {}
-                EventTypes::RepositoryVulnerabilityAlert => {}
-                EventTypes::SecretScanningAlert => {}
-                EventTypes::SecurityAdvisory => {}
-                EventTypes::Sponsorship => {}
-                EventTypes::Status => {}
-                EventTypes::Team => {}
-                EventTypes::TeamAdd => {}
-                EventTypes::WorkflowDispatch => {}
-                EventTypes::CheckSuite => {}
-                EventTypes::Create => {}
-                EventTypes::Delete => {}
-                EventTypes::Fork => {}
-                EventTypes::IssueComment => {}
-                EventTypes::Issues => {}
-                EventTypes::Ping => {}
-                EventTypes::PullRequest => {}
-                EventTypes::Push => {}
-                EventTypes::Release => {}
-                EventTypes::Star => {}
-                EventTypes::Watch => {}
-                EventTypes::WorkflowJob => {}
-                EventTypes::WorkflowRun => {}
-            }
-
-            Status::Ok
-        }
-
-        let figment = rocket::Config::figment()
-            .merge(("port", self.event_handler().webhook_port()))
-            .merge(("log_level", LogLevel::Critical))
-            .merge(("limits", Limits::default().limit("json", self.payload_size())));
-
-        rocket::custom(figment)
-            .mount(self.event_handler().route(), routes![handler])
-            .register("/", catchers![default])
-            .launch()
-            .await?;
-
-        Ok(())
-    }
-
     /// Helper function for use in instances where one needs to pass an http
     /// client
     fn http_client(&self) -> &Self::HttpClient;
@@ -150,8 +30,7 @@ pub trait GitHubClient {
 
     /// Helper function to set the maximum payload size. Default is 8 MiB.
     fn payload_size(&self) -> ByteUnit {
-        8.mebibytes() // TODO: Figure out why on earth this sets the limit to
-                      // 8TiB
+        todo!("Complete Warp migration")
     }
 
     /// Gets all commits from a repository.
@@ -196,7 +75,7 @@ pub trait GitHubClient {
 /// Where the magic happens.
 pub struct Client<T>
 where
-    T: std::fmt::Debug + EventHandler + Send,
+    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     handler: T,
     max_payload_size: ByteUnit,
@@ -206,7 +85,7 @@ where
 #[async_trait]
 impl<T> GitHubClient for Client<T>
 where
-    T: std::fmt::Debug + EventHandler + Send + Sync,
+    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     type HttpClient = HttpClient;
     type EventHandler = T;
@@ -231,8 +110,95 @@ where
 
 impl<T> Client<T>
 where
-    T: std::fmt::Debug + EventHandler + Send,
+    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
+    pub async fn start(self) {
+        let _ = self.run().await.expect("Starting application: User-defined code");
+
+        let event_type = warp::header::<EventTypes>("event-type");
+
+        let self_arc = Arc::new(self);
+        let thread_self = self_arc.clone();
+
+        let routes = event_type.map(move |ev: EventTypes| {
+            let a = async {
+                match ev {
+                    EventTypes::Push => {
+                        thread_self
+                            .event_handler()
+                            .commit_pushed(thread_self.clone(), Commit::default())
+                            .await;
+                    }
+                    EventTypes::GithubAppAuthorization => {}
+                    EventTypes::Installation => {}
+                    EventTypes::InstallationRepositories => {}
+                    EventTypes::DeployKey => {}
+                    EventTypes::Gollum => {}
+                    EventTypes::Member => {}
+                    EventTypes::Milestone => {}
+                    EventTypes::Public => {}
+                    EventTypes::Release => {}
+                    EventTypes::Repository => {}
+                    EventTypes::RepositoryDispatch => {}
+                    EventTypes::RepositoryImport => {}
+                    EventTypes::RepositoryVulnerabilityAlert => {}
+                    EventTypes::SecretScanningAlert => {}
+                    EventTypes::SecurityAdvisory => {}
+                    EventTypes::Star => {}
+                    EventTypes::Watch => {}
+                    EventTypes::PullRequest => {}
+                    EventTypes::PullRequestReview => {}
+                    EventTypes::PullRequestReviewComment => {}
+                    EventTypes::CommitComment => {}
+                    EventTypes::Status => {}
+                    EventTypes::IssueComment => {}
+                    EventTypes::Issues => {}
+                    EventTypes::Label => {}
+                    EventTypes::Discussion => {}
+                    EventTypes::DiscussionComment => {}
+                    EventTypes::BranchProtectionRule => {}
+                    EventTypes::Create => {}
+                    EventTypes::Delete => {}
+                    EventTypes::Fork => {}
+                    EventTypes::CheckRun => {}
+                    EventTypes::CheckSuite => {}
+                    EventTypes::CodeScanningAlert => {}
+                    EventTypes::Deployment => {}
+                    EventTypes::DeploymentStatus => {}
+                    EventTypes::PageBuild => {}
+                    EventTypes::WorkflowDispatch => {}
+                    EventTypes::WorkflowJob => {}
+                    EventTypes::WorkflowRun => {}
+                    EventTypes::Membership => {}
+                    EventTypes::OrgBlock => {}
+                    EventTypes::Organization => {}
+                    EventTypes::Team => {}
+                    EventTypes::TeamAdd => {}
+                    EventTypes::Project => {}
+                    EventTypes::ProjectCard => {}
+                    EventTypes::ProjectColumn => {}
+                    EventTypes::MarketplacePurchase => {}
+                    EventTypes::Meta => {}
+                    EventTypes::Package => {}
+                    EventTypes::Ping => {}
+                    EventTypes::Sponsorship => {}
+                }
+            };
+
+            let _ = tokio::runtime::Builder::new_current_thread()
+                .enable_all()
+                .build()
+                .unwrap()
+                .block_on(a);
+
+            "".to_owned()
+        });
+
+        warp::serve(routes)
+            .run(([127, 0, 0, 1], self_arc.event_handler().webhook_port()))
+            .await;
+    }
+
     /// Creates a new [`Client`].
     pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>, payload_size: Option<u64>) -> Self {
         Self {
