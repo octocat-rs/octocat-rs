@@ -1,6 +1,5 @@
 #![warn(clippy::if_then_some_else_none)]
 #![warn(clippy::str_to_string)]
-#![feature(async_closure)]
 
 //! A GitHub API client written in Rust.
 //!

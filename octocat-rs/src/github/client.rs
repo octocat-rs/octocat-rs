@@ -115,12 +115,17 @@ where
     pub async fn start(self) {
         let _ = self.run().await.expect("Starting application: User-defined code");
 
-        let event_type = warp::header::<EventTypes>("event-type");
-
         let self_arc = Arc::new(self);
         let thread_self = self_arc.clone();
 
-        let routes = event_type.map(move |ev: EventTypes| {
+        let event_type = warp::post()
+            .and(warp::path("payload"))
+            .and(warp::header::<EventTypes>("event-type"))
+            .and(warp::body::content_length_limit(1024 * 8192)) // 8Kb
+            .and(warp::body::json());
+
+        let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
+            dbg!(&body);
             let a = async {
                 match ev {
                     EventTypes::Push => {
@@ -185,13 +190,9 @@ where
                 }
             };
 
-            let _ = tokio::runtime::Builder::new_current_thread()
-                .enable_all()
-                .build()
-                .unwrap()
-                .block_on(a);
+            let _ = futures::executor::block_on(a);
 
-            "".to_owned()
+            body.to_string()
         });
 
         warp::serve(routes)

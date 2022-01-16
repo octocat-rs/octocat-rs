@@ -2,10 +2,7 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 
-use github_rest::{
-    model::{nested::CommitComment, Commit},
-    Requester,
-};
+use github_rest::model::{nested::CommitComment, Commit};
 
 use crate::{client::GitHubClient, github::command::Command, Client};
 
@@ -32,7 +29,6 @@ pub trait EventHandler {
     /// Commit pushed to a repository.
     ///
     /// See also: [`Commit`]
-    // TODO: Remove http client, only pass GH one
     async fn commit_pushed(&self, github_client: Arc<Self::GitHubClient>, commit: Commit) -> Command<Self::Message> {
         Command::none()
     }
@@ -42,9 +38,9 @@ pub trait EventHandler {
     /// See also: [`Commit`], [`CommitComment`]
     async fn commit_comment_added(
         &self,
-        http_client: &'static (impl Requester + Sync),
-        commit: &'static Commit,
-        comment: &'static CommitComment,
+        github_client: Arc<Self::GitHubClient>,
+        commit: Commit,
+        comment: CommitComment,
     ) -> Command<Self::Message> {
         Command::none()
     }

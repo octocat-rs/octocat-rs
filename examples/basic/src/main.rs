@@ -16,7 +16,7 @@ async fn main() -> Result<()> {
         type Message = ();
         type GitHubClient = Client<Self>;
 
-        fn webhook_port(&self) -> u32 {
+        fn webhook_port(&self) -> u16 {
             2022
         }
 
