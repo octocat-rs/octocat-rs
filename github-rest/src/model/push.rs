@@ -1,7 +1,15 @@
 use super::{Repository, User};
-use crate::model::push::push_event_nested::{Commit, HeadCommit, Pusher};
+use crate::{
+    methods::util,
+    model::{
+        nested::CommitComment,
+        push::push_event_nested::{Commit, HeadCommit, Pusher},
+    },
+    GithubRestError, Requester,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::sync::Arc;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushEvent {
@@ -20,6 +28,30 @@ pub struct PushEvent {
     pub commits: Vec<Commit>,
     pub head_commit: HeadCommit,
 }
+
+impl PushEvent {
+    /// Adds a comment to the commit that triggered the event.
+    ///
+    /// See also: https://docs.github.com/en/rest/reference/commits#create-a-commit-comment
+    pub async fn add_comment(
+        &self,
+        client: Arc<&impl Requester>,
+        body: String,
+        path: Option<String>,
+        position: Option<String>,
+    ) -> Result<CommitComment, GithubRestError> {
+        util::helper_for_helper_for_helper(
+            *client,
+            self.head_commit.url.clone(),
+            self.head_commit.id.clone(),
+            body,
+            path,
+            position,
+        )
+        .await
+    }
+}
+
 pub mod push_event_nested {
     use crate::model::SimpleUser;
     use serde::{Deserialize, Serialize};

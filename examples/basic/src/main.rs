@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use async_trait::async_trait;
 
-use github_rest::model::Commit;
+use github_rest::model::PushEvent;
 use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command};
 
 #[tokio::main]
@@ -23,7 +23,7 @@ async fn main() -> Result<()> {
         async fn commit_pushed(
             &self,
             _github_client: Arc<Self::GitHubClient>,
-            _commit: Commit,
+            _commit: PushEvent,
         ) -> Command<Self::Message> {
             println!("Commit pushed!");
             Command::none()

@@ -3,6 +3,7 @@
 pub use commits::*;
 pub use events::*;
 pub use issues::*;
+pub use organizations::*;
 pub use pull_request::*;
 pub use push::*;
 pub use reactions::*;
@@ -15,6 +16,7 @@ pub use workflows::*;
 pub(crate) mod commits;
 mod events;
 mod issues;
+mod organizations;
 mod pull_request;
 mod push;
 mod reactions;

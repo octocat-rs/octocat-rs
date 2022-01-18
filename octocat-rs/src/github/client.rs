@@ -7,7 +7,7 @@ use warp::Filter;
 
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    model::{Commit, Commits, EventTypes, Issues, Pulls},
+    model::{Commits, EventTypes, Issues, Pulls, PushEvent},
     GithubRestError, Requester,
 };
 
@@ -25,6 +25,10 @@ pub trait GitHubClient {
     /// Helper function for use in instances where one needs to pass an http
     /// client
     fn http_client(&self) -> &Self::HttpClient;
+
+    fn http_client_arc(&self) -> Arc<&Self::HttpClient> {
+        Arc::new(self.http_client())
+    }
 
     fn event_handler(&self) -> &Self::EventHandler;
 
@@ -120,7 +124,7 @@ where
 
         let event_type = warp::post()
             .and(warp::path("payload"))
-            .and(warp::header::<EventTypes>("event-type"))
+            .and(warp::header::<EventTypes>("x-github-event"))
             .and(warp::body::content_length_limit(1024 * 8192)) // 8Kb
             .and(warp::body::json());
 
@@ -131,7 +135,10 @@ where
                     EventTypes::Push => {
                         thread_self
                             .event_handler()
-                            .commit_pushed(thread_self.clone(), Commit::default())
+                            .commit_pushed(
+                                thread_self.clone(),
+                                serde_json::from_str::<PushEvent>(body.to_string().as_str()).unwrap(),
+                            )
                             .await;
                     }
                     EventTypes::GithubAppAuthorization => {}

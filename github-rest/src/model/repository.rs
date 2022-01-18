@@ -9,7 +9,7 @@ pub struct ForkEvent {
     sender: User,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Repository {
     pub id: i64,
     pub node_id: String,

@@ -3,6 +3,33 @@ use crate::model::Reaction;
 use super::prelude::*;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct GetCommitBody {
+    /// Page number of the results to fetch.
+    page: usize,
+    /// Results per page (maximum of 100)
+    per_page: u8,
+}
+
+pub async fn get_commit<T>(
+    client: &T,
+    owner: String,
+    repo: String,
+    commit_id: String,
+    options: Option<&GetCommitBody>,
+) -> Result<Commit, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<GetCommitBody, String, Commit>(
+            EndPoints::GetReposownerrepoCommitsref(owner, repo, commit_id),
+            options,
+            None,
+        )
+        .await
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetCommitsBody {
     ///SHA or branch to start listing commits from. Default: the repository’s
     /// default branch (usually master).

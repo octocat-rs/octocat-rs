@@ -1,10 +1,15 @@
-use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-use super::User;
+use serde::{Deserialize, Serialize};
+use strum::{EnumString, EnumVariantNames};
+
 use crate::{
-    builders::CommentOnCommitBuilder, methods::util, model::nested::CommitComment, GithubRestError, Requester,
+    methods::{get_commit, util, GetCommitBody},
+    model::{nested::CommitComment, Organization, Repository},
+    GithubRestError, Requester,
 };
+
+use super::User;
 
 pub type Commits = Vec<Commit>;
 
@@ -22,65 +27,76 @@ pub struct Commit {
 }
 
 impl Commit {
-    pub async fn add_comment_arc<T>(
+    pub async fn add_comment_arc(
         &self,
-        client: Arc<&T>,
+        client: Arc<&impl Requester>,
         body: String,
         path: Option<String>,
         position: Option<String>,
-    ) -> Result<CommitComment, GithubRestError>
-    where
-        T: Requester,
-    {
+    ) -> Result<CommitComment, GithubRestError> {
         self.add_comment(*client, body, path, position).await
     }
     /// Adds a comment to the current instance.
-    pub async fn add_comment<T>(
+    pub async fn add_comment(
         &self,
-        client: &T,
+        client: &impl Requester,
         body: String,
         path: Option<String>,
         position: Option<String>,
-    ) -> Result<CommitComment, GithubRestError>
+    ) -> Result<CommitComment, GithubRestError> {
+        util::helper_for_helper_for_helper(client, self.html_url.clone(), self.sha.clone(), body, path, position).await
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CommitCommentEvent {
+    pub action: CommitCommentAction,
+    pub comment: CommitComment,
+    pub organization: Option<Organization>,
+    pub repository: Repository,
+    pub sender: User,
+}
+
+impl CommitCommentEvent {
+    /// Get the commit that the current comment refers to.
+    ///
+    /// See also: <https://docs.github.com/en/rest/reference/commits#get-a-commit>
+    pub async fn get_commit<T>(&self, client: &T, options: Option<&GetCommitBody>) -> Result<Commit, GithubRestError>
     where
         T: Requester,
     {
-        let (owner, repo) = util::owner_and_repo(self.html_url.clone());
+        get_commit(
+            client,
+            self.repository.owner.login.clone(),
+            self.repository.name.clone(),
+            self.comment.commit_id.clone(),
+            options,
+        )
+        .await
+    }
+}
 
-        let mut comment = CommentOnCommitBuilder::new(owner, repo, self.sha.clone(), body);
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum CommitCommentAction {
+    Created,
+}
 
-        if let Some(s) = path {
-            comment = comment.path(s);
-        }
-
-        if let Some(s) = position {
-            comment = comment.position(s);
-        }
-
-        comment.execute(client).await
+impl Default for CommitCommentAction {
+    fn default() -> Self {
+        Self::Created
     }
 }
 
 pub mod nested {
-    use crate::{
-        methods::{prelude::SimpleUser, react_to_commit_comment, util},
-        GithubRestError, Requester,
-    };
     use serde::{Deserialize, Serialize};
 
+    use crate::{
+        methods::{react_to_commit_comment, util},
+        GithubRestError, Requester,
+    };
     // TODO: Create better names for these model
-    use crate::model::{CommitCommentReactionCreated, Reaction, User};
-
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct Commit {
-        pub author: SimpleUser,
-        pub committer: SimpleUser,
-        pub message: String,
-        pub tree: Tree,
-        pub url: String,
-        pub comment_count: i64,
-        pub verification: Verification,
-    }
+    use crate::model::{CommitCommentReactionCreated, Reaction, Reactions, User};
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Tree {
@@ -118,6 +134,7 @@ pub mod nested {
         pub user: User,
         pub created_at: String,
         pub updated_at: String,
+        pub reactions: Reactions,
     }
 
     impl CommitComment {

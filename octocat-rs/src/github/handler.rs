@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 
-use github_rest::model::{nested::CommitComment, Commit};
+use github_rest::model::{nested::CommitComment, Commit, PushEvent};
 
 use crate::{client::GitHubClient, github::command::Command, Client};
 
@@ -16,6 +16,7 @@ use crate::{client::GitHubClient, github::command::Command, Client};
 pub trait EventHandler {
     type Message: std::fmt::Debug + Send;
     type GitHubClient: GitHubClient + Send + Sync;
+
     /// Utility function for getting the port used by the webhook.
     fn webhook_port(&self) -> u16 {
         8080
@@ -29,7 +30,7 @@ pub trait EventHandler {
     /// Commit pushed to a repository.
     ///
     /// See also: [`Commit`]
-    async fn commit_pushed(&self, github_client: Arc<Self::GitHubClient>, commit: Commit) -> Command<Self::Message> {
+    async fn commit_pushed(&self, github_client: Arc<Self::GitHubClient>, commit: PushEvent) -> Command<Self::Message> {
         Command::none()
     }
 

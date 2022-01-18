@@ -20,7 +20,7 @@ mod tests {
     use futures::FutureExt;
 
     use github_rest::{
-        model::{nested::CommitComment, Commit},
+        model::{nested::CommitComment, PushEvent},
         GithubRestError,
     };
 
@@ -58,11 +58,11 @@ mod tests {
             async fn commit_pushed(
                 &self,
                 github_client: Arc<Self::GitHubClient>,
-                commit: Commit,
+                commit: PushEvent,
             ) -> Command<Self::Message> {
                 let task = tokio::spawn(async move {
                     commit
-                        .add_comment(github_client.http_client(), "".to_owned(), None, None)
+                        .add_comment(github_client.http_client_arc(), "".to_owned(), None, None)
                         .await
                 });
 

@@ -28,14 +28,17 @@ impl CommentOnCommitBuilder {
             },
         }
     }
+
     pub fn body(mut self, body: String) -> CommentOnCommitBuilder {
         self.body.body = body;
         self
     }
+
     pub fn path(mut self, path: String) -> CommentOnCommitBuilder {
         self.body.path = Some(path);
         self
     }
+
     pub fn position(mut self, position: String) -> CommentOnCommitBuilder {
         self.body.position = Some(position);
         self
