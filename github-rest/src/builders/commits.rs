@@ -1,5 +1,6 @@
 use crate::{
-    methods::{comment_on_commit, prelude::CommitComment, CommentOnCommitBody},
+    methods::{comment_on_commit, CommentOnCommitBody},
+    model::commits::comments::CommitComment,
     GithubRestError, Requester,
 };
 

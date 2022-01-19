@@ -1,13 +1,7 @@
-use super::User;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ForkEvent {
-    forkee: Repository,
-    repository: Repository,
-    sender: User,
-}
+use crate::model::user::User;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Repository {

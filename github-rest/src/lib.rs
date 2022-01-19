@@ -2,11 +2,11 @@ use core::fmt;
 use std::error::Error;
 
 use async_trait::async_trait;
+pub use github_api::end_points;
 use github_api::end_points::EndPoints;
 use reqwest::{Body, StatusCode};
 use serde::{de::DeserializeOwned, Serialize};
 
-pub use github_api::end_points;
 #[cfg(feature = "builders")]
 pub mod builders;
 #[cfg(feature = "client")]

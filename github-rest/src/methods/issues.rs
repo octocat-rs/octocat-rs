@@ -1,3 +1,8 @@
+use crate::model::{
+    issues::{Issue, Issues},
+    pull_requests::Pulls,
+};
+
 use super::prelude::*;
 
 //TODO make a builder for this
@@ -17,7 +22,7 @@ pub struct CreateIssueBody {
 /// * docs <https://docs.github.com/rest/reference/issues#create-an-issue>
 ///
 /// Create an issue
-/// Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://help.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
+/// Any user with pull access to a repositories can create an issue. If [issues are disabled in the repositories](https://help.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
 ///
 /// This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 pub async fn create_issue<T>(
@@ -90,14 +95,14 @@ pub enum IssueState {
 /// * get `/repos/{owner}/{repo}/issues`
 /// * docs <https://docs.github.com/rest/reference/issues#list-repository-issues>
 ///
-/// List repository issues
-/// List issues in a repository.
+/// List repositories issues
+/// List issues in a repositories.
 ///
 /// **Note**: GitHub's REST API v3 considers every pull request an issue, but
 /// not every issue is a pull request. For this reason, "Issues" endpoints may
 /// return both issues and pull requests in the response. You can identify pull
-/// requests by the `pull_request` key. Be aware that the `id` of a pull request
-/// returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
+/// requests by the `pull_requests` key. Be aware that the `id` of a pull
+/// request returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
 pub async fn get_issues<T>(
     client: &T,
     owner: String,
@@ -149,7 +154,7 @@ pub struct GetPullsBody {
 /// * docs <https://docs.github.com/rest/reference/pulls#list-pull-requests>
 ///
 /// List pull requests
-/// Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+/// Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repositories billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 pub async fn get_pulls<T>(
     client: &T,
     owner: String,
@@ -194,6 +199,7 @@ mod tests {
         .unwrap();
         println!("{:#?}", r)
     }
+
     #[tokio::test]
     async fn test_get_issues() {
         let reqester = DefaultRequest::new_none();
@@ -203,6 +209,7 @@ mod tests {
             .unwrap();
         println!("{:#?}", r)
     }
+
     #[tokio::test]
     async fn test_get_issues2() {
         let requester = DefaultRequest::new_none();

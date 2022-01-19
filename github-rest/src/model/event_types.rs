@@ -16,7 +16,8 @@ pub enum EventTypes {
 
     // Repositories
     DeployKey,
-    Gollum, // Wiki page created/updated
+    Gollum,
+    // Wiki page created/updated
     Member,
     Milestone,
     Public,
@@ -83,7 +84,8 @@ pub enum EventTypes {
 
     // Misc
     Meta,
-    Package, /* <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package> */
+    Package,
+    /* <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package> */
     Ping,
     Sponsorship,
 }

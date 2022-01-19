@@ -20,7 +20,7 @@ mod tests {
     use futures::FutureExt;
 
     use github_rest::{
-        model::{nested::CommitComment, PushEvent},
+        model::{commits::comments::CommitComment, repositories::events::PushEvent},
         GithubRestError,
     };
 

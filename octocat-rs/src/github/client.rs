@@ -7,7 +7,10 @@ use warp::Filter;
 
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
-    model::{Commits, EventTypes, Issues, Pulls, PushEvent},
+    model::{
+        commits::Commits, event_types::EventTypes, issues::Issues, pull_requests::Pulls,
+        repositories::events::PushEvent,
+    },
     GithubRestError, Requester,
 };
 
@@ -37,21 +40,21 @@ pub trait GitHubClient {
         todo!("Complete Warp migration")
     }
 
-    /// Gets all commits from a repository.
+    /// Gets all commits from a repositories.
     ///
     /// See also: [`get_commits`]
     async fn get_all_commits(&self, owner: String, repo: String) -> std::result::Result<Commits, GithubRestError> {
         get_commits(self.http_client(), owner, repo, None).await
     }
 
-    /// Gets all issues from a repository.
+    /// Gets all issues from a repositories.
     ///
     /// See also: [`get_issues`]
     async fn get_all_issues(&self, owner: String, repo: String) -> std::result::Result<Issues, GithubRestError> {
         get_issues(self.http_client(), owner, repo, None).await
     }
 
-    /// Gets all pull requests from a repository.
+    /// Gets all pull requests from a repositories.
     ///
     /// See also: [`get_pulls`]
     async fn get_all_pulls(&self, owner: String, repo: String) -> std::result::Result<Pulls, GithubRestError> {

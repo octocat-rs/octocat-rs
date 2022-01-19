@@ -1,15 +1,21 @@
-use super::{Repository, User};
+use std::sync::Arc;
+
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use strum::{EnumString, EnumVariantNames};
+
 use crate::{
     methods::util,
     model::{
-        nested::CommitComment,
-        push::push_event_nested::{Commit, HeadCommit, Pusher},
+        commits::comments::CommitComment,
+        repositories::{
+            events::nested::{Commit, HeadCommit, Pusher},
+            Repository,
+        },
+        user::User,
     },
     GithubRestError, Requester,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::sync::Arc;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushEvent {
@@ -52,10 +58,11 @@ impl PushEvent {
     }
 }
 
-pub mod push_event_nested {
-    use crate::model::SimpleUser;
+pub mod nested {
     use serde::{Deserialize, Serialize};
     use serde_json::Value;
+
+    use crate::model::user::SimpleUser;
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Pusher {
@@ -92,4 +99,26 @@ pub mod push_event_nested {
         pub removed: Vec<Value>,
         pub modified: Vec<Value>,
     }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StarEvent {
+    pub action: StarAction,
+    pub repository: Repository,
+    pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum StarAction {
+    Created,
+    Deleted,
+}
+
+// TODO: Watch event
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ForkEvent {
+    forkee: Repository,
+    repository: Repository,
+    sender: User,
 }

@@ -1,3 +1,5 @@
+use crate::model::user::User;
+
 use super::prelude::*;
 
 /// * tags users

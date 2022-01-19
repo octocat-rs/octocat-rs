@@ -2,7 +2,10 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 
-use github_rest::model::{nested::CommitComment, Commit, PushEvent};
+use github_rest::model::{
+    commits::{comments::CommitComment, Commit},
+    repositories::events::PushEvent,
+};
 
 use crate::{client::GitHubClient, github::command::Command, Client};
 
@@ -27,14 +30,14 @@ pub trait EventHandler {
         "/payload"
     }
 
-    /// Commit pushed to a repository.
+    /// Commit pushed to a repositories.
     ///
     /// See also: [`Commit`]
     async fn commit_pushed(&self, github_client: Arc<Self::GitHubClient>, commit: PushEvent) -> Command<Self::Message> {
         Command::none()
     }
 
-    /// Comment added to a repository commit.
+    /// Comment added to a repositories commit.
     ///
     /// See also: [`Commit`], [`CommitComment`]
     async fn commit_comment_added(

@@ -1,6 +1,6 @@
 use crate::{
     methods::react_to_commit_comment,
-    model::{CommitCommentReactionCreated, Reaction},
+    model::reactions::{CommitCommentReactionCreated, Reaction},
     GithubRestError, Requester,
 };
 
@@ -43,7 +43,11 @@ impl ReactionOnCommitCommentBuilder {
 #[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
-    use crate::{builders::ReactionOnCommitCommentBuilder, client::DefaultRequest, model::Reaction};
+    use crate::{
+        builders::ReactionOnCommitCommentBuilder,
+        client::DefaultRequest,
+        model::{reactions::Reaction, Reaction},
+    };
 
     #[cfg(feature = "builders")]
     #[tokio::test]

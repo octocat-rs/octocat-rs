@@ -1,5 +1,5 @@
 //TODO: lock this behind a feature
-//TODO: Replace all String's with T: into<String>
+//TODO: Replace all Strings with T: into<String>
 use async_trait::async_trait;
 use github_api::end_points::{EndPoints, Methods};
 use reqwest::{header, Body};

@@ -15,8 +15,5 @@ pub mod prelude {
     pub use reqwest::Body;
     pub use serde::{Deserialize, Serialize};
 
-    pub use crate::{
-        model::{nested::*, *},
-        GithubRestError, Requester,
-    };
+    pub use crate::{GithubRestError, Requester};
 }

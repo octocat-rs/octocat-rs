@@ -1,5 +1,6 @@
-use crate::model::User;
 use serde::{Deserialize, Serialize};
+
+use crate::model::user::User;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Reactions {
@@ -39,6 +40,7 @@ impl Default for Reaction {
     }
 }
 
+// TODO: Make this a proper event type
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CommitCommentReactionCreated {
     id: i64,
