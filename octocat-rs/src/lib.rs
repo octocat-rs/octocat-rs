@@ -3,7 +3,7 @@
 
 //! A GitHub API client written in Rust.
 //!
-//! Getting started? Take a look at the [examples](https://github.com/octocat-rs/octocat-rs/tree/main/examples) folder in the project repositories!
+//! Getting started? Take a look at the [examples](https://github.com/octocat-rs/octocat-rs/tree/main/examples) folder in the project repository!
 
 pub use github::*;
 

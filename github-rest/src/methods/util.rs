@@ -18,7 +18,7 @@ pub async fn helper_for_helper_for_helper(
     comment.execute(client).await
 }
 
-/// Gets the owner and repositories from the `html_url` field used by so many of
+/// Gets the owner and repository from the `html_url` field used by so many of
 /// our model.
 pub fn owner_and_repo(html_url: String) -> (String, String) {
     let f = |s: &str| {

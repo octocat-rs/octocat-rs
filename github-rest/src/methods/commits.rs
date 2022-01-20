@@ -34,7 +34,7 @@ where
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetCommitsBody {
-    ///SHA or branch to start listing commits from. Default: the repositories’s
+    ///SHA or branch to start listing commits from. Default: the repository’s
     /// default branch (usually master).
     sha: Option<String>,
     ///Only commits containing this file path will be returned.

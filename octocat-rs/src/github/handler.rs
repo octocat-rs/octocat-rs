@@ -30,14 +30,14 @@ pub trait EventHandler {
         "/payload"
     }
 
-    /// Commit pushed to a repositories.
+    /// Commit pushed to a repository.
     ///
     /// See also: [`Commit`]
     async fn commit_pushed(&self, github_client: Arc<Self::GitHubClient>, commit: PushEvent) -> Command<Self::Message> {
         Command::none()
     }
 
-    /// Comment added to a repositories commit.
+    /// Comment added to a repository commit.
     ///
     /// See also: [`Commit`], [`CommitComment`]
     async fn commit_comment_added(
