@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use async_trait::async_trait;
 
-use github_rest::model::{commits::events::CommitCommentEvent, repositories::events::PushEvent};
+use github_rest::model::{repositories::events::PushEvent};
 use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command};
 
 #[tokio::main]
@@ -30,5 +30,6 @@ async fn main() -> Result<()> {
         }
     }
 
-    Ok(ClientBuilder::new().event_handler(Handler {}).build()?.start().await)
+    ClientBuilder::new().event_handler(Handler {}).build()?.start().await;
+    Ok(())
 }
