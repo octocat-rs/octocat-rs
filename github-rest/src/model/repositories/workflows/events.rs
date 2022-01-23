@@ -19,7 +19,7 @@ pub struct WorkflowRunEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WorkflowJobEvent {
-    pub action: WorkflowRunAction,
+    pub action: WorkflowJobAction,
     pub workflow_job: WorkflowJob,
     pub repository: Repository,
     pub sender: User,

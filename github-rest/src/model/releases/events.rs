@@ -19,10 +19,16 @@ pub mod nested {
     #[strum(serialize_all = "snake_case")]
     pub enum ReleaseAction {
         Published,
+        Unpublished,
+        Created,
+        Edited,
+        Deleted,
+        #[strum(serialize = "prereleased")]
+        PreReleased,
+        Released,
     }
 }
 
-// Event gets emitted on a tag create (?)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateEvent {
     #[serde(rename = "ref")]
@@ -35,7 +41,6 @@ pub struct CreateEvent {
     pub sender: User,
 }
 
-// Event gets emitted on a branch delete (?)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteEvent {
     #[serde(rename = "ref")]

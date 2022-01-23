@@ -62,7 +62,7 @@ mod tests {
             ) -> Command<Self::Message> {
                 let task = tokio::spawn(async move {
                     commit
-                        .add_comment(github_client.http_client_arc(), "".to_owned(), None, None)
+                        .add_comment_to_commit(github_client.http_client_arc(), "".to_owned(), None, None)
                         .await
                 });
 

@@ -3,8 +3,14 @@ use std::sync::Arc;
 use async_trait::async_trait;
 
 use github_rest::model::{
-    commits::{comments::CommitComment, Commit},
-    repositories::events::PushEvent,
+    commits::events::CommitCommentEvent,
+    issues::events::IssueEvent,
+    pull_requests::events::PullRequestEvent,
+    releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
+    repositories::{
+        events::{ForkEvent, PushEvent, StarEvent},
+        workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
+    },
 };
 
 use crate::{client::GitHubClient, github::command::Command, Client};
@@ -31,21 +37,89 @@ pub trait EventHandler {
     }
 
     /// Commit pushed to a repository.
-    ///
-    /// See also: [`Commit`]
-    async fn commit_pushed(&self, github_client: Arc<Self::GitHubClient>, commit: PushEvent) -> Command<Self::Message> {
+    async fn commit_pushed(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        push_event: PushEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
     /// Comment added to a repository commit.
-    ///
-    /// See also: [`Commit`], [`CommitComment`]
     async fn commit_comment_added(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        commit: Commit,
-        comment: CommitComment,
+        commit_comment_event: CommitCommentEvent,
     ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Release created
+    async fn release_created(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        release_event: ReleaseEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Git branch or tag created
+    async fn tag_created(&self, github_client: Arc<Self::GitHubClient>, event: CreateEvent) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Git branch or tag deleted
+    async fn tag_deleted(&self, github_client: Arc<Self::GitHubClient>, event: DeleteEvent) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Repository receives a star
+    async fn repository_starred(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: StarEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Repository is forked
+    async fn repository_forked(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: ForkEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn pull_request_updated(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: PullRequestEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn workflow_run(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: WorkflowRunEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn workflow_job(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: WorkflowJobEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn check_run(&self, github_client: Arc<Self::GitHubClient>, event: CheckRunEvent) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn issue_event(&self, github_client: Arc<Self::GitHubClient>, event: IssueEvent) -> Command<Self::Message> {
         Command::none()
     }
 }

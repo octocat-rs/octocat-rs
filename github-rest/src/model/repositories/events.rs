@@ -38,8 +38,8 @@ pub struct PushEvent {
 impl PushEvent {
     /// Adds a comment to the commit that triggered the event.
     ///
-    /// See also: https://docs.github.com/en/rest/reference/commits#create-a-commit-comment
-    pub async fn add_comment(
+    /// See also: <https://docs.github.com/en/rest/reference/commits#create-a-commit-comment>
+    pub async fn add_comment_to_commit(
         &self,
         client: Arc<&impl Requester>,
         body: String,
