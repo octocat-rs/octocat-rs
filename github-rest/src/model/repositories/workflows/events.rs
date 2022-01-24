@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::model::{
+    organizations::Organization,
     repositories::{
         workflows::{events::nested::*, Workflow},
         Repository,
@@ -8,23 +9,28 @@ use crate::model::{
     user::User,
 };
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_run>
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WorkflowRunEvent {
     pub action: WorkflowRunAction,
     pub workflow_run: WorkflowRun,
     pub workflow: Workflow,
     pub repository: Repository,
+    pub organization: Option<Organization>,
     pub sender: User,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_job>
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WorkflowJobEvent {
     pub action: WorkflowJobAction,
     pub workflow_job: WorkflowJob,
     pub repository: Repository,
+    pub organization: Option<Organization>,
     pub sender: User,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#check_run>
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CheckRunEvent {
     action: CheckRunAction,

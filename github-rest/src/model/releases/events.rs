@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use strum::{EnumString, EnumVariantNames};
 
 use crate::model::{releases::Release, repositories::Repository, user::User};
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseEvent {
     pub action: nested::ReleaseAction,
@@ -29,24 +30,33 @@ pub mod nested {
     }
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#create>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateEvent {
     #[serde(rename = "ref")]
     pub ref_field: String,
-    pub ref_type: String,
+    pub ref_type: RefType,
     pub master_branch: String,
-    pub description: Value,
+    pub description: String,
     pub pusher_type: String,
     pub repository: Repository,
     pub sender: User,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#delete>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteEvent {
     #[serde(rename = "ref")]
     pub ref_field: String,
-    pub ref_type: String,
+    pub ref_type: RefType,
     pub pusher_type: String,
     pub repository: Repository,
     pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum RefType {
+    Branch,
+    Tag,
 }

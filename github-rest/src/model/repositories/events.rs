@@ -17,6 +17,7 @@ use crate::{
     GithubRestError, Requester,
 };
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#push>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushEvent {
     #[serde(rename = "ref")]
@@ -101,9 +102,11 @@ pub mod nested {
     }
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StarEvent {
     pub action: StarAction,
+    pub starred_at: String,
     pub repository: Repository,
     pub sender: User,
 }
@@ -116,6 +119,7 @@ pub enum StarAction {
 }
 
 // TODO: Watch event
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#fork>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForkEvent {
     forkee: Repository,

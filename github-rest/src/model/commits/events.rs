@@ -12,6 +12,7 @@ use crate::{
     GithubRestError, Requester,
 };
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#commit_comment>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CommitCommentEvent {
     pub action: CommitCommentAction,
@@ -19,6 +20,12 @@ pub struct CommitCommentEvent {
     pub organization: Option<Organization>,
     pub repository: Repository,
     pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum CommitCommentAction {
+    Created,
 }
 
 impl CommitCommentEvent {
@@ -38,12 +45,6 @@ impl CommitCommentEvent {
         )
         .await
     }
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[strum(serialize_all = "snake_case")]
-pub enum CommitCommentAction {
-    Created,
 }
 
 impl Default for CommitCommentAction {

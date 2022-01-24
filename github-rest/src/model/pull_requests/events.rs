@@ -3,6 +3,8 @@ use strum::{EnumString, EnumVariantNames};
 
 use crate::model::{pull_requests::PullRequest, repositories::Repository, user::User};
 
+// TODO: Complete this
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PullRequestEvent {
     pub action: PullRequestAction,
@@ -15,8 +17,26 @@ pub struct PullRequestEvent {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
 pub enum PullRequestAction {
-    Opened,
+    Assigned,
+    AutoMergeDisabled,
+    AutoMergeEnabled,
     // = merged/closed
     Closed,
+    ConvertedToDraft,
+    Edited,
+    Labeled,
+    Locked,
+    Opened,
+    ReadyForReview,
     Reopened,
+    ReviewRequested,
+    ReviewRequestRemoved,
+    Synchronize,
+    Unassigned,
+    Unlabeled,
+    Unlocked,
 }
+
+// TODO: PullRequestReview & PullRequestReviewComment
+// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review>
+// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review_comment>

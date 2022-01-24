@@ -40,7 +40,6 @@ impl Default for Reaction {
     }
 }
 
-// TODO: Make this a proper event type
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CommitCommentReactionCreated {
     id: i64,
