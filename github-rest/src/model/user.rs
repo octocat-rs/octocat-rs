@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use super::prelude::*;
 
 use crate::{
     methods::{add_to_org, get_user_followers, get_user_following, Pagination, Role},

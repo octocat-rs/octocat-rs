@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use super::super::super::prelude::*;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Workflow {

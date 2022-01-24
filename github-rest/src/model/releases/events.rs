@@ -1,5 +1,4 @@
-use serde::{Deserialize, Serialize};
-use strum::{EnumString, EnumVariantNames};
+use super::super::prelude::*;
 
 use crate::model::{releases::Release, repositories::Repository, user::User};
 
@@ -13,8 +12,7 @@ pub struct ReleaseEvent {
 }
 
 pub mod nested {
-    use serde::{Deserialize, Serialize};
-    use strum::{EnumString, EnumVariantNames};
+    use super::super::super::prelude::*;
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[strum(serialize_all = "snake_case")]

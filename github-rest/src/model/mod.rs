@@ -12,3 +12,9 @@ pub mod reactions;
 pub mod releases;
 pub mod repositories;
 pub mod user;
+
+pub(crate) mod prelude {
+    pub use serde::{Deserialize, Serialize};
+    pub use serde_json::Value;
+    pub use strum::{EnumString, EnumVariantNames};
+}

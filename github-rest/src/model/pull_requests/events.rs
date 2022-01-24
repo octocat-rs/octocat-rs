@@ -1,5 +1,4 @@
-use serde::{Deserialize, Serialize};
-use strum::{EnumString, EnumVariantNames};
+use super::super::prelude::*;
 
 use crate::model::{pull_requests::PullRequest, repositories::Repository, user::User};
 

@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use super::prelude::*;
 
 use crate::model::user::User;
 

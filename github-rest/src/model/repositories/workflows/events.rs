@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use super::super::super::prelude::*;
 
 use crate::model::{
     organizations::Organization,

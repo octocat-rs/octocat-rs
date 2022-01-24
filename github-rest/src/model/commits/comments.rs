@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use super::super::prelude::*;
 
 use crate::{
     methods::{react_to_commit_comment, util},

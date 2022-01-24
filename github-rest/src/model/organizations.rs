@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
+use super::{prelude::*, user::User};
 
-use super::user::User;
 use crate::methods::Role;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

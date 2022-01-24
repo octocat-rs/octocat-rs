@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use super::super::prelude::*;
 
 #[derive(Serialize, Deserialize)]
 pub enum EventsUrl {
