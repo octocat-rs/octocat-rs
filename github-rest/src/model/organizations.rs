@@ -1,5 +1,8 @@
 use serde::{Deserialize, Serialize};
 
+use super::user::User;
+use crate::methods::Role;
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Organization {
     pub avatar_url: String,
@@ -14,4 +17,14 @@ pub struct Organization {
     pub public_members_url: String,
     pub repos_url: String,
     pub url: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AddToOrgResponse {
+    pub url: String,
+    pub state: String,
+    pub role: Role,
+    pub organization_url: String,
+    pub organization: Organization,
+    pub user: User,
 }

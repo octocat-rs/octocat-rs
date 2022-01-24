@@ -1,9 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    methods::{get_user_followers, get_user_following, Pagination},
+    methods::{add_to_org, get_user_followers, get_user_following, Pagination, Role},
     GithubRestError, Requester,
 };
+
+use super::organizations::AddToOrgResponse;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct User {
@@ -29,6 +31,18 @@ pub struct User {
 }
 
 impl User {
+    pub async fn add_to_org<T>(
+        self,
+        client: &T,
+        org: impl Into<String>,
+        role: Option<Role>,
+    ) -> Result<AddToOrgResponse, GithubRestError>
+    where
+        T: Requester,
+    {
+        add_to_org(client, org, self.login, role).await
+    }
+
     /// Get a list of the users that the user in question is following.
     ///
     /// * `followers_per_page` - The number of users to get per page. Default is
