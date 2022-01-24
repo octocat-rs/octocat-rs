@@ -132,7 +132,8 @@ where
             .and(warp::body::json());
 
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
-            dbg!(&body);
+            dbg!(&ev);
+            dbg!(&body.to_string());
             let a = async {
                 match ev {
                     EventTypes::Push => {

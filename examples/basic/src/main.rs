@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use async_trait::async_trait;
 
-use github_rest::model::{repositories::events::PushEvent};
+use github_rest::model::repositories::events::PushEvent;
 use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command};
 
 #[tokio::main]
