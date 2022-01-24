@@ -13,6 +13,7 @@ use github_rest::{
     },
     GithubRestError, Requester,
 };
+use github_rest::model::pull_requests::events::PullRequestEvent;
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
@@ -162,7 +163,15 @@ where
                     EventTypes::SecurityAdvisory => {}
                     EventTypes::Star => {}
                     EventTypes::Watch => {}
-                    EventTypes::PullRequest => {}
+                    EventTypes::PullRequest => {
+                        thread_self
+                            .event_handler()
+                            .pull_request_updated(
+                                thread_self.clone(),
+                                serde_json::from_str::<PullRequestEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::PullRequestReview => {}
                     EventTypes::PullRequestReviewComment => {}
                     EventTypes::CommitComment => {}

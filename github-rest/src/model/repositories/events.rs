@@ -31,7 +31,7 @@ pub struct PushEvent {
     pub base_ref: Value,
     pub compare: String,
     pub commits: Vec<Commit>,
-    pub head_commit: HeadCommit,
+    pub head_commit: Option<HeadCommit>,
 }
 
 impl PushEvent {
@@ -45,10 +45,12 @@ impl PushEvent {
         path: Option<String>,
         position: Option<String>,
     ) -> Result<CommitComment, GithubRestError> {
+        let hc = self.head_commit.as_ref().unwrap();
+
         util::helper_for_helper_for_helper(
             *client,
-            self.head_commit.url.clone(),
-            self.head_commit.id.clone(),
+            hc.url.clone(),
+            hc.id.clone(),
             body,
             path,
             position,
