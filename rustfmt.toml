@@ -6,4 +6,5 @@ comment_width = 80
 wrap_comments = true
 reorder_imports = true
 binop_separator = "Front"
+
 imports_granularity = "Crate"
