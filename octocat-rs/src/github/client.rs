@@ -8,12 +8,14 @@ use warp::Filter;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
-        commits::Commits, event_types::EventTypes, issues::Issues, pull_requests::Pulls,
+        commits::Commits,
+        event_types::EventTypes,
+        issues::Issues,
+        pull_requests::{events::PullRequestEvent, Pulls},
         repositories::events::PushEvent,
     },
     GithubRestError, Requester,
 };
-use github_rest::model::pull_requests::events::PullRequestEvent;
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 

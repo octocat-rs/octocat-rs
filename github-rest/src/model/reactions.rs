@@ -1,6 +1,4 @@
-use super::prelude::*;
-
-use crate::model::user::User;
+use crate::model::{prelude::*, user::User};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Reactions {

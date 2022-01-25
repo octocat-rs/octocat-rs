@@ -1,11 +1,10 @@
 use std::sync::Arc;
 
-use super::super::prelude::*;
-
 use crate::{
     methods::util,
     model::{
         commits::comments::CommitComment,
+        prelude::*,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
             Repository,
@@ -47,23 +46,12 @@ impl PushEvent {
     ) -> Result<CommitComment, GithubRestError> {
         let hc = self.head_commit.as_ref().unwrap();
 
-        util::helper_for_helper_for_helper(
-            *client,
-            hc.url.clone(),
-            hc.id.clone(),
-            body,
-            path,
-            position,
-        )
-        .await
+        util::helper_for_helper_for_helper(*client, hc.url.clone(), hc.id.clone(), body, path, position).await
     }
 }
 
 pub mod nested {
-    use serde::{Deserialize, Serialize};
-    use serde_json::Value;
-
-    use crate::model::user::SimpleUser;
+    use crate::model::{prelude::*, user::SimpleUser};
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Pusher {

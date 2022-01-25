@@ -1,10 +1,9 @@
-use super::super::prelude::*;
-
 use crate::{
     methods::{get_commit, GetCommitBody},
     model::{
         commits::{comments::CommitComment, Commit},
         organizations::Organization,
+        prelude::*,
         repositories::Repository,
         user::User,
     },

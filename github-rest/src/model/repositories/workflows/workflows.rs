@@ -1,4 +1,4 @@
-use super::super::super::prelude::*;
+use crate::model::prelude::*;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Workflow {

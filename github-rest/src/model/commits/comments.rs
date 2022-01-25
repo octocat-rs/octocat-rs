@@ -1,9 +1,8 @@
-use super::super::prelude::*;
-
 use crate::{
     methods::{react_to_commit_comment, util},
     model::{
         commits::association::Association,
+        prelude::*,
         reactions::{CommitCommentReactionCreated, Reaction, Reactions},
         user::User,
     },

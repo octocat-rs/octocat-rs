@@ -1,6 +1,5 @@
-use super::super::prelude::*;
-
 use crate::model::{
+    prelude::*,
     pull_requests::nested::{HeadBase, Links},
     user::User,
 };

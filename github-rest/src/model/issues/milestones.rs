@@ -1,6 +1,4 @@
-use super::super::prelude::*;
-
-use crate::model::user::User;
+use crate::model::{prelude::*, user::User};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Milestone {

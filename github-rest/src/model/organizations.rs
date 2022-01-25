@@ -1,6 +1,6 @@
-use super::{prelude::*, user::User};
-
 use crate::methods::Role;
+
+use super::{prelude::*, user::User};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Organization {

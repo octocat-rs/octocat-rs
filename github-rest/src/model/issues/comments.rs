@@ -1,6 +1,4 @@
-use super::super::prelude::*;
-
-use crate::model::{issues::Issue, reactions::Reactions, user::User};
+use crate::model::{issues::Issue, prelude::*, reactions::Reactions, user::User};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IssueComment {

@@ -1,4 +1,4 @@
-use super::prelude::*;
+use crate::model::prelude::*;
 
 /// Used to represent all possible values for the `x-github-event` header sent
 /// with all webhook payloads.

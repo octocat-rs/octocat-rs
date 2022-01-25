@@ -1,4 +1,4 @@
-use super::super::prelude::*;
+use crate::model::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]

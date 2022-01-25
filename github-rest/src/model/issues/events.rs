@@ -1,15 +1,19 @@
-use super::super::prelude::*;
+use crate::model::{
+    issues::Issue, organizations::Organization, prelude::*, pull_requests::events::nested::Changes,
+    repositories::Repository, user::User,
+};
 
-use crate::model::{issues::Issue, repositories::Repository, user::User};
-
-// TODO: Complete this
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issues>
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IssueEvent {
     pub action: IssueAction,
     pub issue: Issue,
     pub repository: Repository,
+    pub organization: Option<Organization>,
+    // Couldn't find any example in the docs for this
+    pub installation: Option<Value>,
     pub sender: User,
+    pub changes: Option<Changes>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]

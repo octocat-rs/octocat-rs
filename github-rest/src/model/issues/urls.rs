@@ -1,4 +1,4 @@
-use super::super::prelude::*;
+use crate::model::prelude::*;
 
 #[derive(Serialize, Deserialize)]
 pub enum EventsUrl {

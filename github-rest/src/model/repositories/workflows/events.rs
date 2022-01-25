@@ -1,7 +1,6 @@
-use super::super::super::prelude::*;
-
 use crate::model::{
     organizations::Organization,
+    prelude::*,
     repositories::{
         workflows::{events::nested::*, Workflow},
         Repository,
@@ -40,11 +39,8 @@ pub struct CheckRunEvent {
 }
 
 pub mod nested {
-    use serde::{Deserialize, Serialize};
-    use serde_json::Value;
-    use strum::{EnumString, EnumVariantNames};
-
     use crate::model::{
+        prelude::*,
         repositories::{events::nested::HeadCommit, Repository},
         user::User,
     };

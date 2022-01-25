@@ -1,6 +1,4 @@
-use super::super::prelude::*;
-
-use crate::model::{releases::Release, repositories::Repository, user::User};
+use crate::model::{prelude::*, releases::Release, repositories::Repository, user::User};
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -12,7 +10,7 @@ pub struct ReleaseEvent {
 }
 
 pub mod nested {
-    use super::super::super::prelude::*;
+    use crate::model::prelude::*;
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[strum(serialize_all = "snake_case")]

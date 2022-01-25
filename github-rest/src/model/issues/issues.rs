@@ -1,7 +1,6 @@
-use super::super::prelude::*;
-
 use crate::model::{
     issues::{milestones::Milestone, nested::PullRequest},
+    prelude::*,
     user::User,
 };
 

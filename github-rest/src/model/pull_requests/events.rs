@@ -1,39 +1,62 @@
-use super::super::prelude::*;
+use crate::model::{
+    prelude::*,
+    pull_requests::{
+        events::nested::{Changes, PullRequestAction},
+        PullRequest,
+    },
+    repositories::Repository,
+    user::User,
+};
 
-use crate::model::{pull_requests::PullRequest, repositories::Repository, user::User};
-
-// TODO: Complete this
+// TODO: Convenience method to get changes if the action is `Edited`.
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PullRequestEvent {
     pub action: PullRequestAction,
     pub number: i64,
     pub pull_request: PullRequest,
+    changes: Option<Changes>,
     pub repository: Repository,
     pub sender: User,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[serde(rename_all = "snake_case")]
-pub enum PullRequestAction {
-    Assigned,
-    AutoMergeDisabled,
-    AutoMergeEnabled,
-    // = merged/closed
-    Closed,
-    ConvertedToDraft,
-    Edited,
-    Labeled,
-    Locked,
-    Opened,
-    ReadyForReview,
-    Reopened,
-    ReviewRequested,
-    ReviewRequestRemoved,
-    Synchronize,
-    Unassigned,
-    Unlabeled,
-    Unlocked,
+pub mod nested {
+    use crate::model::prelude::*;
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[serde(rename_all = "snake_case")]
+    pub enum PullRequestAction {
+        Assigned,
+        AutoMergeDisabled,
+        AutoMergeEnabled,
+        // = merged/closed
+        Closed,
+        ConvertedToDraft,
+        Edited,
+        Labeled,
+        Locked,
+        Opened,
+        ReadyForReview,
+        Reopened,
+        ReviewRequested,
+        ReviewRequestRemoved,
+        Synchronize,
+        Unassigned,
+        Unlabeled,
+        Unlocked,
+    }
+
+    // TODO: Move this to some type of shared module as `IssueEvent` uses it
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Changes {
+        title: Option<Change>,
+        body: Option<Change>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Change {
+        from: String,
+    }
 }
 
 // TODO: PullRequestReview & PullRequestReviewComment
