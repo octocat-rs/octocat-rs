@@ -1,4 +1,9 @@
 use crate::model::{
+    issues::{
+        comments::IssueComment,
+        events::{CommentChanges, IssueCommentAction},
+    },
+    organizations::Organization,
     prelude::*,
     pull_requests::{
         events::nested::{Changes, PullRequestAction},
@@ -59,6 +64,34 @@ pub mod nested {
     }
 }
 
-// TODO: PullRequestReview & PullRequestReviewComment
-// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review>
-// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review_comment>
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PullRequestReviewEvent {
+    pub action: PullRequestAction,
+    pub changes: Option<CommentChanges>,
+    pub pull_request: PullRequest,
+    pub review: Value,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum PullRequestReviewAction {
+    Submitted,
+    Edited,
+    Dismissed,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review_comment>
+pub struct PullRequestReviewCommentEvent {
+    pub action: IssueCommentAction,
+    pub changes: Option<CommentChanges>,
+    pub pull_request: PullRequest,
+    pub comment: IssueComment,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub installation: Value,
+    pub sender: User,
+}

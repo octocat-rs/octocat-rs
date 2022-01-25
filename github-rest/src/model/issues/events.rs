@@ -1,6 +1,10 @@
 use crate::model::{
-    issues::Issue, organizations::Organization, prelude::*, pull_requests::events::nested::Changes,
-    repositories::Repository, user::User,
+    issues::{comments::IssueComment, Issue},
+    organizations::Organization,
+    prelude::*,
+    pull_requests::events::nested::{Change, Changes},
+    repositories::Repository,
+    user::User,
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issues>
@@ -37,8 +41,18 @@ pub enum IssueAction {
     Demilestoned,
 }
 
-// TODO: IssueComment
-// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment>
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment>
+pub struct IssueCommentEvent {
+    pub action: IssueAction,
+    pub changes: Option<CommentChanges>,
+    pub comment: IssueComment,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    // NOTE: Both of these don't appear to have a set structure, hopefully further testing will allow us to weed out
+    // possible complications.
+    pub installation: Value,
+    pub sender: User,
+}
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
@@ -46,4 +60,11 @@ pub enum IssueCommentAction {
     Created,
     Edited,
     Deleted,
+}
+
+// TODO: Move this to some type of shared module as `PullRequestReviewEvent`
+// uses it
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CommentChanges {
+    body: Option<Change>,
 }
