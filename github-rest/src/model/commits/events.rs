@@ -1,6 +1,7 @@
 use crate::{
     methods::{get_commit, GetCommitBody},
     model::{
+        event_types::macros::repo_origin,
         commits::{comments::CommitComment, Commit},
         organizations::Organization,
         prelude::*,
@@ -50,3 +51,5 @@ impl Default for CommitCommentAction {
         Self::Created
     }
 }
+
+repo_origin!(CommitCommentEvent);

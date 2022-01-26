@@ -1,4 +1,4 @@
-//https://transform.tools/json-to-rust-serde
+// TODO: Figure out which events may not originate from a repository.
 
 // Temporary
 #![allow(clippy::module_inception)]

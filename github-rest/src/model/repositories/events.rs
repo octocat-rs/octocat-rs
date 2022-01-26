@@ -4,6 +4,7 @@ use crate::{
     methods::util,
     model::{
         commits::comments::CommitComment,
+        event_types::{macros::repo_origin},
         prelude::*,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
@@ -114,3 +115,7 @@ pub struct ForkEvent {
     repository: Repository,
     sender: User,
 }
+
+repo_origin!(PushEvent);
+repo_origin!(StarEvent);
+repo_origin!(ForkEvent);

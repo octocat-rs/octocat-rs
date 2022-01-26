@@ -1,4 +1,5 @@
 use crate::model::{
+    event_types::macros::repo_origin,
     issues::{comments::IssueComment, Issue},
     organizations::Organization,
     prelude::*,
@@ -42,6 +43,7 @@ pub enum IssueAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issue_comment>
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IssueCommentEvent {
     pub action: IssueAction,
     pub changes: Option<CommentChanges>,
@@ -68,3 +70,6 @@ pub enum IssueCommentAction {
 pub struct CommentChanges {
     body: Option<Change>,
 }
+
+repo_origin!(IssueEvent);
+repo_origin!(IssueCommentEvent);

@@ -1,4 +1,5 @@
 use crate::model::{
+    event_types::macros::repo_origin,
     issues::{
         comments::IssueComment,
         events::{CommentChanges, IssueCommentAction},
@@ -85,6 +86,7 @@ pub enum PullRequestReviewAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review_comment>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PullRequestReviewCommentEvent {
     pub action: IssueCommentAction,
     pub changes: Option<CommentChanges>,
@@ -95,3 +97,8 @@ pub struct PullRequestReviewCommentEvent {
     pub installation: Value,
     pub sender: User,
 }
+
+repo_origin!(PullRequestEvent);
+repo_origin!(PullRequestReviewEvent);
+repo_origin!(PullRequestReviewAction);
+repo_origin!(PullRequestReviewCommentEvent);

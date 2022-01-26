@@ -1,4 +1,5 @@
 use crate::model::{
+    event_types::macros::repo_origin,
     organizations::Organization,
     prelude::*,
     repositories::{
@@ -218,3 +219,7 @@ pub mod nested {
         pub vulnerability_alerts: String,
     }
 }
+
+repo_origin!(WorkflowRunEvent);
+repo_origin!(WorkflowJobEvent);
+repo_origin!(CheckRunEvent);
