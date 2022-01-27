@@ -4,8 +4,8 @@ use async_trait::async_trait;
 
 use github_rest::model::{
     commits::events::CommitCommentEvent,
-    issues::events::IssueEvent,
-    pull_requests::events::PullRequestEvent,
+    issues::events::{IssueCommentEvent, IssueEvent},
+    pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{ForkEvent, PushEvent, StarEvent},
@@ -37,7 +37,7 @@ pub trait EventHandler {
     }
 
     /// Commit pushed to a repository.
-    async fn commit_pushed(
+    async fn commit_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
         push_event: PushEvent,
@@ -46,7 +46,7 @@ pub trait EventHandler {
     }
 
     /// Comment added to a repository commit.
-    async fn commit_comment_added(
+    async fn commit_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
         commit_comment_event: CommitCommentEvent,
@@ -55,7 +55,7 @@ pub trait EventHandler {
     }
 
     /// Release created
-    async fn release_created(
+    async fn release_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
         release_event: ReleaseEvent,
@@ -74,11 +74,7 @@ pub trait EventHandler {
     }
 
     /// Repository receives a star
-    async fn repository_starred(
-        &self,
-        github_client: Arc<Self::GitHubClient>,
-        event: StarEvent,
-    ) -> Command<Self::Message> {
+    async fn star_event(&self, github_client: Arc<Self::GitHubClient>, event: StarEvent) -> Command<Self::Message> {
         Command::none()
     }
 
@@ -91,10 +87,26 @@ pub trait EventHandler {
         Command::none()
     }
 
-    async fn pull_request_updated(
+    async fn pull_request_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
         event: PullRequestEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn pull_request_review_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: PullRequestReviewEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn pull_request_review_comment_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: PullRequestReviewCommentEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -120,6 +132,14 @@ pub trait EventHandler {
     }
 
     async fn issue_event(&self, github_client: Arc<Self::GitHubClient>, event: IssueEvent) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn issue_comment_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: IssueCommentEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 }

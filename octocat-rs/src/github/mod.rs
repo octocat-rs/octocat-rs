@@ -55,7 +55,7 @@ mod tests {
             }
 
             /// Example for how [`Command::perform`] should be used in practice.
-            async fn commit_pushed(
+            async fn commit_event(
                 &self,
                 github_client: Arc<Self::GitHubClient>,
                 commit: PushEvent,

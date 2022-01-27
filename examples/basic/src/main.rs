@@ -20,7 +20,7 @@ async fn main() -> Result<()> {
             2022
         }
 
-        async fn commit_pushed(
+        async fn commit_event(
             &self,
             _github_client: Arc<Self::GitHubClient>,
             _commit: PushEvent,

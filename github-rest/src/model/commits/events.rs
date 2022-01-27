@@ -1,8 +1,8 @@
 use crate::{
     methods::{get_commit, GetCommitBody},
     model::{
-        event_types::macros::repo_origin,
         commits::{comments::CommitComment, Commit},
+        event_types::macros::repo_origin,
         organizations::Organization,
         prelude::*,
         repositories::Repository,

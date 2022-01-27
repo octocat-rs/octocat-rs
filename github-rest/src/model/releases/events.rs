@@ -1,4 +1,6 @@
-use crate::model::{prelude::*, releases::Release, event_types::macros::repo_origin, repositories::Repository, user::User};
+use crate::model::{
+    event_types::macros::repo_origin, prelude::*, releases::Release, repositories::Repository, user::User,
+};
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

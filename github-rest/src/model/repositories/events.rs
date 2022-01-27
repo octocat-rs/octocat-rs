@@ -4,7 +4,7 @@ use crate::{
     methods::util,
     model::{
         commits::comments::CommitComment,
-        event_types::{macros::repo_origin},
+        event_types::macros::repo_origin,
         prelude::*,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},

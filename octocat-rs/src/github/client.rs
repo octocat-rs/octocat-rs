@@ -8,11 +8,21 @@ use warp::Filter;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
-        commits::Commits,
+        commits::{events::CommitCommentEvent, Commits},
         event_types::EventTypes,
-        issues::Issues,
-        pull_requests::{events::PullRequestEvent, Pulls},
-        repositories::events::PushEvent,
+        issues::{
+            events::{IssueCommentEvent, IssueEvent},
+            Issues,
+        },
+        pull_requests::{
+            events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
+            Pulls,
+        },
+        releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
+        repositories::{
+            events::{ForkEvent, PushEvent, StarEvent},
+            workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
+        },
     },
     GithubRestError, Requester,
 };
@@ -142,7 +152,7 @@ where
                     EventTypes::Push => {
                         thread_self
                             .event_handler()
-                            .commit_pushed(
+                            .commit_event(
                                 thread_self.clone(),
                                 serde_json::from_str::<PushEvent>(body.to_string().as_str()).unwrap(),
                             )
@@ -156,46 +166,151 @@ where
                     EventTypes::Member => {}
                     EventTypes::Milestone => {}
                     EventTypes::Public => {}
-                    EventTypes::Release => {}
+                    EventTypes::Release => {
+                        thread_self
+                            .event_handler()
+                            .release_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<ReleaseEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::Repository => {}
                     EventTypes::RepositoryDispatch => {}
                     EventTypes::RepositoryImport => {}
                     EventTypes::RepositoryVulnerabilityAlert => {}
                     EventTypes::SecretScanningAlert => {}
                     EventTypes::SecurityAdvisory => {}
-                    EventTypes::Star => {}
+                    EventTypes::Star => {
+                        thread_self
+                            .event_handler()
+                            .star_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<StarEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::Watch => {}
                     EventTypes::PullRequest => {
                         thread_self
                             .event_handler()
-                            .pull_request_updated(
+                            .pull_request_event(
                                 thread_self.clone(),
                                 serde_json::from_str::<PullRequestEvent>(body.to_string().as_str()).unwrap(),
                             )
                             .await;
                     }
-                    EventTypes::PullRequestReview => {}
-                    EventTypes::PullRequestReviewComment => {}
-                    EventTypes::CommitComment => {}
+                    EventTypes::PullRequestReview => {
+                        thread_self
+                            .event_handler()
+                            .pull_request_review_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<PullRequestReviewEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::PullRequestReviewComment => {
+                        thread_self
+                            .event_handler()
+                            .pull_request_review_comment_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<PullRequestReviewCommentEvent>(body.to_string().as_str())
+                                    .unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::CommitComment => {
+                        thread_self
+                            .event_handler()
+                            .commit_comment_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<CommitCommentEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::Status => {}
-                    EventTypes::IssueComment => {}
-                    EventTypes::Issues => {}
+                    EventTypes::IssueComment => {
+                        thread_self
+                            .event_handler()
+                            .issue_comment_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<IssueCommentEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::Issues => {
+                        thread_self
+                            .event_handler()
+                            .issue_event(
+                                thread_self.clone(),
+                                serde_json::from_str::<IssueEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::Label => {}
                     EventTypes::Discussion => {}
                     EventTypes::DiscussionComment => {}
                     EventTypes::BranchProtectionRule => {}
-                    EventTypes::Create => {}
-                    EventTypes::Delete => {}
-                    EventTypes::Fork => {}
-                    EventTypes::CheckRun => {}
+                    EventTypes::Create => {
+                        thread_self
+                            .event_handler()
+                            .tag_created(
+                                thread_self.clone(),
+                                serde_json::from_str::<CreateEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::Delete => {
+                        thread_self
+                            .event_handler()
+                            .tag_deleted(
+                                thread_self.clone(),
+                                serde_json::from_str::<DeleteEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::Fork => {
+                        thread_self
+                            .event_handler()
+                            .repository_forked(
+                                thread_self.clone(),
+                                serde_json::from_str::<ForkEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::CheckRun => {
+                        thread_self
+                            .event_handler()
+                            .check_run(
+                                thread_self.clone(),
+                                serde_json::from_str::<CheckRunEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::CheckSuite => {}
                     EventTypes::CodeScanningAlert => {}
                     EventTypes::Deployment => {}
                     EventTypes::DeploymentStatus => {}
                     EventTypes::PageBuild => {}
                     EventTypes::WorkflowDispatch => {}
-                    EventTypes::WorkflowJob => {}
-                    EventTypes::WorkflowRun => {}
+                    EventTypes::WorkflowJob => {
+                        thread_self
+                            .event_handler()
+                            .workflow_job(
+                                thread_self.clone(),
+                                serde_json::from_str::<WorkflowJobEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
+                    EventTypes::WorkflowRun => {
+                        thread_self
+                            .event_handler()
+                            .workflow_run(
+                                thread_self.clone(),
+                                serde_json::from_str::<WorkflowRunEvent>(body.to_string().as_str()).unwrap(),
+                            )
+                            .await;
+                    }
                     EventTypes::Membership => {}
                     EventTypes::OrgBlock => {}
                     EventTypes::Organization => {}

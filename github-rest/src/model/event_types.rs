@@ -89,7 +89,8 @@ pub enum EventTypes {
     Sponsorship,
 }
 
-/// The base trait used to represent different types of events. This will eventually have some subtraits with convenience methods.
+/// The base trait used to represent different types of events. This will
+/// eventually have some subtraits with convenience methods.
 ///
 /// **All** event types implement this.
 pub trait Event<'de>: Serialize + Deserialize<'de> {
@@ -102,7 +103,7 @@ pub(crate) mod macros {
             impl crate::model::event_types::Event<'_> for $ev {
                 type Origin = crate::model::repositories::Repository;
             }
-        }
+        };
     }
 
     pub(crate) use repo_origin;
