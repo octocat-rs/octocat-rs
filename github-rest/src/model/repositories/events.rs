@@ -16,7 +16,7 @@ use crate::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#push>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PushEvent {
     #[serde(rename = "ref")]
     pub ref_field: String,
@@ -54,13 +54,13 @@ impl PushEvent {
 pub mod nested {
     use crate::model::{prelude::*, user::SimpleUser};
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
     pub struct Pusher {
         pub name: String,
         pub email: String,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
     pub struct Commit {
         pub id: String,
         pub tree_id: String,
@@ -75,7 +75,7 @@ pub mod nested {
         pub modified: Vec<Value>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
     pub struct HeadCommit {
         pub id: String,
         pub tree_id: String,

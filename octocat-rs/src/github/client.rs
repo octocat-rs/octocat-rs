@@ -3,8 +3,10 @@ use std::sync::Arc;
 use anyhow::Result;
 use async_trait::async_trait;
 use rocket::data::{ByteUnit, ToByteUnit};
+use tokio::sync::mpsc;
 use warp::Filter;
 
+use crate::Command;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
@@ -137,6 +139,8 @@ where
 
         let self_arc = Arc::new(self);
         let thread_self = self_arc.clone();
+        let thread_self_2 = self_arc.clone();
+        let (tx, mut rx) = mpsc::channel(32);
 
         let event_type = warp::post()
             .and(warp::path("payload"))
@@ -144,36 +148,45 @@ where
             .and(warp::body::content_length_limit(1024 * 8192)) // 8Kb
             .and(warp::body::json());
 
+        macro_rules! event_push {
+            ($i:ident, $f:ident, $t:ty, $b:ident) => {
+                $i = thread_self
+                    .event_handler()
+                    .$f(
+                        thread_self.clone(),
+                        serde_json::from_str::<$t>($b.to_string().as_str()).unwrap(),
+                    )
+                    .await
+            };
+        }
+
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
+            let mut user_cmd = Command::none();
+
             dbg!(&ev);
             dbg!(&body.to_string());
-            let a = async {
+
+            let ev_h = async {
                 match ev {
                     EventTypes::Push => {
-                        thread_self
-                            .event_handler()
-                            .commit_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<PushEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, commit_event, PushEvent, body);
                     }
                     EventTypes::GithubAppAuthorization => {}
                     EventTypes::Installation => {}
                     EventTypes::InstallationRepositories => {}
                     EventTypes::DeployKey => {}
-                    EventTypes::Gollum => {}
+                    EventTypes::Gollum => {
+                        // TODO: Remove this mock code; it's only here for testing purposes.
+                        user_cmd = thread_self
+                            .event_handler()
+                            .commit_event(thread_self.clone(), Default::default())
+                            .await;
+                    }
                     EventTypes::Member => {}
                     EventTypes::Milestone => {}
                     EventTypes::Public => {}
                     EventTypes::Release => {
-                        thread_self
-                            .event_handler()
-                            .release_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<ReleaseEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, release_event, ReleaseEvent, body);
                     }
                     EventTypes::Repository => {}
                     EventTypes::RepositoryDispatch => {}
@@ -182,110 +195,48 @@ where
                     EventTypes::SecretScanningAlert => {}
                     EventTypes::SecurityAdvisory => {}
                     EventTypes::Star => {
-                        thread_self
-                            .event_handler()
-                            .star_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<StarEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, star_event, StarEvent, body);
                     }
                     EventTypes::Watch => {}
                     EventTypes::PullRequest => {
-                        thread_self
-                            .event_handler()
-                            .pull_request_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<PullRequestEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, pull_request_event, PullRequestEvent, body);
                     }
                     EventTypes::PullRequestReview => {
-                        thread_self
-                            .event_handler()
-                            .pull_request_review_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<PullRequestReviewEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, pull_request_review_event, PullRequestReviewEvent, body);
                     }
                     EventTypes::PullRequestReviewComment => {
-                        thread_self
-                            .event_handler()
-                            .pull_request_review_comment_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<PullRequestReviewCommentEvent>(body.to_string().as_str())
-                                    .unwrap(),
-                            )
-                            .await;
+                        event_push!(
+                            user_cmd,
+                            pull_request_review_comment_event,
+                            PullRequestReviewCommentEvent,
+                            body
+                        );
                     }
                     EventTypes::CommitComment => {
-                        thread_self
-                            .event_handler()
-                            .commit_comment_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<CommitCommentEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, commit_comment_event, CommitCommentEvent, body);
                     }
                     EventTypes::Status => {}
                     EventTypes::IssueComment => {
-                        thread_self
-                            .event_handler()
-                            .issue_comment_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<IssueCommentEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, issue_comment_event, IssueCommentEvent, body);
                     }
                     EventTypes::Issues => {
-                        thread_self
-                            .event_handler()
-                            .issue_event(
-                                thread_self.clone(),
-                                serde_json::from_str::<IssueEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, issue_event, IssueEvent, body);
                     }
                     EventTypes::Label => {}
                     EventTypes::Discussion => {}
                     EventTypes::DiscussionComment => {}
                     EventTypes::BranchProtectionRule => {}
                     EventTypes::Create => {
-                        thread_self
-                            .event_handler()
-                            .tag_created(
-                                thread_self.clone(),
-                                serde_json::from_str::<CreateEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, tag_created, CreateEvent, body);
                     }
                     EventTypes::Delete => {
-                        thread_self
-                            .event_handler()
-                            .tag_deleted(
-                                thread_self.clone(),
-                                serde_json::from_str::<DeleteEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, tag_deleted, DeleteEvent, body);
                     }
                     EventTypes::Fork => {
-                        thread_self
-                            .event_handler()
-                            .repository_forked(
-                                thread_self.clone(),
-                                serde_json::from_str::<ForkEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, repository_forked, ForkEvent, body);
                     }
                     EventTypes::CheckRun => {
-                        thread_self
-                            .event_handler()
-                            .check_run(
-                                thread_self.clone(),
-                                serde_json::from_str::<CheckRunEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, check_run, CheckRunEvent, body);
                     }
                     EventTypes::CheckSuite => {}
                     EventTypes::CodeScanningAlert => {}
@@ -294,22 +245,10 @@ where
                     EventTypes::PageBuild => {}
                     EventTypes::WorkflowDispatch => {}
                     EventTypes::WorkflowJob => {
-                        thread_self
-                            .event_handler()
-                            .workflow_job(
-                                thread_self.clone(),
-                                serde_json::from_str::<WorkflowJobEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, workflow_job, WorkflowJobEvent, body);
                     }
                     EventTypes::WorkflowRun => {
-                        thread_self
-                            .event_handler()
-                            .workflow_run(
-                                thread_self.clone(),
-                                serde_json::from_str::<WorkflowRunEvent>(body.to_string().as_str()).unwrap(),
-                            )
-                            .await;
+                        event_push!(user_cmd, workflow_run, WorkflowRunEvent, body);
                     }
                     EventTypes::Membership => {}
                     EventTypes::OrgBlock => {}
@@ -324,17 +263,31 @@ where
                     EventTypes::Package => {}
                     EventTypes::Ping => {}
                     EventTypes::Sponsorship => {}
-                }
+                };
+
+                let _ = &tx.send(user_cmd).await;
             };
 
-            let _ = futures::executor::block_on(a);
+            futures::executor::block_on(ev_h);
 
-            body.to_string()
+            // Needed due to trait bounds
+            ""
         });
 
-        warp::serve(routes)
-            .run(([127, 0, 0, 1], self_arc.event_handler().webhook_port()))
-            .await;
+        let do_cmd_stuff = async {
+            while let Some(cmd) = rx.recv().await {
+                let mut cmd = cmd.into_futures();
+
+                while let Some(c) = cmd.pop() {
+                    thread_self_2.event_handler().message(c.await).await;
+                }
+            }
+        };
+
+        futures::join!(
+            warp::serve(routes).run(([127, 0, 0, 1], self_arc.event_handler().webhook_port())),
+            do_cmd_stuff
+        );
     }
 
     /// Creates a new [`Client`].

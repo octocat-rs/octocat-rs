@@ -36,6 +36,8 @@ pub trait EventHandler {
         "/payload"
     }
 
+    async fn message(&self, message: Self::Message);
+
     /// Commit pushed to a repository.
     async fn commit_event(
         &self,
@@ -151,6 +153,8 @@ pub struct DefaultEventHandler;
 impl EventHandler for DefaultEventHandler {
     type Message = ();
     type GitHubClient = Client<Self>;
+
+    async fn message(&self, _message: Self::Message) {}
 }
 
 impl DefaultEventHandler {
