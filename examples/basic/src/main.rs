@@ -12,21 +12,25 @@ async fn main() -> Result<()> {
     struct Handler {}
 
     #[derive(Debug)]
-    enum Msg {
-        Stuff(String),
+    enum Message {
+        Stuff(&'static str),
     }
 
     #[async_trait]
     impl EventHandler for Handler {
-        type Message = Msg;
+        type Message = Message;
         type GitHubClient = Client<Self>;
 
         fn webhook_port(&self) -> u16 {
             2022
         }
 
-        async fn message(&self, _message: Self::Message) {
-            dbg!("msg recved");
+        async fn message(&self, message: Self::Message) {
+            match message {
+                Message::Stuff(s) => {
+                    println!("==> Message received: {s}");
+                }
+            }
         }
 
         async fn commit_event(
@@ -35,7 +39,8 @@ async fn main() -> Result<()> {
             _commit: PushEvent,
         ) -> Command<Self::Message> {
             println!("Commit pushed!");
-            Command::perform(async { "".to_owned() }, Msg::Stuff)
+
+            Command::perform(async { "Computation finished" }, Message::Stuff)
         }
     }
 

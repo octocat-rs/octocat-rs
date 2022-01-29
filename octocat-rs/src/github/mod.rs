@@ -54,6 +54,8 @@ mod tests {
                 8080
             }
 
+            async fn message(&self, _message: Self::Message) {}
+
             /// Example for how [`Command::perform`] should be used in practice.
             async fn commit_event(
                 &self,
