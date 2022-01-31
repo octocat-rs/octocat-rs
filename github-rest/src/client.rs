@@ -12,7 +12,10 @@ pub struct DefaultRequest {
 }
 
 impl DefaultRequest {
-    pub fn new(auth: String) -> Self {
+    pub fn new<T>(auth: T) -> Self
+    where
+        T: Into<String>,
+    {
         let mut headers = header::HeaderMap::new();
         headers.insert(
             header::USER_AGENT,
@@ -24,7 +27,7 @@ impl DefaultRequest {
         );
         headers.insert(
             header::AUTHORIZATION,
-            header::HeaderValue::from_str(auth.as_str()).unwrap(),
+            header::HeaderValue::from_str(auth.to_string().as_str()).unwrap(),
         );
         let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
         DefaultRequest { client }
