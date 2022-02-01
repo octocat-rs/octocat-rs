@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use async_trait::async_trait;
-use rocket::data::{ByteUnit, ToByteUnit};
 use tokio::sync::mpsc;
 use warp::Filter;
 
@@ -52,10 +51,9 @@ pub trait GitHubClient {
     fn event_handler(&self) -> &Self::EventHandler;
 
     /// Helper function to set the maximum payload size. Default is 8 MiB.
-    fn payload_size(&self) -> ByteUnit {
-        todo!("Complete Warp migration")
+    fn payload_size(&self) -> u64 {
+        1024 * 8192
     }
-
     /// Gets all commits from a repository.
     ///
     /// See also: [`get_commits`]
@@ -101,7 +99,7 @@ where
     T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     handler: T,
-    max_payload_size: ByteUnit,
+    max_payload_size: u64,
     http_client: HttpClient,
 }
 
@@ -126,8 +124,8 @@ where
         &self.handler
     }
 
-    fn payload_size(&self) -> ByteUnit {
-        self.max_payload_size.mebibytes()
+    fn payload_size(&self) -> u64 {
+        self.max_payload_size
     }
 }
 
@@ -146,7 +144,7 @@ where
         let event_type = warp::post()
             .and(warp::path("payload"))
             .and(warp::header::<EventTypes>("x-github-event"))
-            .and(warp::body::content_length_limit(1024 * 8192)) // 8Kb
+            .and(warp::body::content_length_limit(self_arc.max_payload_size)) // 8Kb
             .and(warp::body::json());
 
         macro_rules! event_push {
@@ -308,7 +306,7 @@ where
     pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>, payload_size: Option<u64>) -> Self {
         Self {
             handler,
-            max_payload_size: payload_size.unwrap_or(8).mebibytes(),
+            max_payload_size: payload_size.unwrap_or(1024 * 8192),
             http_client: HttpClient::new(auth, user_agent),
         }
     }
@@ -324,7 +322,7 @@ impl Default for Client<DefaultEventHandler> {
     fn default() -> Client<DefaultEventHandler> {
         Client {
             handler: DefaultEventHandler,
-            max_payload_size: 8.mebibytes(),
+            max_payload_size: 1024 * 8192,
             http_client: HttpClient::new(None, None),
         }
     }
