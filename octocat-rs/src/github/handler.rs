@@ -3,6 +3,7 @@ use std::sync::Arc;
 use async_trait::async_trait;
 
 use github_rest::model::{
+    apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
     commits::events::CommitCommentEvent,
     issues::events::{IssueCommentEvent, IssueEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
@@ -36,7 +37,37 @@ pub trait EventHandler {
         "/payload"
     }
 
-    async fn message(&self, message: Self::Message);
+    async fn message(&self, message: Self::Message) {
+        match message {
+            _ => {}
+        }
+    }
+
+    /// Someone revokes their authorization of a GitHub App
+    async fn app_authorization_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        app_event: AppAuthorizationEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a GitHub App installation
+    async fn installation_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        installation_event: InstallationEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    async fn installation_repositories_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        installation_repositories_event: InstallationRepositoriesEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
 
     /// Commit pushed to a repository.
     async fn commit_event(

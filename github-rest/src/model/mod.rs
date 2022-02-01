@@ -3,6 +3,7 @@
 // Temporary
 #![allow(clippy::module_inception)]
 
+pub mod apps;
 pub mod commits;
 pub mod event_types;
 pub mod issues;

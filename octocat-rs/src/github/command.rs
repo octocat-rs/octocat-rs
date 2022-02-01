@@ -48,6 +48,10 @@ where
         }
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.to_be_performed.len() == 0
+    }
+
     /// Transforms the result of a [`Command`].
     #[allow(clippy::redundant_closure)] // Known bug with Clippy
     pub fn map<A: Debug + Send>(mut self, f: impl Fn(T) -> A + 'static + Send + Sync) -> Command<A>

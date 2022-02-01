@@ -13,10 +13,11 @@ pub enum EventTypes {
     Installation,
     InstallationRepositories,
 
+    // Wiki page created/updated
+    Gollum,
+
     // Repositories
     DeployKey,
-    Gollum,
-    // Wiki page created/updated
     Member,
     Milestone,
     Public,

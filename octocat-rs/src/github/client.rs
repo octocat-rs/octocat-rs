@@ -10,6 +10,7 @@ use crate::Command;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
+        apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
         commits::{events::CommitCommentEvent, Commits},
         event_types::EventTypes,
         issues::{
@@ -171,9 +172,20 @@ where
                     EventTypes::Push => {
                         event_push!(user_cmd, commit_event, PushEvent, body);
                     }
-                    EventTypes::GithubAppAuthorization => {}
-                    EventTypes::Installation => {}
-                    EventTypes::InstallationRepositories => {}
+                    EventTypes::GithubAppAuthorization => {
+                        event_push!(user_cmd, app_authorization_event, AppAuthorizationEvent, body);
+                    }
+                    EventTypes::Installation => {
+                        event_push!(user_cmd, installation_event, InstallationEvent, body);
+                    }
+                    EventTypes::InstallationRepositories => {
+                        event_push!(
+                            user_cmd,
+                            installation_repositories_event,
+                            InstallationRepositoriesEvent,
+                            body
+                        );
+                    }
                     EventTypes::DeployKey => {}
                     EventTypes::Gollum => {
                         // TODO: Remove this mock code; it's only here for testing purposes.
@@ -265,7 +277,9 @@ where
                     EventTypes::Sponsorship => {}
                 };
 
-                let _ = &tx.send(user_cmd).await;
+                if !user_cmd.is_empty() {
+                    let _ = &tx.send(user_cmd).await;
+                }
             };
 
             futures::executor::block_on(ev_h);
