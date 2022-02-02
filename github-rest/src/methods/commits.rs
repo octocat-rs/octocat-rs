@@ -166,7 +166,7 @@ pub async fn react_to_commit_comment<T>(
 where
     T: Requester,
 {
-    dbg!(serde_json::to_string(&reaction).unwrap());
+    // dbg!(serde_json::to_string(&reaction).unwrap());
     let reaction = "{\"content\":stuff}"
         .to_owned()
         .replace("stuff", serde_json::to_string(&reaction).unwrap().as_str());

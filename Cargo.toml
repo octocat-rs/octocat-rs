@@ -1,3 +1,8 @@
 [workspace]
-members = [ "octocat-rs", "github-rest", "examples/basic" ]
-default-members = [ "octocat-rs", "github-rest" ]
+members = [
+    "octocat-rs",
+    "github-rest",
+    "examples/basic",
+    "examples/commitsummary",
+]
+default-members = ["octocat-rs", "github-rest"]

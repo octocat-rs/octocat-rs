@@ -153,7 +153,7 @@ where
                     .event_handler()
                     .$f(
                         thread_self.clone(),
-                        serde_json::from_str::<$t>($b.to_string().as_str()).unwrap(),
+                        serde_json::from_str::<$t>($b.to_string().as_str()).expect("Failed to parse json"),
                     )
                     .await
             };
@@ -162,8 +162,8 @@ where
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
             let mut user_cmd = Command::none();
 
-            dbg!(&ev);
-            dbg!(&body.to_string());
+            // dbg!(&ev);
+            // dbg!(&body.to_string());
 
             let ev_h = async {
                 match ev {
