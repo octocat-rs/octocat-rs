@@ -22,7 +22,7 @@ pub struct CommitCommentEvent {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[strum(serialize_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum CommitCommentAction {
     Created,
 }
