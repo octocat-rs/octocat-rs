@@ -35,6 +35,9 @@ jobs:
           name: octocat-rs
           path: |
             target/release/basic
+            target/release/basic.d
+            target/release/commitsummary
+            target/release/commitsummary.d
             target/release/liboctocat_rs.d
             target/release/liboctocat_rs.rlib
             target/release/libgithub_rest.d
