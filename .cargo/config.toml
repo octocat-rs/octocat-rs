@@ -1,5 +1,5 @@
 [alias]
-b = "build"
+b = "build --all-targets"
 c = "clippy --tests"
 d = "doc"
 t = "test"
