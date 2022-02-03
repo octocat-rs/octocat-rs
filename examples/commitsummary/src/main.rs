@@ -4,7 +4,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 use github_rest::model::repositories::events::PushEvent;
-use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command, GitHubClient};
+use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command, client::GitHubClient};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -40,9 +40,7 @@ async fn main() -> Result<()> {
         ) -> Command<Self::Message> {
             println!("Commit pushed!");
 
-            let text = format!(
-                "{}",
-                commit
+            let text = commit
                     .commits
                     .iter()
                     .map(|x| {
@@ -58,8 +56,7 @@ async fn main() -> Result<()> {
                         )
                     })
                     .collect::<Vec<String>>()
-                    .join("\n")
-            );
+                    .join("\n");
 
             Command::perform(
                 async move {
