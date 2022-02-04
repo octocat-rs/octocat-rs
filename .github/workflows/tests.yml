@@ -28,4 +28,4 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run tests
-        run: cargo test --color=always --package octocat-rs --lib tests --no-fail-fast -- --format=json -Z unstable-options --show-output
+        run: cargo test --color=always --all-targets --no-fail-fast -- --format=json -Z unstable-options --show-output
