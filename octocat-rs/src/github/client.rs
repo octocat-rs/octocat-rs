@@ -22,7 +22,9 @@ use github_rest::{
         },
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
-            events::{ForkEvent, PushEvent, StarEvent},
+            events::{
+                ForkEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, StarEvent,
+            },
             workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
         },
     },
@@ -162,8 +164,8 @@ where
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
             let mut user_cmd = Command::none();
 
-            // dbg!(&ev);
-            // dbg!(&body.to_string());
+            dbg!(&ev);
+            dbg!(&body.to_string());
 
             let ev_h = async {
                 match ev {
@@ -198,9 +200,15 @@ where
                     EventTypes::Release => {
                         event_push!(user_cmd, release_event, ReleaseEvent, body);
                     }
-                    EventTypes::Repository => {}
-                    EventTypes::RepositoryDispatch => {}
-                    EventTypes::RepositoryImport => {}
+                    EventTypes::Repository => {
+                        event_push!(user_cmd, repository_event, RepositoryEvent, body);
+                    }
+                    EventTypes::RepositoryDispatch => {
+                        event_push!(user_cmd, repository_dispatch_event, RepositoryDispatchEvent, body);
+                    }
+                    EventTypes::RepositoryImport => {
+                        event_push!(user_cmd, repository_import_event, RepositoryImportEvent, body);
+                    }
                     EventTypes::RepositoryVulnerabilityAlert => {}
                     EventTypes::SecretScanningAlert => {}
                     EventTypes::SecurityAdvisory => {}

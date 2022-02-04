@@ -5,6 +5,7 @@ use crate::{
     model::{
         commits::comments::CommitComment,
         event_types::macros::repo_origin,
+        organizations::Organization,
         prelude::*,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
@@ -14,6 +15,55 @@ use crate::{
     },
     GithubRestError, Requester,
 };
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RepositoryEvent {
+    pub action: RepositoryAction,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub installation: Option<Value>,
+    pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum RepositoryAction {
+    Created,
+    Deleted,
+    Archived,
+    Unarchived,
+    Edited,
+    Renamed,
+    Transferred,
+    Publicized,
+    Privatized,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RepositoryDispatchEvent {
+    pub action: String,
+    #[serde(flatten)]
+    pub payload: Value,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RepositoryImportEvent {
+    pub action: RepositoryImportAction,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum RepositoryImportAction {
+    Success,
+    Cancelled,
+    Failure,
+}
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#push>
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -101,7 +151,7 @@ pub struct StarEvent {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[strum(serialize_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum StarAction {
     Created,
     Deleted,

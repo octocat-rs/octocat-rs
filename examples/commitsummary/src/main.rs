@@ -4,7 +4,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 use github_rest::model::repositories::events::PushEvent;
-use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command, client::GitHubClient};
+use octocat_rs::{client::GitHubClient, handler::EventHandler, Client, ClientBuilder, Command};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -41,22 +41,22 @@ async fn main() -> Result<()> {
             println!("Commit pushed!");
 
             let text = commit
-                    .commits
-                    .iter()
-                    .map(|x| {
-                        format!(
-                            "`{}`: {}\nModified files: `{}`",
-                            x.author.name,
-                            x.message,
-                            x.modified
-                                .iter()
-                                .map(|x| { serde_json::to_string(&x).unwrap() })
-                                .collect::<Vec<String>>()
-                                .join("`, `")
-                        )
-                    })
-                    .collect::<Vec<String>>()
-                    .join("\n");
+                .commits
+                .iter()
+                .map(|x| {
+                    format!(
+                        "`{}`: {}\nModified files: `{}`",
+                        x.author.name,
+                        x.message,
+                        x.modified
+                            .iter()
+                            .map(|x| { serde_json::to_string(&x).unwrap() })
+                            .collect::<Vec<String>>()
+                            .join("`, `")
+                    )
+                })
+                .collect::<Vec<String>>()
+                .join("\n");
 
             Command::perform(
                 async move {

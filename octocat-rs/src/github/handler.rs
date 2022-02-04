@@ -9,7 +9,7 @@ use github_rest::model::{
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
-        events::{ForkEvent, PushEvent, StarEvent},
+        events::{ForkEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, StarEvent},
         workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
     },
 };
@@ -92,6 +92,33 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         release_event: ReleaseEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Repository-related activity
+    async fn repository_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        repository_event: RepositoryEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// GitHub App sends a POST request to the "[Create a repository dispatch event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event)" endpoint.
+    async fn repository_dispatch_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        repository_event: RepositoryDispatchEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a repository being imported to GitHub
+    async fn repository_import_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        repository_event: RepositoryImportEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
