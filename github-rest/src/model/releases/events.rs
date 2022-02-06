@@ -1,5 +1,7 @@
 use crate::model::{
-    event_types::macros::repo_origin, prelude::*, releases::Release, repositories::Repository, user::User,
+    event_types::{macros::repo_origin, RepoEventInfo},
+    prelude::*,
+    releases::Release,
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release>
@@ -7,8 +9,8 @@ use crate::model::{
 pub struct ReleaseEvent {
     pub action: nested::ReleaseAction,
     pub release: Release,
-    pub repository: Repository,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 pub mod nested {
@@ -37,8 +39,8 @@ pub struct CreateEvent {
     pub master_branch: String,
     pub description: String,
     pub pusher_type: String,
-    pub repository: Repository,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#delete>
@@ -48,8 +50,8 @@ pub struct DeleteEvent {
     pub ref_field: String,
     pub ref_type: RefType,
     pub pusher_type: String,
-    pub repository: Repository,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]

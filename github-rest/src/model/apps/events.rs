@@ -3,11 +3,10 @@ use crate::model::{apps::events::nested::RepoInfo, prelude::*, user::User};
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#installation>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InstallationEvent {
-    // TODO: Complete InstallationEvent
     pub action: InstallationAction,
     pub repositories: Vec<RepoInfo>,
-    pub sender: User,
     pub installation: Value,
+    pub sender: User,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]

@@ -2,7 +2,7 @@
 b = "build --all-targets"
 c = "clippy --tests --all-targets"
 d = "doc"
-t = "test"
+t = "test --all-targets"
 r = "run --package basic"
 rr = "run --release --package basic"
 # space_example = ["run", "--release", "--", "\"command list\""]

@@ -1,17 +1,14 @@
 use crate::model::{
-    event_types::macros::repo_origin,
+    event_types::{macros::repo_origin, RepoEventInfo},
     issues::{
         comments::IssueComment,
         events::{CommentChanges, IssueCommentAction},
     },
-    organizations::Organization,
     prelude::*,
     pull_requests::{
         events::nested::{IssueChanges, PullRequestAction},
         PullRequest,
     },
-    repositories::Repository,
-    user::User,
 };
 
 // TODO: Convenience method to get changes if the action is `Edited`.
@@ -22,8 +19,8 @@ pub struct PullRequestEvent {
     pub number: i64,
     pub pull_request: PullRequest,
     pub changes: Option<IssueChanges>,
-    pub repository: Repository,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 pub mod nested {
@@ -55,13 +52,13 @@ pub mod nested {
     // TODO: Move this to some type of shared module as `IssueEvent` uses it
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct IssueChanges {
-        title: Option<Change>,
-        body: Option<Change>,
+        pub title: Option<Change>,
+        pub body: Option<Change>,
     }
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Change {
-        from: String,
+        pub from: String,
     }
 }
 
@@ -72,9 +69,8 @@ pub struct PullRequestReviewEvent {
     pub changes: Option<CommentChanges>,
     pub pull_request: PullRequest,
     pub review: Value,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -92,10 +88,8 @@ pub struct PullRequestReviewCommentEvent {
     pub changes: Option<CommentChanges>,
     pub pull_request: PullRequest,
     pub comment: IssueComment,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub installation: Value,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 repo_origin!(PullRequestEvent);

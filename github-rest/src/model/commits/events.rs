@@ -2,11 +2,8 @@ use crate::{
     methods::{get_commit, GetCommitBody},
     model::{
         commits::{comments::CommitComment, Commit},
-        event_types::macros::repo_origin,
-        organizations::Organization,
+        event_types::{macros::repo_origin, RepoEventInfo},
         prelude::*,
-        repositories::Repository,
-        user::User,
     },
     GithubRestError, Requester,
 };
@@ -16,9 +13,8 @@ use crate::{
 pub struct CommitCommentEvent {
     pub action: CommitCommentAction,
     pub comment: CommitComment,
-    pub organization: Option<Organization>,
-    pub repository: Repository,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -37,8 +33,8 @@ impl CommitCommentEvent {
     {
         get_commit(
             client,
-            self.repository.owner.login.clone(),
-            self.repository.name.clone(),
+            self.event_info.repository.owner.login.clone(),
+            self.event_info.repository.name.clone(),
             self.comment.commit_id.clone(),
             options,
         )

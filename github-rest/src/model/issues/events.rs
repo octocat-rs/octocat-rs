@@ -1,11 +1,8 @@
 use crate::model::{
-    event_types::macros::repo_origin,
+    event_types::{macros::repo_origin, RepoEventInfo},
     issues::{comments::IssueComment, Issue},
-    organizations::Organization,
     prelude::*,
     pull_requests::events::nested::{Change, IssueChanges},
-    repositories::Repository,
-    user::User,
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#issues>
@@ -13,12 +10,9 @@ use crate::model::{
 pub struct IssueEvent {
     pub action: IssueAction,
     pub issue: Issue,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    // Couldn't find any example in the docs for this
-    pub installation: Option<Value>,
-    pub sender: User,
     pub changes: Option<IssueChanges>,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -48,12 +42,8 @@ pub struct IssueCommentEvent {
     pub action: IssueAction,
     pub changes: Option<CommentChanges>,
     pub comment: IssueComment,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    // NOTE: Both of these don't appear to have a set structure, hopefully further testing will allow us to weed out
-    // possible complications.
-    pub installation: Value,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -68,7 +58,7 @@ pub enum IssueCommentAction {
 // uses it
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CommentChanges {
-    body: Option<Change>,
+    pub body: Option<Change>,
 }
 
 repo_origin!(IssueEvent);

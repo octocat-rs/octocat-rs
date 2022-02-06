@@ -1,12 +1,7 @@
 use crate::model::{
-    event_types::macros::repo_origin,
-    organizations::Organization,
+    event_types::{macros::repo_origin, RepoEventInfo},
     prelude::*,
-    repositories::{
-        workflows::{events::nested::*, Workflow},
-        Repository,
-    },
-    user::User,
+    repositories::workflows::{events::nested::*, Workflow},
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_run>
@@ -15,9 +10,8 @@ pub struct WorkflowRunEvent {
     pub action: WorkflowRunAction,
     pub workflow_run: WorkflowRun,
     pub workflow: Workflow,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_job>
@@ -25,9 +19,8 @@ pub struct WorkflowRunEvent {
 pub struct WorkflowJobEvent {
     pub action: WorkflowJobAction,
     pub workflow_job: WorkflowJob,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#check_run>
@@ -35,8 +28,8 @@ pub struct WorkflowJobEvent {
 pub struct CheckRunEvent {
     action: CheckRunAction,
     check_run: CheckRun,
-    repository: Repository,
-    sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 pub mod nested {

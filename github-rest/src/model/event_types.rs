@@ -1,4 +1,4 @@
-use crate::model::prelude::*;
+use crate::model::{organizations::Organization, prelude::*, repositories::Repository, user::User};
 
 /// Used to represent all possible values for the `x-github-event` header sent
 /// with all webhook payloads.
@@ -88,6 +88,16 @@ pub enum EventTypes {
     /* <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package> */
     Ping,
     Sponsorship,
+}
+
+/// Used to represent the base fields provided by events originating from
+/// repositories.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RepoEventInfo {
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub installation: Option<Value>,
+    pub sender: User,
 }
 
 /// The base trait used to represent different types of events. This will

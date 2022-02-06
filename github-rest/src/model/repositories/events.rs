@@ -4,9 +4,8 @@ use crate::{
     methods::util,
     model::{
         commits::comments::CommitComment,
-        event_types::macros::repo_origin,
+        event_types::{macros::repo_origin, RepoEventInfo},
         issues::milestones::Milestone,
-        organizations::Organization,
         prelude::*,
         pull_requests::events::nested::Change,
         repositories::{
@@ -22,10 +21,8 @@ use crate::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepositoryEvent {
     pub action: RepositoryAction,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub installation: Option<Value>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -47,6 +44,8 @@ pub enum RepositoryAction {
 pub struct RepositoryDispatchEvent {
     pub action: String,
     #[serde(flatten)]
+    pub event_info: Option<RepoEventInfo>,
+    #[serde(flatten)]
     pub payload: Value,
 }
 
@@ -54,9 +53,8 @@ pub struct RepositoryDispatchEvent {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepositoryImportEvent {
     pub action: RepositoryImportAction,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -74,9 +72,7 @@ pub struct PushEvent {
     pub ref_field: String,
     pub before: String,
     pub after: String,
-    pub repository: Repository,
     pub pusher: Pusher,
-    pub sender: User,
     pub created: bool,
     pub deleted: bool,
     pub forced: bool,
@@ -84,6 +80,8 @@ pub struct PushEvent {
     pub compare: String,
     pub commits: Vec<Commit>,
     pub head_commit: Option<HeadCommit>,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 impl PushEvent {
@@ -148,8 +146,8 @@ pub mod nested {
 pub struct StarEvent {
     pub action: StarAction,
     pub starred_at: String,
-    pub repository: Repository,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -159,22 +157,33 @@ pub enum StarAction {
     Deleted,
 }
 
-// TODO: Watch event
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#watch>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WatchEvent {
+    pub action: WatchAction,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum WatchAction {
+    Started,
+}
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#fork>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForkEvent {
-    forkee: Repository,
-    repository: Repository,
-    sender: User,
+    pub forkee: Repository,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#public>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PublicEvent {
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub installation: Option<Value>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#milestone>
@@ -183,9 +192,8 @@ pub struct MilestoneEvent {
     pub action: MilestoneAction,
     pub milestone: Milestone,
     pub changes: Option<MilestoneChanges>,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -211,9 +219,8 @@ pub enum MilestoneAction {
 pub struct DeployKeyEvent {
     pub action: DeployKeyAction,
     pub key: DeployKey,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub sender: User,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -228,11 +235,9 @@ pub enum DeployKeyAction {
 pub struct MemberEvent {
     pub action: MemberAction,
     pub member: User,
-    pub sender: User,
     pub changes: Option<MemberChanges>,
-    pub repository: Repository,
-    pub organization: Option<Organization>,
-    pub installation: Option<Value>,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

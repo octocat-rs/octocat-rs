@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{fmt::Debug, ops::Deref, sync::Arc};
 
 use anyhow::Result;
 use async_trait::async_trait;
@@ -109,7 +109,7 @@ where
 #[async_trait]
 impl<T> GitHubClient for Client<T>
 where
-    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
+    T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     type HttpClient = HttpClient;
     type EventHandler = T;
@@ -134,7 +134,7 @@ where
 
 impl<T> Client<T>
 where
-    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
+    T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
     pub async fn start(self) {
         let _ = self.run().await.expect("Starting application: User-defined code");
@@ -332,6 +332,19 @@ where
     pub fn set_auth(mut self, auth: Authorization) -> Self {
         self.http_client.set_auth(auth);
         self
+    }
+}
+
+/// TODO: Discuss this abuse of `Deref` and decide whether the trade-off is
+/// worth it. See also: <https://rust-unofficial.github.io/patterns/anti_patterns/deref.html#example>
+impl<T> Deref for Client<T>
+where
+    T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
+{
+    type Target = HttpClient;
+
+    fn deref(&self) -> &Self::Target {
+        &self.http_client
     }
 }
 

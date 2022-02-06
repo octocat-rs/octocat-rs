@@ -4,7 +4,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 use github_rest::model::repositories::events::PushEvent;
-use octocat_rs::{client::GitHubClient, handler::EventHandler, Client, ClientBuilder, Command};
+use octocat_rs::{client::GitHubClient, handler::EventHandler, Client, ClientBuilder, Command, HttpClient};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -61,7 +61,9 @@ async fn main() -> Result<()> {
             Command::perform(
                 async move {
                     commit
-                        .add_comment_to_commit(Arc::new(github_client.http_client()), text, None, None)
+                        // TODO: Discuss whether this is viable and if the appropriate `From` trait should be
+                        // implemented to allow users to use `github_client.into()` here instead.
+                        .add_comment_to_commit(Arc::<&HttpClient>::new(&*github_client), text, None, None)
                         .await
                         .unwrap();
 
