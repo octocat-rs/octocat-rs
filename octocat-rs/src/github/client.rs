@@ -150,20 +150,20 @@ where
             .and(warp::body::content_length_limit(self_arc.max_payload_size)) // 8Kb
             .and(warp::body::json());
 
-        macro_rules! event_push {
-            ($i:ident, $f:ident, $t:ty, $b:ident) => {
-                $i = thread_self
-                    .event_handler()
-                    .$f(
-                        thread_self.clone(),
-                        serde_json::from_str::<$t>($b.to_string().as_str()).expect("Failed to parse json"),
-                    )
-                    .await
-            };
-        }
-
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
             let mut user_cmd = Command::none();
+
+            macro_rules! event_push {
+                ($f:ident, $t:ty) => {
+                    user_cmd = thread_self
+                        .event_handler()
+                        .$f(
+                            thread_self.clone(),
+                            serde_json::from_str::<$t>(body.to_string().as_str()).expect("Failed to parse json"),
+                        )
+                        .await
+                };
+            }
 
             dbg!(&ev);
             dbg!(&body.to_string());
@@ -171,24 +171,19 @@ where
             let ev_h = async {
                 match ev {
                     EventTypes::Push => {
-                        event_push!(user_cmd, commit_event, PushEvent, body);
+                        event_push!(commit_event, PushEvent);
                     }
                     EventTypes::GithubAppAuthorization => {
-                        event_push!(user_cmd, app_authorization_event, AppAuthorizationEvent, body);
+                        event_push!(app_authorization_event, AppAuthorizationEvent);
                     }
                     EventTypes::Installation => {
-                        event_push!(user_cmd, installation_event, InstallationEvent, body);
+                        event_push!(installation_event, InstallationEvent);
                     }
                     EventTypes::InstallationRepositories => {
-                        event_push!(
-                            user_cmd,
-                            installation_repositories_event,
-                            InstallationRepositoriesEvent,
-                            body
-                        );
+                        event_push!(installation_repositories_event, InstallationRepositoriesEvent);
                     }
                     EventTypes::DeployKey => {
-                        event_push!(user_cmd, deploy_key_event, DeployKeyEvent, body);
+                        event_push!(deploy_key_event, DeployKeyEvent);
                     }
                     EventTypes::Gollum => {
                         // TODO: Remove this mock code; it's only here for testing purposes.
@@ -198,72 +193,67 @@ where
                             .await;
                     }
                     EventTypes::Member => {
-                        event_push!(user_cmd, member_event, MemberEvent, body);
+                        event_push!(member_event, MemberEvent);
                     }
                     EventTypes::Milestone => {
-                        event_push!(user_cmd, milestone_event, MilestoneEvent, body);
+                        event_push!(milestone_event, MilestoneEvent);
                     }
                     EventTypes::Public => {
-                        event_push!(user_cmd, public_event, PublicEvent, body);
+                        event_push!(public_event, PublicEvent);
                     }
                     EventTypes::Release => {
-                        event_push!(user_cmd, release_event, ReleaseEvent, body);
+                        event_push!(release_event, ReleaseEvent);
                     }
                     EventTypes::Repository => {
-                        event_push!(user_cmd, repository_event, RepositoryEvent, body);
+                        event_push!(repository_event, RepositoryEvent);
                     }
                     EventTypes::RepositoryDispatch => {
-                        event_push!(user_cmd, repository_dispatch_event, RepositoryDispatchEvent, body);
+                        event_push!(repository_dispatch_event, RepositoryDispatchEvent);
                     }
                     EventTypes::RepositoryImport => {
-                        event_push!(user_cmd, repository_import_event, RepositoryImportEvent, body);
+                        event_push!(repository_import_event, RepositoryImportEvent);
                     }
                     EventTypes::RepositoryVulnerabilityAlert => {}
                     EventTypes::SecretScanningAlert => {}
                     EventTypes::SecurityAdvisory => {}
                     EventTypes::Star => {
-                        event_push!(user_cmd, star_event, StarEvent, body);
+                        event_push!(star_event, StarEvent);
                     }
                     EventTypes::Watch => {}
                     EventTypes::PullRequest => {
-                        event_push!(user_cmd, pull_request_event, PullRequestEvent, body);
+                        event_push!(pull_request_event, PullRequestEvent);
                     }
                     EventTypes::PullRequestReview => {
-                        event_push!(user_cmd, pull_request_review_event, PullRequestReviewEvent, body);
+                        event_push!(pull_request_review_event, PullRequestReviewEvent);
                     }
                     EventTypes::PullRequestReviewComment => {
-                        event_push!(
-                            user_cmd,
-                            pull_request_review_comment_event,
-                            PullRequestReviewCommentEvent,
-                            body
-                        );
+                        event_push!(pull_request_review_comment_event, PullRequestReviewCommentEvent);
                     }
                     EventTypes::CommitComment => {
-                        event_push!(user_cmd, commit_comment_event, CommitCommentEvent, body);
+                        event_push!(commit_comment_event, CommitCommentEvent);
                     }
                     EventTypes::Status => {}
                     EventTypes::IssueComment => {
-                        event_push!(user_cmd, issue_comment_event, IssueCommentEvent, body);
+                        event_push!(issue_comment_event, IssueCommentEvent);
                     }
                     EventTypes::Issues => {
-                        event_push!(user_cmd, issue_event, IssueEvent, body);
+                        event_push!(issue_event, IssueEvent);
                     }
                     EventTypes::Label => {}
                     EventTypes::Discussion => {}
                     EventTypes::DiscussionComment => {}
                     EventTypes::BranchProtectionRule => {}
                     EventTypes::Create => {
-                        event_push!(user_cmd, tag_created, CreateEvent, body);
+                        event_push!(tag_created, CreateEvent);
                     }
                     EventTypes::Delete => {
-                        event_push!(user_cmd, tag_deleted, DeleteEvent, body);
+                        event_push!(tag_deleted, DeleteEvent);
                     }
                     EventTypes::Fork => {
-                        event_push!(user_cmd, repository_forked, ForkEvent, body);
+                        event_push!(repository_forked, ForkEvent);
                     }
                     EventTypes::CheckRun => {
-                        event_push!(user_cmd, check_run, CheckRunEvent, body);
+                        event_push!(check_run, CheckRunEvent);
                     }
                     EventTypes::CheckSuite => {}
                     EventTypes::CodeScanningAlert => {}
@@ -272,10 +262,10 @@ where
                     EventTypes::PageBuild => {}
                     EventTypes::WorkflowDispatch => {}
                     EventTypes::WorkflowJob => {
-                        event_push!(user_cmd, workflow_job, WorkflowJobEvent, body);
+                        event_push!(workflow_job, WorkflowJobEvent);
                     }
                     EventTypes::WorkflowRun => {
-                        event_push!(user_cmd, workflow_run, WorkflowRunEvent, body);
+                        event_push!(workflow_run, WorkflowRunEvent);
                     }
                     EventTypes::Membership => {}
                     EventTypes::OrgBlock => {}
