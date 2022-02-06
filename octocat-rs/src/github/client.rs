@@ -23,7 +23,8 @@ use github_rest::{
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
-                ForkEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, StarEvent,
+                DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent,
+                RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, StarEvent,
             },
             workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
         },
@@ -145,7 +146,7 @@ where
 
         let event_type = warp::post()
             .and(warp::path("payload"))
-            .and(warp::header::<EventTypes>("x-github-event"))
+            .and(warp::header::<EventTypes>("X-GitHub-Event"))
             .and(warp::body::content_length_limit(self_arc.max_payload_size)) // 8Kb
             .and(warp::body::json());
 
@@ -186,7 +187,9 @@ where
                             body
                         );
                     }
-                    EventTypes::DeployKey => {}
+                    EventTypes::DeployKey => {
+                        event_push!(user_cmd, deploy_key_event, DeployKeyEvent, body);
+                    }
                     EventTypes::Gollum => {
                         // TODO: Remove this mock code; it's only here for testing purposes.
                         user_cmd = thread_self
@@ -194,9 +197,15 @@ where
                             .commit_event(thread_self.clone(), Default::default())
                             .await;
                     }
-                    EventTypes::Member => {}
-                    EventTypes::Milestone => {}
-                    EventTypes::Public => {}
+                    EventTypes::Member => {
+                        event_push!(user_cmd, member_event, MemberEvent, body);
+                    }
+                    EventTypes::Milestone => {
+                        event_push!(user_cmd, milestone_event, MilestoneEvent, body);
+                    }
+                    EventTypes::Public => {
+                        event_push!(user_cmd, public_event, PublicEvent, body);
+                    }
                     EventTypes::Release => {
                         event_push!(user_cmd, release_event, ReleaseEvent, body);
                     }

@@ -7,7 +7,7 @@ use crate::model::{
     organizations::Organization,
     prelude::*,
     pull_requests::{
-        events::nested::{Changes, PullRequestAction},
+        events::nested::{IssueChanges, PullRequestAction},
         PullRequest,
     },
     repositories::Repository,
@@ -21,7 +21,7 @@ pub struct PullRequestEvent {
     pub action: PullRequestAction,
     pub number: i64,
     pub pull_request: PullRequest,
-    changes: Option<Changes>,
+    pub changes: Option<IssueChanges>,
     pub repository: Repository,
     pub sender: User,
 }
@@ -54,7 +54,7 @@ pub mod nested {
 
     // TODO: Move this to some type of shared module as `IssueEvent` uses it
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct Changes {
+    pub struct IssueChanges {
         title: Option<Change>,
         body: Option<Change>,
     }

@@ -9,7 +9,10 @@ use github_rest::model::{
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
-        events::{ForkEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, StarEvent},
+        events::{
+            DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent, RepositoryDispatchEvent,
+            RepositoryEvent, RepositoryImportEvent, StarEvent,
+        },
         workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
     },
 };
@@ -119,6 +122,42 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         repository_event: RepositoryImportEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Deploy key added or removed from a repository.
+    async fn deploy_key_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        deploy_key_event: DeployKeyEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Event related to repository collaborators
+    async fn member_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        member_event: MemberEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Repository made public.
+    async fn public_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        public_event: PublicEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Event related to repository milestones.
+    async fn milestone_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        milestone_event: MilestoneEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

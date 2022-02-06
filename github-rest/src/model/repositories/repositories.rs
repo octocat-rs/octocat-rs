@@ -80,3 +80,15 @@ pub struct Repository {
     pub watchers: i64,
     pub default_branch: String,
 }
+
+/// <https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeployKey {
+    id: usize,
+    key: String,
+    url: String,
+    title: String,
+    verified: bool,
+    created_at: String,
+    read_only: bool,
+}

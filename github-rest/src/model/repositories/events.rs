@@ -5,11 +5,13 @@ use crate::{
     model::{
         commits::comments::CommitComment,
         event_types::macros::repo_origin,
+        issues::milestones::Milestone,
         organizations::Organization,
         prelude::*,
+        pull_requests::events::nested::Change,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
-            Repository,
+            DeployKey, Repository,
         },
         user::User,
     },
@@ -166,6 +168,92 @@ pub struct ForkEvent {
     sender: User,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#public>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PublicEvent {
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub installation: Option<Value>,
+    pub sender: User,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#milestone>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MilestoneEvent {
+    pub action: MilestoneAction,
+    pub milestone: Milestone,
+    pub changes: Option<MilestoneChanges>,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MilestoneChanges {
+    pub title: Option<Change>,
+    pub description: Option<Change>,
+    pub due_on: Option<Change>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum MilestoneAction {
+    Created,
+    Closed,
+    /// A closed milestone is re-opened
+    Opened,
+    Edited,
+    Deleted,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deploy_key>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeployKeyEvent {
+    pub action: DeployKeyAction,
+    pub key: DeployKey,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum DeployKeyAction {
+    Created,
+    Deleted,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#member>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MemberEvent {
+    pub action: MemberAction,
+    pub member: User,
+    pub sender: User,
+    pub changes: Option<MemberChanges>,
+    pub repository: Repository,
+    pub organization: Option<Organization>,
+    pub installation: Option<Value>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MemberChanges {
+    pub old_permission: Option<Change>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum MemberAction {
+    Added,
+    Removed,
+    Edited,
+}
+
+repo_origin!(RepositoryEvent);
+repo_origin!(RepositoryDispatchEvent);
+repo_origin!(RepositoryImportEvent);
+repo_origin!(PublicEvent);
+repo_origin!(DeployKeyEvent);
+repo_origin!(MemberEvent);
 repo_origin!(PushEvent);
 repo_origin!(StarEvent);
 repo_origin!(ForkEvent);

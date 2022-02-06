@@ -3,7 +3,7 @@ use crate::model::{
     issues::{comments::IssueComment, Issue},
     organizations::Organization,
     prelude::*,
-    pull_requests::events::nested::{Change, Changes},
+    pull_requests::events::nested::{Change, IssueChanges},
     repositories::Repository,
     user::User,
 };
@@ -18,7 +18,7 @@ pub struct IssueEvent {
     // Couldn't find any example in the docs for this
     pub installation: Option<Value>,
     pub sender: User,
-    pub changes: Option<Changes>,
+    pub changes: Option<IssueChanges>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
