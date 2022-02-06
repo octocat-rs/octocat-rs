@@ -336,7 +336,9 @@ where
 }
 
 /// TODO: Discuss this abuse of `Deref` and decide whether the trade-off is
-/// worth it. See also: <https://rust-unofficial.github.io/patterns/anti_patterns/deref.html#example>
+/// worth it.
+///
+/// See also: <https://rust-unofficial.github.io/patterns/anti_patterns/deref.html#example>
 impl<T> Deref for Client<T>
 where
     T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
