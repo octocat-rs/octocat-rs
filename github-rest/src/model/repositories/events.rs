@@ -251,6 +251,7 @@ pub enum MemberAction {
 repo_origin!(RepositoryEvent);
 repo_origin!(RepositoryDispatchEvent);
 repo_origin!(RepositoryImportEvent);
+repo_origin!(MilestoneEvent);
 repo_origin!(PublicEvent);
 repo_origin!(DeployKeyEvent);
 repo_origin!(MemberEvent);
