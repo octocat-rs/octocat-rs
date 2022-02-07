@@ -26,8 +26,8 @@ pub struct WorkflowJobEvent {
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#check_run>
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CheckRunEvent {
-    action: CheckRunAction,
-    check_run: CheckRun,
+    pub action: CheckRunAction,
+    pub check_run: CheckRun,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
