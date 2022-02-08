@@ -1,5 +1,3 @@
-// TODO: Figure out which events may not originate from a repository.
-
 // Temporary
 #![allow(clippy::module_inception)]
 

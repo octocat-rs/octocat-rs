@@ -1,4 +1,4 @@
-//#![deny(rust_2018_idioms)]
+#![deny(rust_2018_idioms)]
 use core::fmt;
 use std::error::Error;
 
@@ -12,7 +12,14 @@ use serde::{de::DeserializeOwned, Serialize};
 pub mod builders;
 #[cfg(feature = "client")]
 pub mod client;
+/// This module contains helper functions for writing API requests.
 pub mod methods;
+/// This module contains all API request/response types currently implemented.
+/// These include:
+/// * Webhook payloads
+///     - Webhook payloads can be found at `./<directory>/events.rs`
+/// * Request bodies
+/// * Response bodies
 pub mod model;
 
 #[derive(Debug)]
