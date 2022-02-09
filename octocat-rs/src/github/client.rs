@@ -24,7 +24,8 @@ use github_rest::{
         repositories::{
             events::{
                 DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent,
-                RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, StarEvent,
+                RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent,
+                SecretScanningAlertEvent, StarEvent, WatchEvent,
             },
             workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
         },
@@ -103,7 +104,7 @@ where
 {
     handler: T,
     max_payload_size: u64,
-    http_client: HttpClient,
+    pub(crate) http_client: HttpClient,
 }
 
 #[async_trait]
@@ -213,13 +214,19 @@ where
                     EventTypes::RepositoryImport => {
                         event_push!(repository_import_event, RepositoryImportEvent);
                     }
-                    EventTypes::RepositoryVulnerabilityAlert => {}
-                    EventTypes::SecretScanningAlert => {}
-                    EventTypes::SecurityAdvisory => {}
+                    EventTypes::RepositoryVulnerabilityAlert => {
+                        event_push!(repository_vulnerability_alert, RepositoryVulnerabilityAlertEvent);
+                    }
+                    EventTypes::SecretScanningAlert => {
+                        event_push!(secret_scanning_alert, SecretScanningAlertEvent);
+                    }
+                    EventTypes::SecurityAdvisory => {} // TODO: Sort this out <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#security_advisory>
                     EventTypes::Star => {
                         event_push!(star_event, StarEvent);
                     }
-                    EventTypes::Watch => {}
+                    EventTypes::Watch => {
+                        event_push!(watch_event, WatchEvent);
+                    }
                     EventTypes::PullRequest => {
                         event_push!(pull_request_event, PullRequestEvent);
                     }

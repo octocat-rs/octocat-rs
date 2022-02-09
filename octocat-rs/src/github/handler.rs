@@ -11,7 +11,8 @@ use github_rest::model::{
     repositories::{
         events::{
             DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent, RepositoryDispatchEvent,
-            RepositoryEvent, RepositoryImportEvent, StarEvent,
+            RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent,
+            StarEvent, WatchEvent,
         },
         workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
     },
@@ -41,9 +42,7 @@ pub trait EventHandler {
     }
 
     async fn message(&self, message: Self::Message) {
-        match message {
-            _ => {}
-        }
+        {}
     }
 
     /// Someone revokes their authorization of a GitHub App
@@ -126,6 +125,24 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// Activity related to security vulnerability alerts in a repository.
+    async fn repository_vulnerability_alert(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        repository_vulnerability_alert: RepositoryVulnerabilityAlertEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to secret scanning alerts in a repository.
+    async fn secret_scanning_alert(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        secret_scanning_alert: SecretScanningAlertEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
     /// Deploy key added or removed from a repository.
     async fn deploy_key_event(
         &self,
@@ -174,6 +191,15 @@ pub trait EventHandler {
 
     /// Repository receives a star
     async fn star_event(&self, github_client: Arc<Self::GitHubClient>, event: StarEvent) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Someone begins watching a repository
+    async fn watch_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        watch_event: WatchEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 

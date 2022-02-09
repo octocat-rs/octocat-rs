@@ -65,6 +65,23 @@ pub enum RepositoryImportAction {
     Failure,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_vulnerability_alert>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RepositoryVulnerabilityAlertEvent {
+    pub action: RepositoryVulnerabilityAlertAction,
+    pub alert: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum RepositoryVulnerabilityAlertAction {
+    Create,
+    Dismiss,
+    Resolve,
+}
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#push>
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PushEvent {
@@ -171,6 +188,23 @@ pub enum WatchAction {
     Started,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#secret_scanning_alert>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SecretScanningAlertEvent {
+    pub action: SecretScanningAlertAction,
+    pub alert: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum SecretScanningAlertAction {
+    Created,
+    Resolved,
+    Reopened,
+}
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#fork>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForkEvent {
@@ -253,13 +287,16 @@ pub enum MemberAction {
     Edited,
 }
 
-repo_origin!(RepositoryEvent);
+repo_origin!(RepositoryVulnerabilityAlertEvent);
+repo_origin!(SecretScanningAlertEvent);
 repo_origin!(RepositoryDispatchEvent);
 repo_origin!(RepositoryImportEvent);
+repo_origin!(RepositoryEvent);
 repo_origin!(MilestoneEvent);
-repo_origin!(PublicEvent);
 repo_origin!(DeployKeyEvent);
+repo_origin!(PublicEvent);
 repo_origin!(MemberEvent);
+repo_origin!(WatchEvent);
 repo_origin!(PushEvent);
 repo_origin!(StarEvent);
 repo_origin!(ForkEvent);
