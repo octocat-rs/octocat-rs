@@ -5,7 +5,6 @@ use async_trait::async_trait;
 use tokio::sync::mpsc;
 use warp::Filter;
 
-use crate::Command;
 use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
@@ -33,7 +32,10 @@ use github_rest::{
     GithubRestError, Requester,
 };
 
-use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
+use crate::{
+    github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient},
+    Command,
+};
 
 #[async_trait]
 pub trait GitHubClient {

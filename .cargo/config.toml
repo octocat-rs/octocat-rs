@@ -1,6 +1,6 @@
 [alias]
 b = "build --all-targets"
-c = "clippy --tests --all-targets"
+c = "clippy --tests --all"
 d = "doc"
 t = "test --all-targets"
 r = "run --package basic"
