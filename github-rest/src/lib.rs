@@ -7,10 +7,12 @@ pub use github_api::end_points;
 use github_api::end_points::EndPoints;
 use reqwest::{Body, StatusCode};
 use serde::{de::DeserializeOwned, Serialize};
-
 #[cfg(feature = "builders")]
+/// This module includes various builders for Methods that require a lot of information
 pub mod builders;
 #[cfg(feature = "client")]
+/// This module contains a pre-built client you can use instead of making your own client.
+/// you can still do this though by implementing the [`Requester`] trait
 pub mod client;
 /// This module contains helper functions for writing API requests.
 pub mod methods;
