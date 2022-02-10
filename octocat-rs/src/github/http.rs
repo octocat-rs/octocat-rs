@@ -142,15 +142,3 @@ impl github_rest::Requester for HttpClient {
         Ok(serde_json::from_str(&r)?)
     }
 }
-
-// TODO: Figure out whether this is worth the pain
-/*
-impl<T> From<Arc<Client<T>>> for &HttpClient
-where
-    T: Debug + Send + Sync + EventHandler<GitHubClient = Client<T>>,
-{
-    fn from(client: Arc<Client<T>>) -> Self {
-        &client.http_client
-    }
-}
-*/

@@ -61,9 +61,7 @@ async fn main() -> Result<()> {
             Command::perform(
                 async move {
                     commit
-                        // TODO: Discuss whether this is viable and if the appropriate `From` trait should be
-                        // implemented to allow users to use `github_client.into()` here instead.
-                        .add_comment_to_commit(Arc::<&HttpClient>::new(&*github_client), text, None, None)
+                        .add_comment_to_commit(Arc::<&HttpClient>::new(github_client.http_client()), text, None, None)
                         .await
                         .unwrap();
 
