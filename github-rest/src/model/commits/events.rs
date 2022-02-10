@@ -42,6 +42,44 @@ impl CommitCommentEvent {
     }
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#status>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StatusEvent {
+    pub id: usize,
+    pub sha: String,
+    pub description: Option<String>,
+    pub target_url: Option<String>,
+    pub commit: Commit,
+    pub state: StatusState,
+    pub branches: Vec<Branch>,
+    pub created_at: Value,
+    pub updated_at: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum StatusState {
+    Pending,
+    Success,
+    Failure,
+    Error,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Branch {
+    pub name: String,
+    pub commit: NestedCommit,
+    pub protected: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NestedCommit {
+    pub sha: String,
+    pub url: String,
+}
+
 impl Default for CommitCommentAction {
     fn default() -> Self {
         Self::Created
@@ -49,3 +87,4 @@ impl Default for CommitCommentAction {
 }
 
 repo_origin!(CommitCommentEvent);
+repo_origin!(StatusEvent);

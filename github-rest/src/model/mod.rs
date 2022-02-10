@@ -3,8 +3,10 @@
 
 pub mod apps;
 pub mod commits;
+pub mod discussions;
 pub mod event_types;
 pub mod issues;
+pub mod misc;
 pub mod organizations;
 pub mod pull_requests;
 pub mod reactions;

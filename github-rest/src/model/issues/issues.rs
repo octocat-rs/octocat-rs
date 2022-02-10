@@ -42,9 +42,10 @@ pub struct Label {
     node_id: String,
     url: String,
     name: String,
-    description: String,
+    description: Option<String>,
     color: String,
-    label_default: Option<bool>,
+    // 🚎
+    default: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize)]

@@ -4,8 +4,10 @@ use async_trait::async_trait;
 
 use github_rest::model::{
     apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
-    commits::events::CommitCommentEvent,
+    commits::events::{CommitCommentEvent, StatusEvent},
+    discussions::events::DiscussionEvent,
     issues::events::{IssueCommentEvent, IssueEvent},
+    misc::events::LabelEvent,
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
@@ -139,6 +141,33 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         secret_scanning_alert: SecretScanningAlertEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Status of a Git commit changed.
+    async fn status_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        status_event: StatusEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a label.
+    async fn label_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        label_event: LabelEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a discussion.
+    async fn discussion_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        discussion_event: DiscussionEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

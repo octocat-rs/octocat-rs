@@ -9,12 +9,17 @@ use github_rest::{
     methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
         apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
-        commits::{events::CommitCommentEvent, Commits},
+        commits::{
+            events::{CommitCommentEvent, StatusEvent},
+            Commits,
+        },
+        discussions::events::DiscussionEvent,
         event_types::EventTypes,
         issues::{
             events::{IssueCommentEvent, IssueEvent},
             Issues,
         },
+        misc::events::LabelEvent,
         pull_requests::{
             events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
             Pulls,
@@ -241,15 +246,21 @@ where
                     EventTypes::CommitComment => {
                         event_push!(commit_comment_event, CommitCommentEvent);
                     }
-                    EventTypes::Status => {}
+                    EventTypes::Status => {
+                        event_push!(status_event, StatusEvent);
+                    }
                     EventTypes::IssueComment => {
                         event_push!(issue_comment_event, IssueCommentEvent);
                     }
                     EventTypes::Issues => {
                         event_push!(issue_event, IssueEvent);
                     }
-                    EventTypes::Label => {}
-                    EventTypes::Discussion => {}
+                    EventTypes::Label => {
+                        event_push!(label_event, LabelEvent);
+                    }
+                    EventTypes::Discussion => {
+                        event_push!(discussion_event, DiscussionEvent);
+                    }
                     EventTypes::DiscussionComment => {}
                     EventTypes::BranchProtectionRule => {}
                     EventTypes::Create => {
