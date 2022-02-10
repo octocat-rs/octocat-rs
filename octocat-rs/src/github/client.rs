@@ -13,7 +13,7 @@ use github_rest::{
             events::{CommitCommentEvent, StatusEvent},
             Commits,
         },
-        discussions::events::DiscussionEvent,
+        discussions::events::{DiscussionCommentEvent, DiscussionEvent},
         event_types::EventTypes,
         issues::{
             events::{IssueCommentEvent, IssueEvent},
@@ -27,11 +27,11 @@ use github_rest::{
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
-                DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent,
-                RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent,
-                SecretScanningAlertEvent, StarEvent, WatchEvent,
+                BranchProtectionRuleEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent,
+                PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
+                RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, WatchEvent,
             },
-            workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
+            workflows::events::{CheckRunEvent, CheckSuiteEvent, WorkflowJobEvent, WorkflowRunEvent},
         },
     },
     GithubRestError, Requester,
@@ -261,8 +261,12 @@ where
                     EventTypes::Discussion => {
                         event_push!(discussion_event, DiscussionEvent);
                     }
-                    EventTypes::DiscussionComment => {}
-                    EventTypes::BranchProtectionRule => {}
+                    EventTypes::DiscussionComment => {
+                        event_push!(discussion_comment_event, DiscussionCommentEvent);
+                    }
+                    EventTypes::BranchProtectionRule => {
+                        event_push!(branch_protection_rule_event, BranchProtectionRuleEvent);
+                    }
                     EventTypes::Create => {
                         event_push!(tag_created, CreateEvent);
                     }
@@ -275,7 +279,9 @@ where
                     EventTypes::CheckRun => {
                         event_push!(check_run, CheckRunEvent);
                     }
-                    EventTypes::CheckSuite => {}
+                    EventTypes::CheckSuite => {
+                        event_push!(check_suite_event, CheckSuiteEvent);
+                    }
                     EventTypes::CodeScanningAlert => {}
                     EventTypes::Deployment => {}
                     EventTypes::DeploymentStatus => {}

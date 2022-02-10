@@ -5,18 +5,18 @@ use async_trait::async_trait;
 use github_rest::model::{
     apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
     commits::events::{CommitCommentEvent, StatusEvent},
-    discussions::events::DiscussionEvent,
+    discussions::events::{DiscussionCommentEvent, DiscussionEvent},
     issues::events::{IssueCommentEvent, IssueEvent},
     misc::events::LabelEvent,
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{
-            DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent, RepositoryDispatchEvent,
-            RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent,
-            StarEvent, WatchEvent,
+            BranchProtectionRuleEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent,
+            RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent,
+            SecretScanningAlertEvent, StarEvent, WatchEvent,
         },
-        workflows::events::{CheckRunEvent, WorkflowJobEvent, WorkflowRunEvent},
+        workflows::events::{CheckRunEvent, CheckSuiteEvent, WorkflowJobEvent, WorkflowRunEvent},
     },
 };
 
@@ -168,6 +168,33 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         discussion_event: DiscussionEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a comment in a discussion.
+    async fn discussion_comment_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        discussion_comment_event: DiscussionCommentEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a branch protection rule.
+    async fn branch_protection_rule_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        branch_protection_rule_event: BranchProtectionRuleEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Check suite activity has occurred.
+    async fn check_suite_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        check_suite_event: CheckSuiteEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

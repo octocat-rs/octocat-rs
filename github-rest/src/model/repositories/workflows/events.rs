@@ -32,6 +32,23 @@ pub struct CheckRunEvent {
     pub event_info: RepoEventInfo,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#check_suite>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CheckSuiteEvent {
+    pub action: CheckSuiteAction,
+    pub check_suite: CheckSuite,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum CheckSuiteAction {
+    Completed,
+    Requested,
+    Rerequested,
+}
+
 pub mod nested {
     use crate::model::{
         prelude::*,
@@ -216,3 +233,4 @@ pub mod nested {
 repo_origin!(WorkflowRunEvent);
 repo_origin!(WorkflowJobEvent);
 repo_origin!(CheckRunEvent);
+repo_origin!(CheckSuiteEvent);

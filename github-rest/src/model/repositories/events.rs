@@ -158,6 +158,25 @@ pub mod nested {
     }
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#branch_protection_rule>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BranchProtectionRuleEvent {
+    pub action: BranchProtectionRuleAction,
+    // TODO: Create the relevant struct
+    pub rule: Value,
+    pub changes: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum BranchProtectionRuleAction {
+    Created,
+    Edited,
+    Deleted,
+}
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StarEvent {
@@ -288,6 +307,7 @@ pub enum MemberAction {
 }
 
 repo_origin!(RepositoryVulnerabilityAlertEvent);
+repo_origin!(BranchProtectionRuleEvent);
 repo_origin!(SecretScanningAlertEvent);
 repo_origin!(RepositoryDispatchEvent);
 repo_origin!(RepositoryImportEvent);
