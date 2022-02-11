@@ -4,6 +4,16 @@ use crate::model::{
     repositories::workflows::{events::nested::*, Workflow},
 };
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_dispatch>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WorkflowDispatchEvent {
+    pub inputs: Option<Value>,
+    #[serde(rename = "ref")]
+    pub ref_field: String,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_run>
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WorkflowRunEvent {
@@ -47,6 +57,16 @@ pub enum CheckSuiteAction {
     Completed,
     Requested,
     Rerequested,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#page_build>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PageBuildEvent {
+    pub id: usize,
+    // TODO: Create this struct <https://docs.github.com/en/rest/reference/pages#list-github-pages-builds>
+    pub build: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 pub mod nested {
@@ -230,7 +250,9 @@ pub mod nested {
     }
 }
 
+repo_origin!(WorkflowDispatchEvent);
 repo_origin!(WorkflowRunEvent);
 repo_origin!(WorkflowJobEvent);
+repo_origin!(PageBuildEvent);
 repo_origin!(CheckRunEvent);
 repo_origin!(CheckSuiteEvent);

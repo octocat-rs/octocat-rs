@@ -224,6 +224,30 @@ pub enum SecretScanningAlertAction {
     Reopened,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#code_scanning_alert>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CodeScanningAlertEvent {
+    pub action: CodeScanningAlertAction,
+    // TODO: Create the relevant struct.
+    pub alert: Value,
+    #[serde(rename = "ref")]
+    pub ref_field: String,
+    pub commit_oid: String,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum CodeScanningAlertAction {
+    Created,
+    ReopenedByUser,
+    ClosedByUser,
+    Fixed,
+    AppearedInBranch,
+    Reopened,
+}
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#fork>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForkEvent {
@@ -310,6 +334,7 @@ repo_origin!(RepositoryVulnerabilityAlertEvent);
 repo_origin!(BranchProtectionRuleEvent);
 repo_origin!(SecretScanningAlertEvent);
 repo_origin!(RepositoryDispatchEvent);
+repo_origin!(CodeScanningAlertEvent);
 repo_origin!(RepositoryImportEvent);
 repo_origin!(RepositoryEvent);
 repo_origin!(MilestoneEvent);

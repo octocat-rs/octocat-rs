@@ -7,16 +7,18 @@ use github_rest::model::{
     commits::events::{CommitCommentEvent, StatusEvent},
     discussions::events::{DiscussionCommentEvent, DiscussionEvent},
     issues::events::{IssueCommentEvent, IssueEvent},
-    misc::events::LabelEvent,
+    misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{
-            BranchProtectionRuleEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent, PushEvent,
-            RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent,
-            SecretScanningAlertEvent, StarEvent, WatchEvent,
+            BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent,
+            PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
+            RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, WatchEvent,
         },
-        workflows::events::{CheckRunEvent, CheckSuiteEvent, WorkflowJobEvent, WorkflowRunEvent},
+        workflows::events::{
+            CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent, WorkflowRunEvent,
+        },
     },
 };
 
@@ -195,6 +197,53 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         check_suite_event: CheckSuiteEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to code scanning alerts in a repository.
+    async fn code_scanning_alert_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        code_scanning_alert_event: CodeScanningAlertEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// A deployment is created.
+    async fn deployment_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        deployment_event: DeploymentEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// A deployment is created.
+    async fn deployment_status_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        deployment_status_event: DeploymentStatusEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Represents an attempted build of a GitHub Pages site (successful or
+    /// not).
+    async fn page_build_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        page_build_event: PageBuildEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Someone triggers a workflow run on GitHub or sends a POST request to the
+    /// "Create a workflow dispatch event" endpoint.
+    async fn workflow_dispatch_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        workflow_dispatch_event: WorkflowDispatchEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

@@ -84,11 +84,11 @@ pub struct Repository {
 /// <https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeployKey {
-    id: usize,
-    key: String,
-    url: String,
-    title: String,
-    verified: bool,
-    created_at: String,
-    read_only: bool,
+    pub id: usize,
+    pub key: String,
+    pub url: String,
+    pub title: String,
+    pub verified: bool,
+    pub created_at: String,
+    pub read_only: bool,
 }

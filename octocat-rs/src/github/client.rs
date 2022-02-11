@@ -19,7 +19,7 @@ use github_rest::{
             events::{IssueCommentEvent, IssueEvent},
             Issues,
         },
-        misc::events::LabelEvent,
+        misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
         pull_requests::{
             events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
             Pulls,
@@ -27,11 +27,15 @@ use github_rest::{
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
-                BranchProtectionRuleEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent, PublicEvent,
-                PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
-                RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, WatchEvent,
+                BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent,
+                MilestoneEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent,
+                RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent,
+                WatchEvent,
             },
-            workflows::events::{CheckRunEvent, CheckSuiteEvent, WorkflowJobEvent, WorkflowRunEvent},
+            workflows::events::{
+                CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent,
+                WorkflowRunEvent,
+            },
         },
     },
     GithubRestError, Requester,
@@ -282,11 +286,21 @@ where
                     EventTypes::CheckSuite => {
                         event_push!(check_suite_event, CheckSuiteEvent);
                     }
-                    EventTypes::CodeScanningAlert => {}
-                    EventTypes::Deployment => {}
-                    EventTypes::DeploymentStatus => {}
-                    EventTypes::PageBuild => {}
-                    EventTypes::WorkflowDispatch => {}
+                    EventTypes::CodeScanningAlert => {
+                        event_push!(code_scanning_alert_event, CodeScanningAlertEvent);
+                    }
+                    EventTypes::Deployment => {
+                        event_push!(deployment_event, DeploymentEvent);
+                    }
+                    EventTypes::DeploymentStatus => {
+                        event_push!(deployment_status_event, DeploymentStatusEvent);
+                    }
+                    EventTypes::PageBuild => {
+                        event_push!(page_build_event, PageBuildEvent);
+                    }
+                    EventTypes::WorkflowDispatch => {
+                        event_push!(workflow_dispatch_event, WorkflowDispatchEvent);
+                    }
                     EventTypes::WorkflowJob => {
                         event_push!(workflow_job, WorkflowJobEvent);
                     }
