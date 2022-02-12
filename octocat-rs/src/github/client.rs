@@ -20,6 +20,7 @@ use github_rest::{
             Issues,
         },
         misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
+        organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
         pull_requests::{
             events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
             Pulls,
@@ -28,9 +29,9 @@ use github_rest::{
         repositories::{
             events::{
                 BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent,
-                MilestoneEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent,
+                MilestoneEvent, ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent,
                 RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent,
-                WatchEvent,
+                TeamAddEvent, WatchEvent,
             },
             workflows::events::{
                 CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent,
@@ -307,12 +308,24 @@ where
                     EventTypes::WorkflowRun => {
                         event_push!(workflow_run, WorkflowRunEvent);
                     }
-                    EventTypes::Membership => {}
-                    EventTypes::OrgBlock => {}
-                    EventTypes::Organization => {}
-                    EventTypes::Team => {}
-                    EventTypes::TeamAdd => {}
-                    EventTypes::Project => {}
+                    EventTypes::Membership => {
+                        event_push!(membership_event, MembershipEvent);
+                    }
+                    EventTypes::OrgBlock => {
+                        event_push!(org_block_event, OrgBlockEvent);
+                    }
+                    EventTypes::Organization => {
+                        event_push!(organization_event, OrganizationEvent);
+                    }
+                    EventTypes::Team => {
+                        event_push!(team_event, TeamEvent);
+                    }
+                    EventTypes::TeamAdd => {
+                        event_push!(team_add_event, TeamAddEvent);
+                    }
+                    EventTypes::Project => {
+                        event_push!(project_event, ProjectEvent);
+                    }
                     EventTypes::ProjectCard => {}
                     EventTypes::ProjectColumn => {}
                     EventTypes::MarketplacePurchase => {}

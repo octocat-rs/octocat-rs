@@ -1,6 +1,6 @@
 use crate::methods::Role;
 
-use super::{prelude::*, user::User};
+use crate::model::{prelude::*, user::User};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Organization {
@@ -16,6 +16,21 @@ pub struct Organization {
     pub public_members_url: String,
     pub repos_url: String,
     pub url: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Team {
+    pub name: String,
+    pub id: usize,
+    pub node_id: String,
+    pub slug: String,
+    pub description: Option<String>,
+    pub privacy: String,
+    pub url: String,
+    pub html_url: String,
+    pub members_url: String,
+    pub repositories_url: String,
+    pub permission: String,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]

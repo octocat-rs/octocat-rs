@@ -8,13 +8,14 @@ use github_rest::model::{
     discussions::events::{DiscussionCommentEvent, DiscussionEvent},
     issues::events::{IssueCommentEvent, IssueEvent},
     misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
+    organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{
             BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent,
-            PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
-            RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, WatchEvent,
+            ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
+            RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
         },
         workflows::events::{
             CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent, WorkflowRunEvent,
@@ -67,6 +68,8 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// Activity related to repositories being added to a GitHub App
+    /// installation
     async fn installation_repositories_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -75,7 +78,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Commit pushed to a repository.
+    /// Commit pushed to a repository
     async fn commit_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -84,7 +87,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Comment added to a repository commit.
+    /// Comment added to a repository commit
     async fn commit_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -111,7 +114,43 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// GitHub App sends a POST request to the "[Create a repository dispatch event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event)" endpoint.
+    /// Organization-related activity
+    async fn organization_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        organization_event: OrganizationEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to an organization's team
+    async fn team_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        team_event: TeamEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// A repository is added to a team
+    async fn team_add_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        team_add_event: TeamAddEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to project boards
+    async fn project_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        project_event: ProjectEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// GitHub App sends a POST request to the "[create a repository dispatch event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event)" endpoint
     async fn repository_dispatch_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -129,7 +168,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Activity related to security vulnerability alerts in a repository.
+    /// Activity related to security vulnerability alerts in a repository
     async fn repository_vulnerability_alert(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -138,7 +177,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Activity related to secret scanning alerts in a repository.
+    /// Activity related to secret scanning alerts in a repository
     async fn secret_scanning_alert(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -147,7 +186,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Status of a Git commit changed.
+    /// Status of a Git commit changed
     async fn status_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -165,7 +204,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Activity related to a discussion.
+    /// Activity related to a discussion
     async fn discussion_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -174,7 +213,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Activity related to a comment in a discussion.
+    /// Activity related to a comment in a discussion
     async fn discussion_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -183,7 +222,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Activity related to a branch protection rule.
+    /// Activity related to a branch protection rule
     async fn branch_protection_rule_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -192,7 +231,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Check suite activity has occurred.
+    /// Check suite activity has occurred
     async fn check_suite_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -201,7 +240,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Activity related to code scanning alerts in a repository.
+    /// Activity related to code scanning alerts in a repository
     async fn code_scanning_alert_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -210,7 +249,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// A deployment is created.
+    /// A deployment is created
     async fn deployment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -219,7 +258,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// A deployment is created.
+    /// A deployment is created
     async fn deployment_status_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -229,7 +268,7 @@ pub trait EventHandler {
     }
 
     /// Represents an attempted build of a GitHub Pages site (successful or
-    /// not).
+    /// not)
     async fn page_build_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -239,7 +278,7 @@ pub trait EventHandler {
     }
 
     /// Someone triggers a workflow run on GitHub or sends a POST request to the
-    /// "Create a workflow dispatch event" endpoint.
+    /// "[create a workflow dispatch event](https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event)" endpoint
     async fn workflow_dispatch_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -248,11 +287,29 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Deploy key added or removed from a repository.
+    /// Deploy key added or removed from a repository
     async fn deploy_key_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
         deploy_key_event: DeployKeyEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to team membership
+    async fn membership_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        membership_event: MembershipEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a user being blocked in an organization
+    async fn org_block_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        org_block_event: OrgBlockEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -266,7 +323,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Repository made public.
+    /// Repository made public
     async fn public_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -275,7 +332,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    /// Event related to repository milestones.
+    /// Event related to repository milestones
     async fn milestone_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -317,6 +374,7 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// Activity related to pull requests
     async fn pull_request_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -325,6 +383,7 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// Activity related to pull request reviews
     async fn pull_request_review_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -333,6 +392,8 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// Activity related to pull request review comments in the pull request's
+    /// unified diff
     async fn pull_request_review_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -341,6 +402,7 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// A GitHub Actions workflow run is requested or completed
     async fn workflow_run(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -349,6 +411,8 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// A GitHub Actions workflow job has been queued, is in progress, or has
+    /// been completed on a repository
     async fn workflow_job(
         &self,
         github_client: Arc<Self::GitHubClient>,
@@ -357,14 +421,17 @@ pub trait EventHandler {
         Command::none()
     }
 
+    /// Check run activity has occurred
     async fn check_run(&self, github_client: Arc<Self::GitHubClient>, event: CheckRunEvent) -> Command<Self::Message> {
         Command::none()
     }
 
+    /// Activity related to an issue
     async fn issue_event(&self, github_client: Arc<Self::GitHubClient>, event: IssueEvent) -> Command<Self::Message> {
         Command::none()
     }
 
+    /// Activity related to an issue or pull request comment
     async fn issue_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,

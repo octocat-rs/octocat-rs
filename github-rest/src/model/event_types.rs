@@ -100,6 +100,15 @@ pub struct RepoEventInfo {
     pub sender: User,
 }
 
+/// Used to represent the base fields provided by events originating from
+/// organizations.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct OrgEventInfo {
+    pub organization: Organization,
+    pub installation: Option<Value>,
+    pub sender: User,
+}
+
 /// The base trait used to represent different types of events. This will
 /// eventually have some subtraits with convenience methods.
 ///
@@ -117,5 +126,14 @@ pub(crate) mod macros {
         };
     }
 
+    macro_rules! org_origin {
+        ($ev:ident) => {
+            impl crate::model::event_types::Event<'_> for $ev {
+                type Origin = crate::model::organizations::Organization;
+            }
+        };
+    }
+
+    pub(crate) use org_origin;
     pub(crate) use repo_origin;
 }

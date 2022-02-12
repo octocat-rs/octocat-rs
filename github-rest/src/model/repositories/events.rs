@@ -6,11 +6,12 @@ use crate::{
         commits::comments::CommitComment,
         event_types::{macros::repo_origin, RepoEventInfo},
         issues::milestones::Milestone,
+        organizations::Team,
         prelude::*,
         pull_requests::events::nested::Change,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
-            DeployKey, Repository,
+            DeployKey, Project, Repository,
         },
         user::User,
     },
@@ -37,6 +38,14 @@ pub enum RepositoryAction {
     Transferred,
     Publicized,
     Privatized,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#team_add>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TeamAddEvent {
+    pub team: Team,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
@@ -330,6 +339,32 @@ pub enum MemberAction {
     Edited,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectEvent {
+    pub action: ProjectAction,
+    pub project: Project,
+    pub changes: Option<ProjectChanges>,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum ProjectAction {
+    Created,
+    Edited,
+    Closed,
+    Reopened,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectChanges {
+    pub name: Option<Change>,
+    pub body: Option<Change>,
+}
+
 repo_origin!(RepositoryVulnerabilityAlertEvent);
 repo_origin!(BranchProtectionRuleEvent);
 repo_origin!(SecretScanningAlertEvent);
@@ -339,6 +374,8 @@ repo_origin!(RepositoryImportEvent);
 repo_origin!(RepositoryEvent);
 repo_origin!(MilestoneEvent);
 repo_origin!(DeployKeyEvent);
+repo_origin!(TeamAddEvent);
+repo_origin!(ProjectEvent);
 repo_origin!(PublicEvent);
 repo_origin!(MemberEvent);
 repo_origin!(WatchEvent);

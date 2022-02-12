@@ -81,6 +81,23 @@ pub struct Repository {
     pub default_branch: String,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Project {
+    pub owner_url: String,
+    pub url: String,
+    pub html_url: String,
+    pub columns_url: String,
+    pub id: usize,
+    pub node_id: String,
+    pub name: String,
+    pub body: String,
+    pub number: usize,
+    pub state: String,
+    pub creator: Value,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
 /// <https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeployKey {
