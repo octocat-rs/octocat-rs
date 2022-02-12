@@ -10,6 +10,9 @@ pub use github::*;
 
 pub mod github;
 
+pub use github_api as api;
+pub use github_rest as rest;
+
 #[cfg(test)]
 mod tests {
     #[test]
