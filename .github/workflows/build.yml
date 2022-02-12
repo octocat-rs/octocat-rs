@@ -30,17 +30,17 @@ jobs:
       - name: Build
         run: cargo build --release --all-targets
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: octocat-rs
-          path: |
-            target/release/basic
-            target/release/basic.d
-            target/release/commitsummary
-            target/release/commitsummary.d
-            target/release/liboctocat_rs.d
-            target/release/liboctocat_rs.rlib
-            target/release/libgithub_rest.d
-            target/release/libgithub_rest.rlib
-          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: octocat-rs
+#          path: |
+#            target/release/basic
+#            target/release/basic.d
+#            target/release/commitsummary
+#            target/release/commitsummary.d
+#            target/release/liboctocat_rs.d
+#            target/release/liboctocat_rs.rlib
+#            target/release/libgithub_rest.d
+#            target/release/libgithub_rest.rlib
+#          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
 

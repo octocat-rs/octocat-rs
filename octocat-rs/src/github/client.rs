@@ -157,7 +157,7 @@ where
         let (tx, mut rx) = mpsc::channel(32);
 
         let event_type = warp::post()
-            .and(warp::path(self.handler.route()))
+            .and(warp::path(self_arc.handler.route()))
             .and(warp::header::<EventTypes>("X-GitHub-Event"))
             .and(warp::body::content_length_limit(self_arc.max_payload_size)) // 8Kb
             .and(warp::body::json());
