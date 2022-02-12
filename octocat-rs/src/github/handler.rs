@@ -35,8 +35,8 @@ pub trait EventHandler {
     type Message: std::fmt::Debug + Send;
     type GitHubClient: GitHubClient + Send + Sync;
 
-    /// Utility function for getting the port used by the webhook.
-    fn webhook_port(&self) -> u16 {
+    /// Utility function for setting the port used by the webhook.
+    fn listener_port(&self) -> u16 {
         8080
     }
 
