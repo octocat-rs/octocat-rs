@@ -366,7 +366,6 @@ pub struct ProjectChanges {
 repo_origin!(RepositoryVulnerabilityAlertEvent);
 repo_origin!(BranchProtectionRuleEvent);
 repo_origin!(SecretScanningAlertEvent);
-repo_origin!(RepositoryDispatchEvent);
 repo_origin!(CodeScanningAlertEvent);
 repo_origin!(RepositoryImportEvent);
 repo_origin!(RepositoryEvent);

@@ -115,6 +115,10 @@ pub struct OrgEventInfo {
 /// **All** event types implement this.
 pub trait Event<'de>: Serialize + Deserialize<'de> {
     type Origin: Serialize + Deserialize<'de>;
+
+    fn origin(&self) -> Option<Self::Origin> {
+        None
+    }
 }
 
 pub(crate) mod macros {
@@ -122,6 +126,10 @@ pub(crate) mod macros {
         ($ev:ident) => {
             impl crate::model::event_types::Event<'_> for $ev {
                 type Origin = crate::model::repositories::Repository;
+
+                fn origin(&self) -> Option<Self::Origin> {
+                    Some(self.event_info.repository.clone())
+                }
             }
         };
     }
