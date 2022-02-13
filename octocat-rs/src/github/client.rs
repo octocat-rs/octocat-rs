@@ -2,6 +2,9 @@ use std::{fmt::Debug, sync::Arc};
 
 use anyhow::Result;
 use async_trait::async_trait;
+use github_api::end_points::EndPoints;
+use reqwest::Body;
+use serde::{de::DeserializeOwned, Serialize};
 use tokio::sync::mpsc;
 use warp::Filter;
 
@@ -48,17 +51,13 @@ use crate::{
 };
 
 #[async_trait]
-pub trait GitHubClient {
+pub trait GitHubClient: Requester + Sized {
     type HttpClient: Requester + Send + Sync;
     type EventHandler: EventHandler + Send + Sync;
 
     /// Code that the implementer wishes to be run *before* the event listener
     /// is started.
     async fn run(&self) -> Result<()>;
-
-    /// Helper function for use in instances where one needs to pass an http
-    /// client
-    fn http_client(&self) -> &Self::HttpClient;
 
     fn event_handler(&self) -> &Self::EventHandler;
 
@@ -70,28 +69,28 @@ pub trait GitHubClient {
     ///
     /// See also: [`get_commits`]
     async fn get_all_commits(&self, owner: String, repo: String) -> std::result::Result<Commits, GithubRestError> {
-        get_commits(self.http_client(), owner, repo, None).await
+        get_commits(self, owner, repo, None).await
     }
 
     /// Gets all issues from a repository.
     ///
     /// See also: [`get_issues`]
     async fn get_all_issues(&self, owner: String, repo: String) -> std::result::Result<Issues, GithubRestError> {
-        get_issues(self.http_client(), owner, repo, None).await
+        get_issues(self, owner, repo, None).await
     }
 
     /// Gets all pull requests from a repository.
     ///
     /// See also: [`get_pulls`]
     async fn get_all_pulls(&self, owner: String, repo: String) -> std::result::Result<Pulls, GithubRestError> {
-        get_pulls(self.http_client(), owner, repo, None).await
+        get_pulls(self, owner, repo, None).await
     }
 
     /// Gets all the endpoint categories that the REST API supports.
     ///
     /// See also: [`api_info`]
     async fn get_api_info(&self) -> std::result::Result<GetResponse, GithubRestError> {
-        api_info(self.http_client()).await
+        api_info(self).await
     }
 
     /// Gets a random line from the zen of GitHub.
@@ -100,7 +99,7 @@ pub trait GitHubClient {
     ///
     /// [`GetZen`]: github_api::end_points::EndPoints::GetZen
     async fn zen(&self) -> std::result::Result<String, GithubRestError> {
-        zen(self.http_client()).await
+        zen(self).await
     }
 }
 
@@ -112,7 +111,7 @@ where
 {
     handler: T,
     max_payload_size: u64,
-    pub(crate) http_client: HttpClient,
+    http_client: HttpClient,
 }
 
 #[async_trait]
@@ -128,16 +127,44 @@ where
         Ok(())
     }
 
-    fn http_client(&self) -> &Self::HttpClient {
-        &self.http_client
-    }
-
     fn event_handler(&self) -> &T {
         &self.handler
     }
 
     fn payload_size(&self) -> u64 {
         self.max_payload_size
+    }
+}
+
+#[async_trait]
+impl<C> Requester for Client<C>
+where
+    C: Send + Sync + Debug + EventHandler<GitHubClient = Client<C>>
+{
+    async fn raw_req<T, V>(
+        &self,
+        url: EndPoints,
+        query: Option<&T>,
+        body: Option<V>,
+    ) -> std::result::Result<String, GithubRestError>
+    where
+        T: Serialize + ?Sized + Send + Sync,
+        V: Into<Body> + Send,
+    {
+        self.http_client.raw_req(url, query, body).await
+    }
+
+    async fn req<T, V, A: DeserializeOwned>(
+        &self,
+        url: EndPoints,
+        query: Option<&T>,
+        body: Option<V>,
+    ) -> std::result::Result<A, GithubRestError>
+    where
+        T: Serialize + ?Sized + Send + Sync,
+        V: Into<Body> + Send,
+    {
+        self.http_client.req(url, query, body).await
     }
 }
 

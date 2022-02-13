@@ -4,7 +4,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 use github_rest::model::repositories::events::PushEvent;
-use octocat_rs::{client::GitHubClient, handler::EventHandler, Client, ClientBuilder, Command};
+use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -61,7 +61,8 @@ async fn main() -> Result<()> {
             Command::perform(
                 async move {
                     commit
-                        .add_comment_to_commit(github_client.http_client(), text, None, None)
+                        // TODO: Make methods accept Arc so that the &* isn't necessary
+                        .add_comment_to_commit(&*github_client, text, None, None)
                         .await
                         .unwrap();
 
