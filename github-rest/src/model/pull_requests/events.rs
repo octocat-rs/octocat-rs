@@ -94,5 +94,4 @@ pub struct PullRequestReviewCommentEvent {
 
 repo_origin!(PullRequestEvent);
 repo_origin!(PullRequestReviewEvent);
-repo_origin!(PullRequestReviewAction);
 repo_origin!(PullRequestReviewCommentEvent);

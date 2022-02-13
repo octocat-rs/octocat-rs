@@ -139,7 +139,7 @@ where
 #[async_trait]
 impl<C> Requester for Client<C>
 where
-    C: Send + Sync + Debug + EventHandler<GitHubClient = Client<C>>
+    C: Send + Sync + Debug + EventHandler<GitHubClient = Client<C>>,
 {
     async fn raw_req<T, V>(
         &self,

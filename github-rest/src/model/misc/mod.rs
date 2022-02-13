@@ -106,7 +106,7 @@ pub mod events {
         pub label: Label,
         pub changes: Option<LabelChanges>,
         #[serde(flatten)]
-        pub repo_info: RepoEventInfo,
+        pub event_info: RepoEventInfo,
     }
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
