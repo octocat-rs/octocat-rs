@@ -61,7 +61,7 @@ async fn main() -> Result<()> {
             Command::perform(
                 async move {
                     commit
-                        .add_comment_to_commit(Arc::new(github_client.http_client()), text, None, None)
+                        .add_comment_to_commit(github_client.http_client(), text, None, None)
                         .await
                         .unwrap();
 

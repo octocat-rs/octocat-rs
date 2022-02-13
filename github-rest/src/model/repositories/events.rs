@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::{
     methods::util,
     model::{
@@ -116,14 +114,14 @@ impl PushEvent {
     /// See also: <https://docs.github.com/en/rest/reference/commits#create-a-commit-comment>
     pub async fn add_comment_to_commit(
         &self,
-        client: Arc<&impl Requester>,
+        client: &impl Requester,
         body: String,
         path: Option<String>,
         position: Option<String>,
     ) -> Result<CommitComment, GithubRestError> {
         let hc = self.head_commit.as_ref().unwrap();
 
-        util::helper_for_helper_for_helper(*client, hc.url.clone(), hc.id.clone(), body, path, position).await
+        util::helper_for_helper_for_helper(client, hc.url.clone(), hc.id.clone(), body, path, position).await
     }
 }
 

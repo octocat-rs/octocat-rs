@@ -60,10 +60,6 @@ pub trait GitHubClient {
     /// client
     fn http_client(&self) -> &Self::HttpClient;
 
-    fn http_client_arc(&self) -> Arc<&Self::HttpClient> {
-        Arc::new(self.http_client())
-    }
-
     fn event_handler(&self) -> &Self::EventHandler;
 
     /// Helper function to set the maximum payload size. Default is 8 MiB.

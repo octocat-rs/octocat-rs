@@ -31,7 +31,7 @@ pub struct User {
 
 impl User {
     pub async fn add_to_org<T>(
-        self,
+        &self,
         client: &T,
         org: impl Into<String>,
         role: Option<Role>,
@@ -39,7 +39,7 @@ impl User {
     where
         T: Requester,
     {
-        add_to_org(client, org, self.login, role).await
+        add_to_org(client, org, self.login.clone(), role).await
     }
 
     /// Get a list of the users that the user in question is following.
@@ -48,7 +48,7 @@ impl User {
     ///   30.
     /// * `page_number` - The page number of the result to return. Default is 1.
     pub async fn get_following<T>(
-        self,
+        &self,
         client: &T,
         followers_per_page: Option<u8>,
         page_number: Option<u8>,
