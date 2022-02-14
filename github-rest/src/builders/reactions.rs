@@ -46,7 +46,7 @@ mod tests {
     use crate::{
         builders::ReactionOnCommitCommentBuilder,
         client::DefaultRequest,
-        model::{reactions::Reaction, Reaction},
+        model::reactions::Reaction
     };
 
     #[cfg(feature = "builders")]

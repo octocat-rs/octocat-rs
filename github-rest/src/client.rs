@@ -1,3 +1,4 @@
+use std::fmt::Display;
 //TODO: lock this behind a feature
 //TODO: Replace all Strings with T: into<String>
 use async_trait::async_trait;
@@ -14,7 +15,7 @@ pub struct DefaultRequest {
 impl DefaultRequest {
     pub fn new<T>(auth: T) -> Self
     where
-        T: Into<String>,
+        T: Into<String> + Display,
     {
         let mut headers = header::HeaderMap::new();
         headers.insert(

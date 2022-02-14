@@ -1,8 +1,8 @@
 [alias]
 b = "build --all-targets"
-c = "clippy --tests --all"
+c = "clippy --tests --all --features full"
 d = "doc"
-t = "test --all-targets"
+t = "test --all-targets --features full" # Many tests are failing, this is intentional and can be ignored
 r = "run --package basic"
 rr = "run --release --package basic"
 # space_example = ["run", "--release", "--", "\"command list\""]
