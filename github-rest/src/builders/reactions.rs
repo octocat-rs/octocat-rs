@@ -43,11 +43,7 @@ impl ReactionOnCommitCommentBuilder {
 #[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
-    use crate::{
-        builders::ReactionOnCommitCommentBuilder,
-        client::DefaultRequest,
-        model::reactions::Reaction
-    };
+    use crate::{builders::ReactionOnCommitCommentBuilder, client::DefaultRequest, model::reactions::Reaction};
 
     #[cfg(feature = "builders")]
     #[tokio::test]

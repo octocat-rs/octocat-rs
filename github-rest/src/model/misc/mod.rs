@@ -1,5 +1,5 @@
 pub mod deployments {
-    use crate::model::prelude::*;
+    use crate::model::{prelude::*, user::User};
 
     /// <https://docs.github.com/en/rest/reference/deployments#get-a-deployment>
     #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -17,8 +17,7 @@ pub mod deployments {
         pub original_environment: String,
         pub environment: String,
         pub description: Option<String>,
-        // TODO: Create relevant struct.
-        pub creator: Value,
+        pub creator: User,
         pub created_at: Value,
         pub updated_at: Value,
         pub statuses_url: String,
@@ -34,8 +33,7 @@ pub mod deployments {
         pub id: usize,
         pub node_id: String,
         pub state: DeploymentState,
-        // TODO: Create relevant struct.
-        pub creator: Value,
+        pub creator: User,
         pub description: Option<String>,
         pub environment: String,
         pub target_url: Option<String>,

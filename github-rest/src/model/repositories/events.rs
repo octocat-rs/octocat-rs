@@ -9,7 +9,7 @@ use crate::{
         pull_requests::events::nested::Change,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
-            DeployKey, Project, Repository,
+            CodeScanningAlert, DeployKey, Project, Repository,
         },
         user::User,
     },
@@ -169,8 +169,7 @@ pub mod nested {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BranchProtectionRuleEvent {
     pub action: BranchProtectionRuleAction,
-    // TODO: Create the relevant struct
-    pub rule: Value,
+    pub rule: BranchProtectionRule,
     pub changes: Value,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
@@ -182,6 +181,42 @@ pub enum BranchProtectionRuleAction {
     Created,
     Edited,
     Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BranchProtectionRule {
+    pub id: usize,
+    pub repository_id: usize,
+    pub name: String,
+    pub created_at: String,
+    pub updated_at: String,
+    pub pull_request_reviews_enforcement_level: MultiLevelConfiguration,
+    pub required_approving_review_count: usize,
+    pub dismiss_stale_reviews_on_push: bool,
+    pub require_code_owner_review: bool,
+    pub authorized_dismissal_actors_only: bool,
+    pub ignore_approvals_from_contributors: bool,
+    pub required_status_checks: Vec<String>,
+    pub required_status_checks_enforcement_level: MultiLevelConfiguration,
+    pub strict_required_status_checks_policy: bool,
+    pub signature_requirement_enforcement_level: String,
+    pub linear_history_requirement_enforcement_level: MultiLevelConfiguration,
+    pub admin_enforced: bool,
+    pub allow_force_pushes_enforcement_level: MultiLevelConfiguration,
+    pub allow_deletions_enforcement_level: MultiLevelConfiguration,
+    pub merge_queue_enforcement_level: MultiLevelConfiguration,
+    pub required_deployments_enforcement_level: MultiLevelConfiguration,
+    pub required_conversation_resolution_level: MultiLevelConfiguration,
+    pub authorized_actors_only: bool,
+    pub authorized_actor_names: Vec<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum MultiLevelConfiguration {
+    Off,
+    NonAdmins,
+    Everyone,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star>
@@ -235,8 +270,7 @@ pub enum SecretScanningAlertAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeScanningAlertEvent {
     pub action: CodeScanningAlertAction,
-    // TODO: Create the relevant struct.
-    pub alert: Value,
+    pub alert: CodeScanningAlert,
     #[serde(rename = "ref")]
     pub ref_field: String,
     pub commit_oid: String,

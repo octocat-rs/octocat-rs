@@ -1,5 +1,9 @@
+mod discussions;
+pub use discussions::*;
+
 pub mod events {
     use crate::model::{
+        discussions::Discussion,
         event_types::{macros::repo_origin, RepoEventInfo},
         prelude::*,
     };
@@ -8,8 +12,7 @@ pub mod events {
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct DiscussionEvent {
         pub action: DiscussionAction,
-        // TODO: <https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion>
-        pub discussion: Value,
+        pub discussion: Discussion,
         #[serde(flatten)]
         pub event_info: RepoEventInfo,
     }

@@ -109,3 +109,23 @@ pub struct DeployKey {
     pub created_at: String,
     pub read_only: bool,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CodeScanningAlert {
+    pub number: usize,
+    pub created_at: String,
+    pub updated_at: String,
+    pub url: String,
+    pub html_url: String,
+    pub instances: Vec<Value>,
+    // TODO: Find possible values
+    pub state: String,
+    // Don't know if it's unix millis or DateTime
+    pub fixed_at: Option<Value>,
+    pub dismissed_by: Option<String>,
+    // See above
+    pub dismissed_at: Option<Value>,
+    // TODO: Create relevant struct
+    pub rule: Value,
+    pub tool: Value,
+}
