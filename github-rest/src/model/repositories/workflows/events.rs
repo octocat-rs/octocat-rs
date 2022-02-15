@@ -1,7 +1,7 @@
 use crate::model::{
     event_types::{macros::repo_origin, RepoEventInfo},
     prelude::*,
-    repositories::workflows::{events::nested::*, Workflow},
+    repositories::workflows::{events::nested::*, PageBuild, Workflow},
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_dispatch>
@@ -63,8 +63,7 @@ pub enum CheckSuiteAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PageBuildEvent {
     pub id: usize,
-    // TODO: Create this struct <https://docs.github.com/en/rest/reference/pages#list-github-pages-builds>
-    pub build: Value,
+    pub build: PageBuild,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }

@@ -125,7 +125,21 @@ pub struct CodeScanningAlert {
     pub dismissed_by: Option<String>,
     // See above
     pub dismissed_at: Option<Value>,
-    // TODO: Create relevant struct
-    pub rule: Value,
-    pub tool: Value,
+    pub rule: CodeScanningAlertRule,
+    pub tool: Tool,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CodeScanningAlertRule {
+    pub id: String,
+    pub severity: String,
+    pub description: String,
+    pub full_description: String,
+    pub tags: Vec<String>,
+    pub help: String,
+}
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tool {
+    pub name: String,
+    pub version: Option<Value>,
 }
