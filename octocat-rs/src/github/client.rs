@@ -208,7 +208,9 @@ where
                     EventTypes::SecretScanningAlert => {
                         event_push!(secret_scanning_alert, SecretScanningAlertEvent);
                     }
-                    EventTypes::SecurityAdvisory => {} // TODO: Sort this out <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#security_advisory>
+                    EventTypes::SecurityAdvisory => {
+                        event_push!(security_advisory, SecurityAdvisoryEvent);
+                    }
                     EventTypes::Star => {
                         event_push!(star_event, StarEvent);
                     }

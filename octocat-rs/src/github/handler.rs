@@ -17,6 +17,7 @@ use github_rest::model::{
             ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
             RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
         },
+        security_advisory::SecurityAdvisoryEvent,
         workflows::events::{
             CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent, WorkflowRunEvent,
         },
@@ -353,6 +354,15 @@ pub trait EventHandler {
 
     /// Repository receives a star
     async fn star_event(&self, github_client: Arc<Self::GitHubClient>, event: StarEvent) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    // Repository gets a new security advisory
+    async fn security_advisory(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        event: SecurityAdvisoryEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
