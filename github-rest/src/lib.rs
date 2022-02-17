@@ -55,7 +55,7 @@ impl From<serde_json::Error> for GithubRestError {
 }
 
 #[async_trait]
-pub trait Requester {
+pub trait Requester: Send + Sync {
     async fn raw_req<T, V>(
         &self,
         url: EndPoints,

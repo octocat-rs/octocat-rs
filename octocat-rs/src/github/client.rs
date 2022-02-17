@@ -9,25 +9,15 @@ use tokio::sync::mpsc;
 use warp::Filter;
 
 use github_rest::{
-    methods::{api_info, get_commits, get_issues, get_pulls, prelude::GetResponse, zen},
     model::{
         apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
-        commits::{
-            events::{CommitCommentEvent, StatusEvent},
-            Commits,
-        },
+        commits::events::{CommitCommentEvent, StatusEvent},
         discussions::events::{DiscussionCommentEvent, DiscussionEvent},
         event_types::EventTypes,
-        issues::{
-            events::{IssueCommentEvent, IssueEvent},
-            Issues,
-        },
+        issues::events::{IssueCommentEvent, IssueEvent},
         misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
         organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
-        pull_requests::{
-            events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
-            Pulls,
-        },
+        pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
@@ -65,45 +55,8 @@ pub trait GitHubClient: Requester + Sized {
     fn payload_size(&self) -> u64 {
         1024 * 8192
     }
-    /// Gets all commits from a repository.
-    ///
-    /// See also: [`get_commits`]
-    async fn get_all_commits(&self, owner: String, repo: String) -> std::result::Result<Commits, GithubRestError> {
-        get_commits(self, owner, repo, None).await
-    }
-
-    /// Gets all issues from a repository.
-    ///
-    /// See also: [`get_issues`]
-    async fn get_all_issues(&self, owner: String, repo: String) -> std::result::Result<Issues, GithubRestError> {
-        get_issues(self, owner, repo, None).await
-    }
-
-    /// Gets all pull requests from a repository.
-    ///
-    /// See also: [`get_pulls`]
-    async fn get_all_pulls(&self, owner: String, repo: String) -> std::result::Result<Pulls, GithubRestError> {
-        get_pulls(self, owner, repo, None).await
-    }
-
-    /// Gets all the endpoint categories that the REST API supports.
-    ///
-    /// See also: [`api_info`]
-    async fn get_api_info(&self) -> std::result::Result<GetResponse, GithubRestError> {
-        api_info(self).await
-    }
-
-    /// Gets a random line from the zen of GitHub.
-    ///
-    /// See also: [`GetZen`]
-    ///
-    /// [`GetZen`]: github_api::end_points::EndPoints::GetZen
-    async fn zen(&self) -> std::result::Result<String, GithubRestError> {
-        zen(self).await
-    }
 }
 
-// TODO: Method impls
 /// Where the magic happens.
 pub struct Client<T>
 where

@@ -1,4 +1,8 @@
-use crate::{builders::CommentOnCommitBuilder, model::commits::comments::CommitComment, GithubRestError, Requester};
+use crate::{
+    builders::{Builder, CommentOnCommitBuilder},
+    model::commits::comments::CommitComment,
+    GithubRestError, Requester,
+};
 
 /// Help I'm going insane
 pub async fn helper_for_helper_for_helper(
@@ -11,7 +15,11 @@ pub async fn helper_for_helper_for_helper(
 ) -> Result<CommitComment, GithubRestError> {
     let (owner, repo) = owner_and_repo(url);
 
-    let mut comment = CommentOnCommitBuilder::new(owner, repo, commit_hash, body);
+    let mut comment = CommentOnCommitBuilder::new()
+        .owner(owner)
+        .repo(repo)
+        .sha(commit_hash)
+        .body(body);
 
     comment = path_and_position(comment, path, position);
 

@@ -110,7 +110,7 @@ where
         .await
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct CommentOnCommitBody {
     /// **Required**. The contents of the comment.
     pub body: String,

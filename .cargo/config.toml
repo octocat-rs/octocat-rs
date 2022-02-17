@@ -1,5 +1,5 @@
 [alias]
-b = "build --all-targets"
+b = "build --all-targets --features full"
 c = "clippy --tests --all --features full"
 d = "doc"
 t = "test --all-targets --features full" # Many tests are failing, this is intentional and can be ignored
