@@ -26,6 +26,7 @@ use github_rest::{
                 RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent,
                 TeamAddEvent, WatchEvent,
             },
+            security_advisory::events::SecurityAdvisoryEvent,
             workflows::events::{
                 CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent,
                 WorkflowRunEvent,

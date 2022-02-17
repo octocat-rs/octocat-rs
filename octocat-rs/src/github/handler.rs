@@ -17,7 +17,7 @@ use github_rest::model::{
             ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
             RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
         },
-        security_advisory::SecurityAdvisoryEvent,
+        security_advisory::events::SecurityAdvisoryEvent,
         workflows::events::{
             CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent, WorkflowRunEvent,
         },

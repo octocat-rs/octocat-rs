@@ -1,18 +1,22 @@
 use crate::model::prelude::*;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SecurityAdvisoryEvent {
-    pub action: SecurityAdvisoryAction,
-    pub security_advisory: SecurityAdvisory,
-}
+pub mod events {
+    use crate::model::{prelude::*, repositories::security_advisory::SecurityAdvisory};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[serde(rename_all = "snake_case")]
-pub enum SecurityAdvisoryAction {
-    Published,
-    Updated,
-    Performed,
-    Withdrawn,
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct SecurityAdvisoryEvent {
+        pub action: SecurityAdvisoryAction,
+        pub security_advisory: SecurityAdvisory,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[serde(rename_all = "snake_case")]
+    pub enum SecurityAdvisoryAction {
+        Published,
+        Updated,
+        Performed,
+        Withdrawn,
+    }
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
