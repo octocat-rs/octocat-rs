@@ -1,4 +1,4 @@
-use std::{fs::File, io::prelude::*};
+use std::{ffi::OsStr, fs::File, io::prelude::*, path::Path};
 
 use anyhow::{Error, Result};
 
@@ -21,12 +21,7 @@ where
 {
     /// Creates a new [`ClientBuilder`]
     pub fn new() -> Self {
-        Self {
-            handler: None,
-            auth: None,
-            user_agent: None,
-            payload_size: None,
-        }
+        Self { ..Default::default() }
     }
 
     /// Adds an [`EventHandler`] to the current builder.
@@ -35,7 +30,7 @@ where
         self
     }
 
-    /// Sets the maximum payload size that the listener can recieve from GitHub
+    /// Sets the maximum payload size that the listener can receive from GitHub
     /// in MiB. Default: 8.
     pub fn payload_size(mut self, size: u64) -> Self {
         self.payload_size = Some(size);
@@ -47,14 +42,14 @@ where
     /// See also: [`HttpClient::set_ua`]
     ///
     /// [`HttpClient::set_ua`]: crate::github::HttpClient::set_ua
-    pub fn user_agent(mut self, user_agent: String) -> Self {
-        self.user_agent = Some(user_agent);
+    pub fn user_agent<V: Into<String>>(mut self, user_agent: V) -> Self {
+        self.user_agent = Some(user_agent.into());
         self
     }
 
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from a file.
-    pub fn credentials_file(self, file: &str) -> Self {
+    pub fn credentials_file<P: AsRef<Path>>(self, file: P) -> Self {
         let mut f = File::open(file).expect("ClientBuilder: Opening authorization file");
         let mut contents = "".to_owned();
 
@@ -72,7 +67,7 @@ where
 
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from an environment variable.
-    pub fn credentials_env_var(self, username_var: &str, token_var: &str) -> Self {
+    pub fn credentials_env_var<K: AsRef<OsStr>>(self, username_var: K, token_var: K) -> Self {
         let username = match std::env::var(username_var) {
             Ok(u) => u,
             Err(e) => panic!("{}", e),
@@ -89,10 +84,10 @@ where
     }
 
     /// Adds an [`Authorization`] instance to the current builder.
-    pub fn personal_auth(self, username: &str, token: &str) -> Self {
+    pub fn personal_auth<V: Into<String>>(self, username: V, token: V) -> Self {
         let auth = Some(Authorization::PersonalToken {
-            username: username.to_owned(),
-            token: token.to_owned(),
+            username: username.into(),
+            token: token.into(),
         });
 
         self.set_auth(auth)
