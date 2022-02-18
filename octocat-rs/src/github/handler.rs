@@ -18,6 +18,7 @@ use github_rest::model::{
             RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
         },
         security_advisory::events::SecurityAdvisoryEvent,
+        wiki::events::GollumEvent,
         workflows::events::{
             CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent, WorkflowRunEvent,
         },
@@ -293,6 +294,15 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         deploy_key_event: DeployKeyEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    // A wiki page is created or updated
+    async fn gollum_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        deploy_key_event: GollumEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

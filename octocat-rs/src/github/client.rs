@@ -27,6 +27,7 @@ use github_rest::{
                 TeamAddEvent, WatchEvent,
             },
             security_advisory::events::SecurityAdvisoryEvent,
+            wiki::events::GollumEvent,
             workflows::events::{
                 CheckRunEvent, CheckSuiteEvent, PageBuildEvent, WorkflowDispatchEvent, WorkflowJobEvent,
                 WorkflowRunEvent,
@@ -176,11 +177,7 @@ where
                         event_push!(deploy_key_event, DeployKeyEvent);
                     }
                     EventTypes::Gollum => {
-                        // TODO: Remove this mock code; it's only here for testing purposes.
-                        user_cmd = thread_self
-                            .event_handler()
-                            .commit_event(thread_self.clone(), Default::default())
-                            .await;
+                        event_push!(gollum_event, GollumEvent);
                     }
                     EventTypes::Member => {
                         event_push!(member_event, MemberEvent);
