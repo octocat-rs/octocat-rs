@@ -17,7 +17,7 @@ pub struct Reactions {
 }
 
 /// See also: <https://docs.github.com/en/rest/reference/reactions#reaction-types>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Reaction {
     #[serde(rename = "+1")]

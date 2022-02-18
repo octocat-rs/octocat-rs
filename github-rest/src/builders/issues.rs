@@ -1,8 +1,10 @@
 use crate::{
+    builders::Builder,
     methods::{get_issues, GetIssueBody, IssueState},
     model::issues::Issues,
     GithubRestError, Requester,
 };
+use async_trait::async_trait;
 
 /// * tags issues
 /// * get `/repos/{owner}/{repo}/issues`
@@ -16,33 +18,20 @@ use crate::{
 /// return both issues and pull requests in the response. You can identify pull
 /// requests by the `pull_request` key. Be aware that the `id` of a pull
 /// request returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
+#[derive(Default, Clone)]
 pub struct GetIssuesBuilder {
-    data: (String, String),
+    owner: String,
+    repo: String,
     body: GetIssueBody,
 }
 
 impl GetIssuesBuilder {
-    pub fn new(user: String, repo: String) -> Self {
-        GetIssuesBuilder {
-            data: (user, repo),
-            body: GetIssueBody {
-                milestone: None,
-                state: None,
-                assignee: None,
-                creator: None,
-                mentioned: None,
-                labels: None,
-                sort: None,
-                direction: None,
-                since: None,
-                per_page: None,
-                page: None,
-            },
-        }
+    pub fn new() -> Self {
+        Self::default()
     }
 
-    pub fn milestone(mut self, milestone: String) -> GetIssuesBuilder {
-        self.body.milestone = Some(milestone);
+    pub fn milestone<T: Into<String>>(mut self, milestone: T) -> GetIssuesBuilder {
+        self.body.milestone = Some(milestone.into());
         self
     }
 
@@ -51,38 +40,38 @@ impl GetIssuesBuilder {
         self
     }
 
-    pub fn assignee(mut self, assignee: String) -> GetIssuesBuilder {
-        self.body.assignee = Some(assignee);
+    pub fn assignee<T: Into<String>>(mut self, assignee: T) -> GetIssuesBuilder {
+        self.body.assignee = Some(assignee.into());
         self
     }
 
-    pub fn creator(mut self, creator: String) -> GetIssuesBuilder {
-        self.body.creator = Some(creator);
+    pub fn creator<T: Into<String>>(mut self, creator: T) -> GetIssuesBuilder {
+        self.body.creator = Some(creator.into());
         self
     }
 
-    pub fn mentioned(mut self, mentioned: String) -> GetIssuesBuilder {
-        self.body.mentioned = Some(mentioned);
+    pub fn mentioned<T: Into<String>>(mut self, mentioned: T) -> GetIssuesBuilder {
+        self.body.mentioned = Some(mentioned.into());
         self
     }
 
-    pub fn labels(mut self, labels: String) -> GetIssuesBuilder {
-        self.body.labels = Some(labels);
+    pub fn labels<T: Into<String>>(mut self, labels: T) -> GetIssuesBuilder {
+        self.body.labels = Some(labels.into());
         self
     }
 
-    pub fn sort(mut self, sort: String) -> GetIssuesBuilder {
-        self.body.sort = Some(sort);
+    pub fn sort<T: Into<String>>(mut self, sort: T) -> GetIssuesBuilder {
+        self.body.sort = Some(sort.into());
         self
     }
 
-    pub fn direction(mut self, direction: String) -> GetIssuesBuilder {
-        self.body.direction = Some(direction);
+    pub fn direction<T: Into<String>>(mut self, direction: T) -> GetIssuesBuilder {
+        self.body.direction = Some(direction.into());
         self
     }
 
-    pub fn since(mut self, since: String) -> GetIssuesBuilder {
-        self.body.since = Some(since);
+    pub fn since<T: Into<String>>(mut self, since: T) -> GetIssuesBuilder {
+        self.body.since = Some(since.into());
         self
     }
 
@@ -96,11 +85,26 @@ impl GetIssuesBuilder {
         self
     }
 
-    pub async fn execute<T>(self, client: &T) -> Result<Issues, GithubRestError>
+    pub fn owner<T: Into<String>>(mut self, user: T) -> GetIssuesBuilder {
+        self.owner = user.into();
+        self
+    }
+
+    pub fn repo<T: Into<String>>(mut self, repo: T) -> GetIssuesBuilder {
+        self.repo = repo.into();
+        self
+    }
+}
+
+#[async_trait]
+impl Builder for GetIssuesBuilder {
+    type Response = Issues;
+
+    async fn execute<T>(self, client: &T) -> Result<Issues, GithubRestError>
     where
         T: Requester,
     {
-        get_issues(client, self.data.0, self.data.1, Some(&self.body)).await
+        get_issues(client, self.owner, self.repo, Some(&self.body)).await
     }
 }
 
@@ -113,14 +117,16 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_issues_builder() {
-        let reqester = DefaultRequest::new_none();
+        let requester = DefaultRequest::new_none();
 
-        let builder = GetIssuesBuilder::new("microsoft".to_owned(), "vscode".to_owned())
+        let builder = GetIssuesBuilder::new()
+            .owner("microsoft")
+            .repo("vscode")
             .per_page(1)
             .page(2)
             .state(IssueState::Open);
 
-        let r = builder.execute(&reqester).await.unwrap();
+        let r = builder.execute(&requester).await.unwrap();
         println!("{:#?}", r)
     }
 }

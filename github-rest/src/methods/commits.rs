@@ -111,7 +111,7 @@ where
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
-pub struct CommentOnCommitBody {
+pub struct CommitCommentBody {
     /// **Required**. The contents of the comment.
     pub body: String,
     /// Relative path of the file to comment on.
@@ -136,7 +136,7 @@ pub async fn comment_on_commit<T>(
     owner: String,
     repo: String,
     sha: String,
-    options: CommentOnCommitBody,
+    options: CommitCommentBody,
 ) -> Result<CommitComment, GithubRestError>
 where
     T: Requester,

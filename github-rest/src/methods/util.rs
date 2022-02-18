@@ -1,5 +1,5 @@
 use crate::{
-    builders::{Builder, CommentOnCommitBuilder},
+    builders::{Builder, CommitCommentBuilder},
     model::commits::comments::CommitComment,
     GithubRestError, Requester,
 };
@@ -15,7 +15,7 @@ pub async fn helper_for_helper_for_helper(
 ) -> Result<CommitComment, GithubRestError> {
     let (owner, repo) = owner_and_repo(url);
 
-    let mut comment = CommentOnCommitBuilder::new()
+    let mut comment = CommitCommentBuilder::new()
         .owner(owner)
         .repo(repo)
         .sha(commit_hash)
@@ -43,10 +43,10 @@ pub fn owner_and_repo(html_url: String) -> (String, String) {
 }
 
 pub fn path_and_position(
-    mut builder: CommentOnCommitBuilder,
+    mut builder: CommitCommentBuilder,
     path: Option<String>,
     position: Option<String>,
-) -> CommentOnCommitBuilder {
+) -> CommitCommentBuilder {
     if let Some(s) = path {
         builder = builder.path(s);
     }
