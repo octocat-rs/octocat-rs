@@ -34,7 +34,7 @@ mod tests {
     };
 
     use crate::{
-        github::{command::Command, handler::EventHandler, ClientBuilder, DefaultEventHandler},
+        github::{command::Command, handler::EventHandler, ClientBuilder},
         Client,
     };
 
@@ -86,7 +86,7 @@ mod tests {
             .build()
             .unwrap();
     }
-/*
+    /*
     #[test]
     fn no_auth_no_handler() {
         // TODO: Figure out what on earth is wrong with this

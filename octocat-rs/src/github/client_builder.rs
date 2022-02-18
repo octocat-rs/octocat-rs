@@ -21,9 +21,13 @@ where
 {
     /// Creates a new [`ClientBuilder`]
     pub fn new() -> Self {
-        Self { ..Default::default() }
+        Self {
+            handler: None,
+            auth: None,
+            user_agent: None,
+            payload_size: None,
+        }
     }
-
     /// Adds an [`EventHandler`] to the current builder.
     pub fn event_handler(mut self, event_handler: T) -> Self {
         self.handler = Some(event_handler);
@@ -130,14 +134,5 @@ impl ClientBuilder<DefaultEventHandler> {
             self.user_agent,
             self.payload_size,
         ))
-    }
-}
-
-impl<T> Default for ClientBuilder<T>
-where
-    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
-{
-    fn default() -> Self {
-        Self::new()
     }
 }
