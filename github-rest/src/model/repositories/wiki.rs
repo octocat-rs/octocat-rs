@@ -1,6 +1,9 @@
 use crate::model::prelude::*;
 pub mod events {
-    use crate::model::{prelude::*, repositories::Repository, user::User};
+    use crate::model::{
+        event_types::{macros::repo_origin, RepoEventInfo},
+        prelude::*,
+    };
 
     use super::Page;
 
@@ -8,9 +11,11 @@ pub mod events {
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct GollumEvent {
         pub pages: Vec<Page>,
-        pub repository: Repository,
-        pub sender: User,
+        #[serde(flatten)]
+        pub event_info: RepoEventInfo,
     }
+
+    repo_origin!(GollumEvent);
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
