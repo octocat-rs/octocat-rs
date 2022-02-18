@@ -298,7 +298,7 @@ pub trait EventHandler {
         Command::none()
     }
 
-    // A wiki page is created or updated
+    /// A wiki page is created or updated
     async fn gollum_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
