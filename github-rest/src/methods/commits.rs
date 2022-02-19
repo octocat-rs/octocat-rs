@@ -15,9 +15,9 @@ pub struct GetCommitBody {
 
 pub async fn get_commit<T>(
     client: &T,
-    owner: String,
-    repo: String,
-    commit_id: String,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
+    commit_id: impl Into<String>,
     options: Option<&GetCommitBody>,
 ) -> Result<Commit, GithubRestError>
 where
@@ -25,7 +25,7 @@ where
 {
     client
         .req::<GetCommitBody, String, Commit>(
-            EndPoints::GetReposownerrepoCommitsref(owner, repo, commit_id),
+            EndPoints::GetReposownerrepoCommitsref(owner.into(), repo.into(), commit_id.into()),
             options,
             None,
         )
@@ -98,15 +98,19 @@ pub struct GetCommitsBody {
 /// is considered to be verified. |
 pub async fn get_commits<T>(
     client: &T,
-    owner: String,
-    repo: String,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
     options: Option<&GetCommitsBody>,
 ) -> Result<Commits, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<GetCommitsBody, String, Commits>(EndPoints::GetReposownerrepoCommits(owner, repo), options, None)
+        .req::<GetCommitsBody, String, Commits>(
+            EndPoints::GetReposownerrepoCommits(owner.into(), repo.into()),
+            options,
+            None,
+        )
         .await
 }
 
@@ -133,19 +137,19 @@ pub struct CommitCommentBody {
 /// This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 pub async fn comment_on_commit<T>(
     client: &T,
-    owner: String,
-    repo: String,
-    sha: String,
-    options: CommitCommentBody,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
+    sha: impl Into<String>,
+    options: &CommitCommentBody,
 ) -> Result<CommitComment, GithubRestError>
 where
     T: Requester,
 {
     client
         .req::<String, String, CommitComment>(
-            EndPoints::PostReposownerrepoCommitscommitShaComments(owner, repo, sha),
+            EndPoints::PostReposownerrepoCommitscommitShaComments(owner.into(), repo.into(), sha.into()),
             None,
-            Some(serde_json::to_string(&options)?),
+            Some(serde_json::to_string(options)?),
         )
         .await
 }
@@ -158,8 +162,8 @@ where
 /// Create a reaction to a [commit comment](https://docs.github.com/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
 pub async fn react_to_commit_comment<T>(
     client: &T,
-    owner: String,
-    repo: String,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
     comment_id: i64,
     reaction: Reaction,
 ) -> Result<CommitCommentReactionCreated, GithubRestError>
@@ -173,7 +177,7 @@ where
 
     client
         .req::<String, String, CommitCommentReactionCreated>(
-            EndPoints::PostReposownerrepoCommentscommentIdReactions(owner, repo, comment_id.to_string()),
+            EndPoints::PostReposownerrepoCommentscommentIdReactions(owner.into(), repo.into(), comment_id.to_string()),
             None,
             Some(reaction),
         )
@@ -191,9 +195,7 @@ mod tests {
     async fn test_get_commits() {
         let reqester = DefaultRequest::new_none();
 
-        let r = get_commits(&reqester, "microsoft".to_owned(), "vscode".to_owned(), None)
-            .await
-            .unwrap();
+        let r = get_commits(&reqester, "microsoft", "vscode", None).await.unwrap();
         println!("{:#?}", r)
     }
 }

@@ -38,16 +38,17 @@ where
 ///
 /// List the people a user follows
 /// Lists the people who the specified user follows.
-pub async fn get_user_following<T>(
+pub async fn get_user_following<T, A>(
     client: &T,
-    user: String,
+    user: A,
     params: Option<&Pagination>,
 ) -> Result<Vec<User>, GithubRestError>
 where
     T: Requester,
+    A: Into<String>,
 {
     client
-        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowing(user), params, None)
+        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowing(user.into()), params, None)
         .await
 }
 
@@ -57,16 +58,17 @@ where
 ///
 /// List followers of a user
 /// Lists the people following the specified user.
-pub async fn get_user_followers<T>(
+pub async fn get_user_followers<T, A>(
     client: &T,
-    user: String,
+    user: A,
     params: Option<&Pagination>,
 ) -> Result<Vec<User>, GithubRestError>
 where
     T: Requester,
+    A: Into<String>,
 {
     client
-        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowers(user), params, None)
+        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowers(user.into()), params, None)
         .await
 }
 
@@ -106,16 +108,14 @@ mod tests {
     #[tokio::test]
     async fn test_get_user_following() {
         let client = DefaultRequest::new_none();
-        let res = get_user_following(&client, "proudmuslim-dev".to_owned(), None)
-            .await
-            .unwrap();
+        let res = get_user_following(&client, "proudmuslim-dev", None).await.unwrap();
         dbg!(res);
     }
 
     #[tokio::test]
     async fn test_get_user_followers() {
         let client = DefaultRequest::new_none();
-        let res = get_user_followers(&client, "bors".to_owned(), None).await.unwrap();
+        let res = get_user_followers(&client, "bors", None).await.unwrap();
         dbg!(res);
     }
 }

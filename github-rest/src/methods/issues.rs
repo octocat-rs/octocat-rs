@@ -27,18 +27,18 @@ pub struct CreateIssueBody {
 /// This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 pub async fn create_issue<T>(
     client: &T,
-    owner: String,
-    repo: String,
-    body: CreateIssueBody,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
+    body: &CreateIssueBody,
 ) -> Result<Issue, GithubRestError>
 where
     T: Requester,
 {
     client
         .req::<String, String, Issue>(
-            EndPoints::PostReposownerrepoIssues(owner, repo),
+            EndPoints::PostReposownerrepoIssues(owner.into(), repo.into()),
             None,
-            Some(serde_json::to_string(&body)?),
+            Some(serde_json::to_string(body)?),
         )
         .await
 }
@@ -105,15 +105,19 @@ pub enum IssueState {
 /// request returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
 pub async fn get_issues<T>(
     client: &T,
-    owner: String,
-    repo: String,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
     options: Option<&GetIssueBody>,
 ) -> Result<Issues, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<GetIssueBody, String, Issues>(EndPoints::GetReposownerrepoIssues(owner, repo), options, None)
+        .req::<GetIssueBody, String, Issues>(
+            EndPoints::GetReposownerrepoIssues(owner.into(), repo.into()),
+            options,
+            None,
+        )
         .await
 }
 
@@ -157,15 +161,19 @@ pub struct GetPullsBody {
 /// Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 pub async fn get_pulls<T>(
     client: &T,
-    owner: String,
-    repo: String,
+    owner: impl Into<String>,
+    repo: impl Into<String>,
     options: Option<&GetIssueBody>,
 ) -> Result<Pulls, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<GetIssueBody, String, Pulls>(EndPoints::GetReposownerrepoPulls(owner, repo), options, None)
+        .req::<GetIssueBody, String, Pulls>(
+            EndPoints::GetReposownerrepoPulls(owner.into(), repo.into()),
+            options,
+            None,
+        )
         .await
 }
 
@@ -178,7 +186,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_issue() {
-        let reqester = DefaultRequest::new("TOKEN".to_owned());
+        let reqester = DefaultRequest::new("TOKEN");
 
         let bdy = CreateIssueBody {
             title: "tricked is cool".to_owned(),
@@ -189,14 +197,9 @@ mod tests {
             assignees: None,
         };
 
-        let r = create_issue(
-            &reqester,
-            "Tricked-dev".to_owned(),
-            "octo-computing-machine".to_owned(),
-            bdy,
-        )
-        .await
-        .unwrap();
+        let r = create_issue(&reqester, "Tricked-dev", "octo-computing-machine", &bdy)
+            .await
+            .unwrap();
         println!("{:#?}", r)
     }
 
@@ -204,9 +207,7 @@ mod tests {
     async fn test_get_issues() {
         let reqester = DefaultRequest::new_none();
 
-        let r = get_issues(&reqester, "microsoft".to_owned(), "vscode".to_owned(), None)
-            .await
-            .unwrap();
+        let r = get_issues(&reqester, "microsoft", "vscode", None).await.unwrap();
         println!("{:#?}", r)
     }
 
@@ -226,9 +227,7 @@ mod tests {
             per_page: Some("1".to_owned()),
             page: None,
         };
-        let r = get_issues(&requester, "microsoft".to_owned(), "vscode".to_owned(), Some(&bdy))
-            .await
-            .unwrap();
+        let r = get_issues(&requester, "microsoft", "vscode", Some(&bdy)).await.unwrap();
         println!("{:#?}", r)
     }
 }

@@ -66,7 +66,7 @@ impl Builder for CommitCommentBuilder {
     where
         T: Requester,
     {
-        comment_on_commit(client, self.owner, self.repo, self.sha, self.options).await
+        comment_on_commit(client, self.owner, self.repo, self.sha, &self.options).await
     }
 }
 

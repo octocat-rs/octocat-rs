@@ -30,16 +30,17 @@ pub struct User {
 }
 
 impl User {
-    pub async fn add_to_org<T>(
+    pub async fn add_to_org<T, A>(
         &self,
         client: &T,
-        org: impl Into<String>,
+        org: A,
         role: Option<Role>,
     ) -> Result<AddToOrgResponse, GithubRestError>
     where
         T: Requester,
+        A: Into<String>,
     {
-        add_to_org(client, org, self.login.clone(), role).await
+        add_to_org(client, org, self.login.as_str(), role).await
     }
 
     /// Get a list of the users that the user in question is following.
