@@ -4,6 +4,7 @@ members = [
     "github-rest",
     "examples/basic",
     "examples/commitsummary",
+    "examples/cloudflare",
     #"examples/config-file",
 ]
 default-members = ["octocat-rs", "github-rest"]

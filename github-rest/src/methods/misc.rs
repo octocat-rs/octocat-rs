@@ -12,14 +12,14 @@ where
     client.raw_req::<String, String>(EndPoints::GetZen(), None, None).await
 }
 
-pub async fn api_info<T>(client: &T) -> Result<GetResponse, GithubRestError>
-where
-    T: Requester,
-{
-    client
-        .req::<String, String, GetResponse>(EndPoints::Get(), None, None)
-        .await
-}
+//pub async fn api_info<T>(client: &T) -> Result<GetResponse, GithubRestError>
+//where
+//    T: Requester,
+//{
+//   client
+//        .req::<String, String, GetResponse>(EndPoints::Get(), None, None)
+//        .await
+//}
 
 //Role enum used for add to org function determines the function a user has
 // within a organization

@@ -13,6 +13,9 @@ pub mod github;
 pub use github_api as api;
 pub use github_rest as rest;
 
+#[cfg(feature="workers")]
+pub use worker;
+
 #[cfg(test)]
 mod tests {
     #[test]
