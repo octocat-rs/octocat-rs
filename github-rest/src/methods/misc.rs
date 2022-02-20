@@ -3,6 +3,7 @@ use crate::model::organizations::AddToOrgResponse;
 use super::prelude::*;
 
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use strum::{EnumString, EnumVariantNames};
 
 pub async fn zen<T>(client: &T) -> Result<String, GithubRestError>
@@ -12,14 +13,12 @@ where
     client.raw_req::<String, String>(EndPoints::GetZen(), None, None).await
 }
 
-//pub async fn api_info<T>(client: &T) -> Result<GetResponse, GithubRestError>
-//where
-//    T: Requester,
-//{
-//   client
-//        .req::<String, String, GetResponse>(EndPoints::Get(), None, None)
-//        .await
-//}
+pub async fn api_info<T>(client: &T) -> Result<Value, GithubRestError>
+where
+    T: Requester,
+{
+    client.req::<String, String, Value>(EndPoints::Get(), None, None).await
+}
 
 //Role enum used for add to org function determines the function a user has
 // within a organization

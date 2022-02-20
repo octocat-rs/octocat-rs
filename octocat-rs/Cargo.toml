@@ -24,7 +24,7 @@ async-trait = "0.1.52"
 futures = "0.3"
 
 ## Webserver
-warp = "0.3"
+warp = { version = "0.3", optional = true}
 
 ## Serialization/Deserialization
 serde = { version = "^1", features = ["derive"] }
@@ -35,16 +35,11 @@ toml = "0.5.8"
 thiserror = "1.0.30"
 anyhow = "1.0.51"
 
-## Logging
-pretty_env_logger = "0.4"
-log = "0.4"
-
-## Util
-lazy_static = "1.4.0"
 strum_macros = "0.23"
 reqwest = "^0.11.8"
 strum = "0.23.0"
 worker = { version = "0.0.9", optional = true }
 
 [features]
+default = ["warp"]
 workers = ["worker"]

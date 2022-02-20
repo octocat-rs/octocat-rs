@@ -13,13 +13,17 @@ default = ["console_error_panic_hook"]
 [dependencies]
 cfg-if = "1.0.0"
 serde_json = "1.0.79"
-octocat-rs = { path = "../../octocat-rs", features = ["workers"] }
+octocat-rs = { path = "../../octocat-rs", features = ["workers"], default-features = false }
+worker = "0.0.9"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
+async-trait = "0.1.52"
+wasm-bindgen-futures = "0.4.1"
+anyhow = "1"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.

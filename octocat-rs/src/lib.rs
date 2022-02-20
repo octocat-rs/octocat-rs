@@ -13,8 +13,8 @@ pub mod github;
 pub use github_api as api;
 pub use github_rest as rest;
 
-#[cfg(feature="workers")]
-pub use worker;
+#[cfg(all(feature = "warp", feature = "worker"))]
+compile_error!("feature \"worker\" and feature \"warp\" cannot be enabled at the same time");
 
 #[cfg(test)]
 mod tests {

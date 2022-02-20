@@ -5,7 +5,10 @@ use async_trait::async_trait;
 use github_api::end_points::EndPoints;
 use reqwest::Body;
 use serde::{de::DeserializeOwned, Serialize};
+
+#[cfg(feature = "warp")]
 use tokio::sync::mpsc;
+#[cfg(feature = "warp")]
 use warp::Filter;
 
 use github_rest::{
@@ -128,7 +131,7 @@ where
     T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
     #[cfg(feature = "workers")]
-    pub async fn handle(self,mut req: worker::Request) {
+    pub async fn handle(self, mut req: worker::Request) {
         let _ = self.run().await.expect("Starting application: User-defined code");
 
         let self_arc = Arc::new(self);
@@ -141,7 +144,7 @@ where
                     .event_handler()
                     .$f(
                         thread_self.clone(),
-                        (req).json::<$t>().await.expect("Failed to parse json")
+                        (req).json::<$t>().await.expect("Failed to parse json"),
                     )
                     .await
             };
@@ -306,7 +309,7 @@ where
         }
     }
 
-    #[cfg(not(feature = "workers"))]
+    #[cfg(feature = "warp")]
     pub async fn start(self) {
         let _ = self.run().await.expect("Starting application: User-defined code");
 
