@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+#[cfg(not(feature = "workers"))]
 use reqwest::{
     header,
     header::{HeaderMap, HeaderValue},
@@ -6,6 +7,11 @@ use reqwest::{
 };
 use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
+
+#[cfg(feature = "workers")]
+use worker::{Fetch, Request, Method};
+use worker::RequestInit;
+use worker::ResponseBody::Body;
 
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -78,6 +84,7 @@ impl HttpClient {
             .unwrap()
     }
 
+    #[cfg(not(feature = "workers"))]
     fn http_auth(&self, req: RequestBuilder) -> RequestBuilder {
         if let Some(auth) = &self.auth {
             match auth {
@@ -87,10 +94,16 @@ impl HttpClient {
             req
         }
     }
+
+    #[cfg(feature = "workers")]
+    fn http_auth(&self, req: RequestBuilder) -> RequestBuilder {
+        todo!()
+    }
 }
 
 #[async_trait]
 impl github_rest::Requester for HttpClient {
+    #[cfg(not(feature = "workers"))]
     /// Returns the API response as a [`String`].
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
@@ -118,6 +131,46 @@ impl github_rest::Requester for HttpClient {
         let res = req.send().await?;
 
         match res.status().as_u16() {
+            200..=299 => {}
+            _ => {
+                return Err(GithubRestError::ResponseError(res.status(), res.text().await?));
+            }
+        }
+        let txt = res.text().await?;
+
+        Ok(txt)
+    }
+
+    #[cfg(feature = "workers")]
+    /// Returns the API response as a [`String`].
+    async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
+        where
+            T: Serialize + ?Sized + Send + Sync,
+            V: Into<Body> + Send,
+    {
+        let path = format!("https://api.github.com{}", url.path());
+
+        let mut req: Request = match url.method() {
+            Methods::Get => Request::new(path.as_str(), Method::Get).unwrap(),
+            Methods::Post => Request::new(path.as_str(), Method::Post).unwrap(),
+            Methods::Patch => Request::new(path.as_str(), Method::Patch).unwrap(),
+            Methods::Delete => Request::new(path.as_str(), Method::Delete).unwrap(),
+            Methods::Put => Request::new(path.as_str(), Method::Put).unwrap(),
+        };
+
+        let _init = RequestInit::new();
+
+        if let Some(query) = query {
+            // TODO: Query
+        }
+
+        if let Some(body) = body {
+            // TODO: Body
+        }
+
+        let mut res = Fetch::Request(req).send().await?;
+
+        match res.status_code() {
             200..=299 => {}
             _ => {
                 return Err(GithubRestError::ResponseError(res.status(), res.text().await?));

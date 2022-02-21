@@ -26,4 +26,4 @@ client = []
 
 
 [dev-dependencies]
-#tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }

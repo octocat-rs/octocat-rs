@@ -416,6 +416,7 @@ dependencies = [
  "serde",
  "serde_json",
  "strum",
+ "tokio",
 ]
 
 [[package]]
@@ -780,6 +781,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "serde_urlencoded",
  "strum",
  "strum_macros",
  "thiserror",
