@@ -9,9 +9,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
 
 #[cfg(feature = "workers")]
-use worker::{Fetch, Request, Method};
-use worker::RequestInit;
-use worker::ResponseBody::Body;
+use worker::{Fetch, Method, Request, RequestInit, ResponseBody::Body};
 
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -144,9 +142,9 @@ impl github_rest::Requester for HttpClient {
     #[cfg(feature = "workers")]
     /// Returns the API response as a [`String`].
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
-        where
-            T: Serialize + ?Sized + Send + Sync,
-            V: Into<Body> + Send,
+    where
+        T: Serialize + ?Sized + Send + Sync,
+        V: Into<Body> + Send,
     {
         let path = format!("https://api.github.com{}", url.path());
 
