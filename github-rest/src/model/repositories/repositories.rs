@@ -98,6 +98,33 @@ pub struct Project {
     pub updated_at: String,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCard {
+    pub url: String,
+    pub id: usize,
+    pub node_id: String,
+    pub note: String,
+    pub creator: User,
+    pub created_at: String,
+    pub updated_at: String,
+    pub archived: bool,
+    pub column_url: String,
+    pub content_url: String,
+    pub project_url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectColumn {
+    pub url: String,
+    pub project_url: String,
+    pub cards_url: String,
+    pub id: usize,
+    pub node_id: String,
+    pub name: String,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
 /// <https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeployKey {

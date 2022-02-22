@@ -15,16 +15,16 @@ use github_rest::{
         discussions::events::{DiscussionCommentEvent, DiscussionEvent},
         event_types::EventTypes,
         issues::events::{IssueCommentEvent, IssueEvent},
-        misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
+        misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent},
         organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
         pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
                 BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent,
-                MilestoneEvent, ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent,
-                RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent,
-                TeamAddEvent, WatchEvent,
+                MilestoneEvent, ProjectCardEvent, ProjectColumnEvent, ProjectEvent, PublicEvent, PushEvent,
+                RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent,
+                SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
             },
             security_advisory::events::SecurityAdvisoryEvent,
             wiki::events::GollumEvent,
@@ -302,9 +302,15 @@ where
                     EventTypes::Project => {
                         event_push!(project_event, ProjectEvent);
                     }
-                    EventTypes::ProjectCard => {}
-                    EventTypes::ProjectColumn => {}
-                    EventTypes::MarketplacePurchase => {}
+                    EventTypes::ProjectCard => {
+                        event_push!(project_card_event, ProjectCardEvent);
+                    }
+                    EventTypes::ProjectColumn => {
+                        event_push!(project_column_event, ProjectColumnEvent);
+                    }
+                    EventTypes::MarketplacePurchase => {
+                        event_push!(marketplace_purchase_event, MarketplacePurchaseEvent);
+                    }
                     EventTypes::Meta => {}
                     EventTypes::Package => {}
                     EventTypes::Ping => {}

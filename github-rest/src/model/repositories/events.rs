@@ -9,7 +9,7 @@ use crate::{
         pull_requests::events::nested::Change,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
-            CodeScanningAlert, DeployKey, Project, Repository,
+            CodeScanningAlert, DeployKey, Project, ProjectCard, ProjectColumn, Repository,
         },
         user::User,
     },
@@ -397,11 +397,64 @@ pub struct ProjectChanges {
     pub body: Option<Change>,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_card>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCardEvent {
+    pub action: ProjectCardAction,
+    pub changes: Option<ProjectCardChanges>,
+    pub after_id: usize,
+    pub project_card: ProjectCard,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum ProjectCardAction {
+    Created,
+    Edited,
+    Moved,
+    Converted,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCardChanges {
+    pub note: Option<Change>,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_column>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectColumnEvent {
+    pub action: ProjectColumnAction,
+    pub changes: Option<ProjectColumnChanges>,
+    pub after_id: usize,
+    pub project_column: ProjectColumn,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum ProjectColumnAction {
+    Created,
+    Edited,
+    Moved,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectColumnChanges {
+    pub name: Option<Change>,
+}
+
 repo_origin!(RepositoryVulnerabilityAlertEvent);
 repo_origin!(BranchProtectionRuleEvent);
 repo_origin!(SecretScanningAlertEvent);
 repo_origin!(CodeScanningAlertEvent);
 repo_origin!(RepositoryImportEvent);
+repo_origin!(ProjectColumnEvent);
+repo_origin!(ProjectCardEvent);
 repo_origin!(RepositoryEvent);
 repo_origin!(MilestoneEvent);
 repo_origin!(DeployKeyEvent);

@@ -7,15 +7,16 @@ use github_rest::model::{
     commits::events::{CommitCommentEvent, StatusEvent},
     discussions::events::{DiscussionCommentEvent, DiscussionEvent},
     issues::events::{IssueCommentEvent, IssueEvent},
-    misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
+    misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent},
     organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{
             BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent,
-            ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
-            RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
+            ProjectCardEvent, ProjectColumnEvent, ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent,
+            RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent,
+            StarEvent, TeamAddEvent, WatchEvent,
         },
         security_advisory::events::SecurityAdvisoryEvent,
         wiki::events::GollumEvent,
@@ -148,6 +149,33 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         project_event: ProjectEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to project cards
+    async fn project_card_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        project_card_event: ProjectCardEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to columns in a project board
+    async fn project_column_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        project_column_event: ProjectColumnEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a GitHub Marketplace purchase
+    async fn marketplace_purchase_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        marketplace_purchase_event: MarketplacePurchaseEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
