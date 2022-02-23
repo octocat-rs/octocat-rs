@@ -118,6 +118,29 @@ macro_rules! builder_nested_string_setters {
 /// Build an impl block with setters. This expands to:
 ///
 ///     impl S {
+///         pub fn a<T: Into<String>>(mut self, v: T) -> Self {
+///             self.f.a = v.into();
+///             self
+///         }
+///     }
+macro_rules! builder_nested_string_setters_required {
+    ($name:ident { $field:ident { $($subfield:ident),* } }) => {
+        paste::paste! {
+            impl $name {
+                $(
+                    pub fn $subfield<T: Into<String>>(mut self, $subfield: T) -> Self {
+                        self.$field.$subfield = $subfield.into();
+                        self
+                    }
+                )*
+            }
+        }
+    }
+}
+
+/// Build an impl block with setters. This expands to:
+///
+///     impl S {
 ///         pub fn a(mut self, v: A) -> Self {
 ///             self.f.a = Some(v);
 ///             self
@@ -141,5 +164,6 @@ macro_rules! builder_nested_setters {
 pub(crate) use builder;
 pub(crate) use builder_nested_setters;
 pub(crate) use builder_nested_string_setters;
+pub(crate) use builder_nested_string_setters_required;
 pub(crate) use builder_setters;
 pub(crate) use builder_string_setters;

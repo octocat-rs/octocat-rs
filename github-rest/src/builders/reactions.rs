@@ -1,47 +1,31 @@
 use crate::{
-    builders::Builder,
+    builders::{builder, builder_setters, builder_string_setters, Builder},
     methods::react_to_commit_comment,
     model::reactions::{CommitCommentReactionCreated, Reaction},
     GithubRestError, Requester,
 };
 use async_trait::async_trait;
 
-/// * tags reactions
-/// * post `/repos/{owner}/{repo}/comments/{comment_id}/reactions`
-/// * docs <https://docs.github.com/rest/reference/reactions#create-reaction-for-a-commit-comment>
-///
-/// Create reaction for a commit comment
-/// Create a reaction to a [commit comment](https://docs.github.com/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
-#[derive(Default, Clone)]
-pub struct CommentReactionBuilder {
-    owner: String,
-    repo: String,
+builder!(
+    /// * tags reactions
+    /// * post `/repos/{owner}/{repo}/comments/{comment_id}/reactions`
+    /// * docs <https://docs.github.com/rest/reference/reactions#create-reaction-for-a-commit-comment>
+    ///
+    /// Create reaction for a commit comment
+    /// Create a reaction to a [commit comment](https://docs.github.com/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
+    CommentReactionBuilder {
+        owner: String,
+        repo: String,
+        comment_id: i64,
+        reaction: Reaction
+    }
+);
+
+builder_string_setters!(CommentReactionBuilder { owner, repo });
+builder_setters!(CommentReactionBuilder {
     comment_id: i64,
-    reaction: Reaction,
-}
-
-impl CommentReactionBuilder {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    pub fn owner<T: Into<String>>(mut self, owner: T) -> CommentReactionBuilder {
-        self.owner = owner.into();
-        self
-    }
-    pub fn repo<T: Into<String>>(mut self, repo: T) -> CommentReactionBuilder {
-        self.repo = repo.into();
-        self
-    }
-    pub fn comment_id(mut self, comment_id: i64) -> CommentReactionBuilder {
-        self.comment_id = comment_id;
-        self
-    }
-    pub fn reaction(mut self, reaction: Reaction) -> CommentReactionBuilder {
-        self.reaction = reaction;
-        self
-    }
-}
+    reaction: Reaction
+});
 
 #[async_trait]
 impl Builder for CommentReactionBuilder {
