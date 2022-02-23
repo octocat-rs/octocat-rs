@@ -17,6 +17,7 @@ serde_json = "^1"
 
 # Misc
 async-trait = "0.1.52"
+paste = "1"
 
 [features]
 default = ["builders"]
