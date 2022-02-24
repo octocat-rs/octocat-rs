@@ -1,7 +1,10 @@
 use crate::{
-    builders::{builder, builder_nested_setters, builder_nested_string_setters, builder_string_setters, Builder},
-    methods::{get_issues, GetIssueBody, IssueState},
-    model::issues::Issues,
+    builders::{
+        builder, builder_nested_setters, builder_nested_string_setters, builder_nested_string_setters_required,
+        builder_string_setters, Builder,
+    },
+    methods::{create_issue, get_issues, CreateIssueBody, GetIssueBody, IssueState},
+    model::issues::{Issue, Issues},
     GithubRestError, Requester,
 };
 use async_trait::async_trait;
@@ -47,11 +50,42 @@ builder_nested_string_setters!(GetIssuesBuilder {
 impl Builder for GetIssuesBuilder {
     type Response = Issues;
 
-    async fn execute<T>(self, client: &T) -> Result<Issues, GithubRestError>
+    async fn execute<T>(self, client: &T) -> Result<Self::Response, GithubRestError>
     where
         T: Requester,
     {
         get_issues(client, self.owner, self.repo, Some(&self.body)).await
+    }
+}
+
+builder!(
+    /// * tags issues
+    /// * post `/repos/{owner}/{repo}/issues`
+    /// * docs <https://docs.github.com/rest/reference/issues#create-an-issue>
+    ///
+    /// Create an issue
+    /// Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://help.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
+    CreateIssueBuilder {
+        owner: String,
+        repo: String,
+        body: CreateIssueBody
+    }
+);
+
+builder_nested_setters!(CreateIssueBuilder { body { labels: Vec<String>, assignees: Vec<String> } });
+builder_nested_string_setters!(CreateIssueBuilder { body { body, assignee, milestone } });
+builder_nested_string_setters_required!(CreateIssueBuilder { body { title } });
+builder_string_setters!(CreateIssueBuilder { owner, repo });
+
+#[async_trait]
+impl Builder for CreateIssueBuilder {
+    type Response = Issue;
+
+    async fn execute<T>(self, client: &T) -> Result<Self::Response, GithubRestError>
+    where
+        T: Requester,
+    {
+        create_issue(client, self.owner, self.repo, &self.body).await
     }
 }
 
@@ -64,16 +98,34 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_issues_builder() {
-        let requester = DefaultRequest::new_none();
+        let requester = DefaultRequest::new("TOKEN");
 
-        let builder = GetIssuesBuilder::new()
+        let r = GetIssuesBuilder::new()
             .owner("microsoft")
             .repo("vscode")
             .per_page(1.to_string())
             .page(2.to_string())
-            .state(IssueState::Open);
+            .state(IssueState::Open)
+            .execute(&requester)
+            .await
+            .unwrap();
 
-        let r = builder.execute(&requester).await.unwrap();
-        println!("{:#?}", r)
+        dbg!(r);
+    }
+
+    #[tokio::test]
+    async fn test_create_issue_builder() {
+        let requester = DefaultRequest::new("TOKEN");
+
+        let r = CreateIssueBuilder::new()
+            .owner("octocat-rs")
+            .repo("octocat-rs")
+            .title("Title")
+            .body("body")
+            .execute(&requester)
+            .await
+            .unwrap();
+
+        dbg!(r);
     }
 }

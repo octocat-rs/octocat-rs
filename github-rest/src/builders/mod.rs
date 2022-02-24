@@ -29,7 +29,7 @@ pub trait Builder {
 macro_rules! builder {
     (
         $(#[$attr:meta])*
-        $name:ident { $($field:ident: $field_type:ident),* }
+        $name:ident { $($field:ident: $field_type:ty),* }
     ) => {
 
         $(#[$attr])*
@@ -55,7 +55,7 @@ macro_rules! builder {
 ///         }
 ///     }
 macro_rules! builder_setters {
-    ($name:ident { $($field:ident: $field_type:ident),* }) => {
+    ($name:ident { $($field:ident: $field_type:ty),* }) => {
         paste::paste! {
             impl $name {
                 $(
@@ -147,7 +147,7 @@ macro_rules! builder_nested_string_setters_required {
 ///         }
 ///     }
 macro_rules! builder_nested_setters {
-    ($name:ident { $field:ident { $($subfield:ident: $subfield_type:ident),* } }) => {
+    ($name:ident { $field:ident { $($subfield:ident: $subfield_type:ty),* } }) => {
         paste::paste! {
             impl $name {
                 $(

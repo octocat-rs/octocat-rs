@@ -5,15 +5,14 @@ use crate::model::{
 
 use super::prelude::*;
 
-//TODO make a builder for this
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct CreateIssueBody {
-    title: String,
-    body: Option<String>,
-    assignee: Option<String>,
-    milestone: Option<String>,
-    labels: Option<Vec<String>>,
-    assignees: Option<Vec<String>>,
+    pub title: String,
+    pub body: Option<String>,
+    pub assignee: Option<String>,
+    pub milestone: Option<String>,
+    pub labels: Option<Vec<String>>,
+    pub assignees: Option<Vec<String>>,
 }
 
 //TODO: TEST THIS
@@ -186,9 +185,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_issue() {
-        let reqester = DefaultRequest::new("TOKEN");
+        let requester = DefaultRequest::new("TOKEN");
 
-        let bdy = CreateIssueBody {
+        let body = CreateIssueBody {
             title: "tricked is cool".to_owned(),
             body: Some("This is very true".to_owned()),
             assignee: None,
@@ -197,24 +196,25 @@ mod tests {
             assignees: None,
         };
 
-        let r = create_issue(&reqester, "Tricked-dev", "octo-computing-machine", &bdy)
+        let r = create_issue(&requester, "Tricked-dev", "octo-computing-machine", &body)
             .await
             .unwrap();
-        println!("{:#?}", r)
+
+        dbg!(r);
     }
 
     #[tokio::test]
     async fn test_get_issues() {
-        let reqester = DefaultRequest::new_none();
+        let requester = DefaultRequest::new_none();
 
-        let r = get_issues(&reqester, "microsoft", "vscode", None).await.unwrap();
+        let r = get_issues(&requester, "microsoft", "vscode", None).await.unwrap();
         println!("{:#?}", r)
     }
 
     #[tokio::test]
     async fn test_get_issues2() {
         let requester = DefaultRequest::new_none();
-        let bdy = GetIssueBody {
+        let body = GetIssueBody {
             milestone: None,
             state: None,
             assignee: None,
@@ -227,7 +227,11 @@ mod tests {
             per_page: Some("1".to_owned()),
             page: None,
         };
-        let r = get_issues(&requester, "microsoft", "vscode", Some(&bdy)).await.unwrap();
-        println!("{:#?}", r)
+
+        let r = get_issues(&requester, "microsoft", "vscode", Some(&body))
+            .await
+            .unwrap();
+
+        dbg!(r);
     }
 }
