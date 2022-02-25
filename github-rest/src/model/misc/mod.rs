@@ -102,7 +102,7 @@ pub mod deployments {
 
 pub mod events {
     use crate::model::{
-        event_types::{macros::repo_origin, RepoEventInfo},
+        event_types::{macros::repo_origin, Event, RepoEventInfo},
         issues::Label,
         misc::deployments::{Deployment, DeploymentStatus, MarketplacePurchase},
         prelude::*,
@@ -185,6 +185,37 @@ pub mod events {
         PendingChangeCancelled,
         Changed,
         Cancelled,
+    }
+
+    /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#sponsorship>
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct SponsorshipEvent {
+        pub action: SponsorshipAction,
+        pub effective_date: String,
+        pub changes: SponsorshipChanges,
+        pub sender: User,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[serde(rename_all = "snake_case")]
+    pub enum SponsorshipAction {
+        /// `Created` is only triggered after the payment is processed.
+        Created,
+        Cancelled,
+        Edited,
+        TierChanged,
+        PendingCancellation,
+        PendingTierChange,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct SponsorshipChanges {
+        pub tier: Option<Change>,
+        pub privacy_level: Option<Change>,
+    }
+
+    impl Event<'_> for SponsorshipEvent {
+        type Origin = User;
     }
 
     repo_origin!(LabelEvent);

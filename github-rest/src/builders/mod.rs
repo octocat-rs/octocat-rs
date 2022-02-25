@@ -26,6 +26,12 @@ pub trait Builder {
 ///         b: Type,
 ///         c: Type,
 ///     }
+///
+///     impl S {
+///         pub fn new() -> Self {
+///             Self::default()
+///         }
+///     }
 macro_rules! builder {
     (
         $(#[$attr:meta])*
