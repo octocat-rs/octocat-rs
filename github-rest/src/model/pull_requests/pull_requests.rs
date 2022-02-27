@@ -1,10 +1,69 @@
 use crate::model::{
+    commits::association::Association,
     prelude::*,
     pull_requests::nested::{HeadBase, Links},
     user::User,
 };
 
-pub type Pulls = Vec<PullRequest>;
+pub type Pulls = Vec<Pull>;
+
+/// Only used when getting pull requests in a list.
+///
+/// If you aren't listing multiple pull requests, please use [`PullRequest`]
+/// instead.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Pull {
+    pub url: String,
+    pub id: i64,
+    pub node_id: String,
+    pub html_url: String,
+    pub diff_url: String,
+    pub patch_url: String,
+    pub issue_url: String,
+    pub number: i64,
+    pub state: PullRequestState,
+    pub locked: bool,
+    pub title: String,
+    pub user: User,
+    pub body: Value,
+    pub created_at: String,
+    pub updated_at: String,
+    pub closed_at: Value,
+    pub merged_at: Value,
+    pub merge_commit_sha: Value,
+    pub assignee: Value,
+    pub assignees: Vec<Value>,
+    pub requested_reviewers: Vec<Value>,
+    pub requested_teams: Vec<Value>,
+    pub labels: Vec<Value>,
+    pub milestone: Value,
+    pub draft: bool,
+    pub commits_url: String,
+    pub review_comments_url: String,
+    pub review_comment_url: String,
+    pub comments_url: String,
+    pub statuses_url: String,
+    pub head: HeadBase,
+    pub base: HeadBase,
+    #[serde(rename = "_links")]
+    pub links: Links,
+    pub author_association: Association,
+    pub auto_merge: Value,
+    pub active_lock_reason: Value,
+    pub mergeable: Option<bool>,
+    // Don't know if these two can be null so just to be safe(?)
+    pub rebaseable: Option<bool>,
+    pub mergeable_state: Option<String>,
+    // Docs really didn't help me when I attempted to create an enum for this
+    pub merged_by: Option<Value>,
+    pub comments: Option<i64>,
+    pub review_comments: Option<i64>,
+    pub maintainer_can_modify: Option<bool>,
+    pub commits: Option<i64>,
+    pub additions: Option<i64>,
+    pub deletions: Option<i64>,
+    pub changed_files: Option<i64>,
+}
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PullRequest {
@@ -42,10 +101,9 @@ pub struct PullRequest {
     pub base: HeadBase,
     #[serde(rename = "_links")]
     pub links: Links,
-    pub author_association: String,
+    pub author_association: Association,
     pub auto_merge: Value,
     pub active_lock_reason: Value,
-    pub merged: bool,
     pub mergeable: Option<bool>,
     // Don't know if these two can be null so just to be safe(?)
     pub rebaseable: Option<bool>,

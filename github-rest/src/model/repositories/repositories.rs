@@ -59,7 +59,7 @@ pub struct Repository {
     pub size: i64,
     pub stargazers_count: i64,
     pub watchers_count: i64,
-    pub language: String,
+    pub language: Option<String>,
     pub has_issues: bool,
     pub has_projects: bool,
     pub has_downloads: bool,

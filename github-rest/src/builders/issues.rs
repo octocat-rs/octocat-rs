@@ -3,7 +3,7 @@ use crate::{
         builder, builder_nested_setters, builder_nested_string_setters, builder_nested_string_setters_required,
         builder_string_setters, Builder,
     },
-    methods::{create_issue, get_issues, CreateIssueBody, GetIssueBody, IssueState},
+    methods::{create_issue, get_issues, CreateIssueBody, GetIssuesBody, IssueState},
     model::issues::{Issue, Issues},
     GithubRestError, Requester,
 };
@@ -25,7 +25,7 @@ builder!(
     GetIssuesBuilder {
         owner: String,
         repo: String,
-        body: GetIssueBody
+        body: GetIssuesBody
     }
 );
 
