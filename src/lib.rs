@@ -1,3 +1,6 @@
+#![feature(future_join, future_poll_fn)]
+
+use std::future::join;
 use crate::utils::{EventTypes, ExampleBody};
 use std::str::FromStr;
 use worker::*;
@@ -32,7 +35,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     // handling HTTP functionality and a `RouteContext` which you can use to
     // and get route parameters and Environment bindings like KV Stores, Durable
     // Objects, Secrets, and Variables.
-    router
+    let r = router
         .post_async("/payload", |mut req, _| async move {
             let headers = req.headers();
             match headers.get("X-GitHub-Event").unwrap() {
@@ -62,7 +65,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get("/worker-version", |_, ctx| {
             let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
             Response::ok(version)
-        })
-        .run(req, env)
-        .await
+        });
+
+    let x = join!(r.run(req, env), async { 1 }).await;
+
+    x.0
 }
