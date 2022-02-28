@@ -1,3 +1,7 @@
+//! This module contains a pre-built client you can use instead of making your
+//! own client. you can still do this though by implementing the [`Requester`]
+//! trait
+
 use std::fmt::Display;
 //TODO: lock this behind a feature
 //TODO: Replace all Strings with T: into<String>

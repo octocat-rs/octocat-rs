@@ -1,3 +1,6 @@
+//! Contains the [`EventHandler`] trait and its default implementation
+//! ([`DefaultEventHandler`]).
+
 use std::sync::Arc;
 
 use async_trait::async_trait;
@@ -7,14 +10,15 @@ use github_rest::model::{
     commits::events::{CommitCommentEvent, StatusEvent},
     discussions::events::{DiscussionCommentEvent, DiscussionEvent},
     issues::events::{IssueCommentEvent, IssueEvent},
-    misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
+    misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, SponsorshipEvent},
     organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{
-            BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent,
-            ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
+            BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MetaEvent,
+            MilestoneEvent, PackageEvent, PingEvent, ProjectCardEvent, ProjectColumnEvent, ProjectEvent, PublicEvent,
+            PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
             RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
         },
         security_advisory::events::SecurityAdvisoryEvent,
@@ -148,6 +152,70 @@ pub trait EventHandler {
         &self,
         github_client: Arc<Self::GitHubClient>,
         project_event: ProjectEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to project cards
+    async fn project_card_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        project_card_event: ProjectCardEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to columns in a project board
+    async fn project_column_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        project_column_event: ProjectColumnEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// The webhook this event is configured on was deleted. This event will
+    /// only listen for changes to the particular hook the event is installed on
+    async fn meta_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        meta_event: MetaEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to GitHub Packages
+    async fn package_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        package_event: PackageEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// New webhook created
+    async fn ping_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        ping_event: PingEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a sponsorship listing
+    async fn sponsorship_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        sponsorship_event: SponsorshipEvent,
+    ) -> Command<Self::Message> {
+        Command::none()
+    }
+
+    /// Activity related to a GitHub Marketplace purchase
+    async fn marketplace_purchase_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        marketplace_purchase_event: MarketplacePurchaseEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

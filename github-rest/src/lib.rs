@@ -1,4 +1,5 @@
 #![deny(rust_2018_idioms)]
+
 use core::fmt;
 use std::error::Error;
 
@@ -7,23 +8,12 @@ pub use github_api::end_points;
 use github_api::end_points::EndPoints;
 use reqwest::{Body, StatusCode};
 use serde::{de::DeserializeOwned, Serialize};
+
 #[cfg(feature = "builders")]
-/// This module includes various builders for Methods that require a lot of
-/// information
 pub mod builders;
 #[cfg(feature = "client")]
-/// This module contains a pre-built client you can use instead of making your
-/// own client. you can still do this though by implementing the [`Requester`]
-/// trait
 pub mod client;
-/// This module contains helper functions for writing API requests.
 pub mod methods;
-/// This module contains all API request/response types currently implemented.
-/// These include:
-/// * Webhook payloads
-///     - Webhook payloads can be found at `./<directory>/events.rs`
-/// * Request bodies
-/// * Response bodies
 pub mod model;
 
 #[derive(Debug)]

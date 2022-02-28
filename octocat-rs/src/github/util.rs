@@ -1,3 +1,6 @@
+//! Miscellaneous utilities including the [`OctocatConfig`] struct and
+//! [`Authorization`] enum.
+
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 

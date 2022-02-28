@@ -1,3 +1,5 @@
+//! Contains [`HttpClient`].
+
 use async_trait::async_trait;
 #[cfg(not(feature = "workers"))]
 use reqwest::{

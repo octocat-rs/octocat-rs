@@ -1,3 +1,5 @@
+//! This module contains helper functions for writing API requests.
+
 pub use commits::*;
 pub use issues::*;
 pub use misc::*;

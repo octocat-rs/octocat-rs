@@ -1,19 +1,18 @@
 use crate::model::{
     issues::{Issue, Issues},
-    pull_requests::Pulls,
+    pull_requests::{PullRequestState, Pulls},
 };
 
 use super::prelude::*;
 
-//TODO make a builder for this
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct CreateIssueBody {
-    title: String,
-    body: Option<String>,
-    assignee: Option<String>,
-    milestone: Option<String>,
-    labels: Option<Vec<String>>,
-    assignees: Option<Vec<String>>,
+    pub title: String,
+    pub body: Option<String>,
+    pub assignee: Option<String>,
+    pub milestone: Option<String>,
+    pub labels: Option<Vec<String>>,
+    pub assignees: Option<Vec<String>>,
 }
 
 //TODO: TEST THIS
@@ -44,7 +43,7 @@ where
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
-pub struct GetIssueBody {
+pub struct GetIssuesBody {
     /// If an integer is passed, it should refer to a milestone by its number
     /// field. If the string * is passed, issues with any milestone are
     /// accepted. If the string none is passed, issues without milestones are
@@ -107,13 +106,13 @@ pub async fn get_issues<T>(
     client: &T,
     owner: impl Into<String>,
     repo: impl Into<String>,
-    options: Option<&GetIssueBody>,
+    options: Option<&GetIssuesBody>,
 ) -> Result<Issues, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<GetIssueBody, String, Issues>(
+        .req::<GetIssuesBody, String, Issues>(
             EndPoints::GetReposownerrepoIssues(owner.into(), repo.into()),
             options,
             None,
@@ -121,35 +120,32 @@ where
         .await
 }
 
-//TODO make a builder for this to **it must be completed using .execute()** not
-// `build().execute()`
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct GetPullsBody {
-    //TODO: write a enum for this
-    ///Either open, closed, or all to filter by state.
-    ///Default: open
-    pub state: Option<String>,
-    ///Filter pulls by head user or head organization and branch name in the
+    /// Either open, closed, or all to filter by state.
+    /// Default: open
+    pub state: Option<PullRequestState>,
+    /// Filter pulls by head user or head organization and branch name in the
     /// format of user:ref-name or organization:ref-name. For example:
     /// github:new-script-format or octocat:test-branch.
     pub head: Option<String>,
-    ///Filter pulls by base branch name. Example: gh-pages.
+    /// Filter pulls by base branch name. Example: gh-pages.
     pub base: Option<String>,
-    ///What to sort results by. Can be either created, updated, popularity
+    /// What to sort results by. Can be either created, updated, popularity
     /// (comment count) or long-running (age, filtering by pulls updated in the
     /// last month). Default: created
     pub sort: Option<String>,
-    ///One of asc (ascending) or desc (descending).
-    ///Default: desc
+    /// One of asc (ascending) or desc (descending).
+    /// Default: desc
     pub direction: Option<String>,
-    ///Only show notifications updated after the given time. This is a
+    /// Only show notifications updated after the given time. This is a
     /// timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
     pub since: Option<String>,
-    ///Results per page (max 100)
-    ///Default: 30
+    /// Results per page (max 100)
+    /// Default: 30
     pub per_page: Option<String>,
-    ///Page number of the results to fetch.
-    ///Default: 1
+    /// Page number of the results to fetch.
+    /// Default: 1
     pub page: Option<String>,
 }
 
@@ -163,13 +159,13 @@ pub async fn get_pulls<T>(
     client: &T,
     owner: impl Into<String>,
     repo: impl Into<String>,
-    options: Option<&GetIssueBody>,
+    options: Option<&GetPullsBody>,
 ) -> Result<Pulls, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<GetIssueBody, String, Pulls>(
+        .req::<GetPullsBody, String, Pulls>(
             EndPoints::GetReposownerrepoPulls(owner.into(), repo.into()),
             options,
             None,
@@ -186,9 +182,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_issue() {
-        let reqester = DefaultRequest::new("TOKEN");
+        let requester = DefaultRequest::new("TOKEN");
 
-        let bdy = CreateIssueBody {
+        let body = CreateIssueBody {
             title: "tricked is cool".to_owned(),
             body: Some("This is very true".to_owned()),
             assignee: None,
@@ -197,24 +193,25 @@ mod tests {
             assignees: None,
         };
 
-        let r = create_issue(&reqester, "Tricked-dev", "octo-computing-machine", &bdy)
+        let r = create_issue(&requester, "Tricked-dev", "octo-computing-machine", &body)
             .await
             .unwrap();
-        println!("{:#?}", r)
+
+        dbg!(r);
     }
 
     #[tokio::test]
     async fn test_get_issues() {
-        let reqester = DefaultRequest::new_none();
+        let requester = DefaultRequest::new_none();
 
-        let r = get_issues(&reqester, "microsoft", "vscode", None).await.unwrap();
+        let r = get_issues(&requester, "microsoft", "vscode", None).await.unwrap();
         println!("{:#?}", r)
     }
 
     #[tokio::test]
     async fn test_get_issues2() {
         let requester = DefaultRequest::new_none();
-        let bdy = GetIssueBody {
+        let body = GetIssuesBody {
             milestone: None,
             state: None,
             assignee: None,
@@ -227,7 +224,11 @@ mod tests {
             per_page: Some("1".to_owned()),
             page: None,
         };
-        let r = get_issues(&requester, "microsoft", "vscode", Some(&bdy)).await.unwrap();
-        println!("{:#?}", r)
+
+        let r = get_issues(&requester, "microsoft", "vscode", Some(&body))
+            .await
+            .unwrap();
+
+        dbg!(r);
     }
 }

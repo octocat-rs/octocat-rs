@@ -1,3 +1,6 @@
+//! Contains the [`GitHubClient`] trait and its default implementation
+//! ([`Client`]).
+
 use std::{fmt::Debug, sync::Arc};
 
 use anyhow::Result;
@@ -18,16 +21,18 @@ use github_rest::{
         discussions::events::{DiscussionCommentEvent, DiscussionEvent},
         event_types::EventTypes,
         issues::events::{IssueCommentEvent, IssueEvent},
-        misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent},
+        misc::events::{
+            DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, SponsorshipEvent,
+        },
         organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
         pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
-                BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent,
-                MilestoneEvent, ProjectEvent, PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent,
-                RepositoryImportEvent, RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent,
-                TeamAddEvent, WatchEvent,
+                BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MetaEvent,
+                MilestoneEvent, PackageEvent, PingEvent, ProjectCardEvent, ProjectColumnEvent, ProjectEvent,
+                PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
+                RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
             },
             security_advisory::events::SecurityAdvisoryEvent,
             wiki::events::GollumEvent,
@@ -40,10 +45,7 @@ use github_rest::{
     GithubRestError, Requester,
 };
 
-use crate::{
-    github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient},
-    Command,
-};
+use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
 #[async_trait]
 pub trait GitHubClient: Requester + Sized {
@@ -325,11 +327,9 @@ where
             .and(warp::body::json());
 
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
-            let mut user_cmd = Command::none();
-
             macro_rules! event_push {
                 ($f:ident, $t:ty) => {
-                    user_cmd = thread_self
+                    thread_self
                         .event_handler()
                         .$f(
                             thread_self.clone(),
@@ -340,155 +340,169 @@ where
             }
 
             let ev_h = async {
-                match ev {
+                let user_cmd = match ev {
                     EventTypes::Push => {
-                        event_push!(commit_event, PushEvent);
+                        event_push!(commit_event, PushEvent)
                     }
                     EventTypes::GithubAppAuthorization => {
-                        event_push!(app_authorization_event, AppAuthorizationEvent);
+                        event_push!(app_authorization_event, AppAuthorizationEvent)
                     }
                     EventTypes::Installation => {
-                        event_push!(installation_event, InstallationEvent);
+                        event_push!(installation_event, InstallationEvent)
                     }
                     EventTypes::InstallationRepositories => {
-                        event_push!(installation_repositories_event, InstallationRepositoriesEvent);
+                        event_push!(installation_repositories_event, InstallationRepositoriesEvent)
                     }
                     EventTypes::DeployKey => {
-                        event_push!(deploy_key_event, DeployKeyEvent);
+                        event_push!(deploy_key_event, DeployKeyEvent)
                     }
                     EventTypes::Gollum => {
-                        event_push!(gollum_event, GollumEvent);
+                        event_push!(gollum_event, GollumEvent)
                     }
                     EventTypes::Member => {
-                        event_push!(member_event, MemberEvent);
+                        event_push!(member_event, MemberEvent)
                     }
                     EventTypes::Milestone => {
-                        event_push!(milestone_event, MilestoneEvent);
+                        event_push!(milestone_event, MilestoneEvent)
                     }
                     EventTypes::Public => {
-                        event_push!(public_event, PublicEvent);
+                        event_push!(public_event, PublicEvent)
                     }
                     EventTypes::Release => {
-                        event_push!(release_event, ReleaseEvent);
+                        event_push!(release_event, ReleaseEvent)
                     }
                     EventTypes::Repository => {
-                        event_push!(repository_event, RepositoryEvent);
+                        event_push!(repository_event, RepositoryEvent)
                     }
                     EventTypes::RepositoryDispatch => {
-                        event_push!(repository_dispatch_event, RepositoryDispatchEvent);
+                        event_push!(repository_dispatch_event, RepositoryDispatchEvent)
                     }
                     EventTypes::RepositoryImport => {
-                        event_push!(repository_import_event, RepositoryImportEvent);
+                        event_push!(repository_import_event, RepositoryImportEvent)
                     }
                     EventTypes::RepositoryVulnerabilityAlert => {
-                        event_push!(repository_vulnerability_alert, RepositoryVulnerabilityAlertEvent);
+                        event_push!(repository_vulnerability_alert, RepositoryVulnerabilityAlertEvent)
                     }
                     EventTypes::SecretScanningAlert => {
-                        event_push!(secret_scanning_alert, SecretScanningAlertEvent);
+                        event_push!(secret_scanning_alert, SecretScanningAlertEvent)
                     }
                     EventTypes::SecurityAdvisory => {
-                        event_push!(security_advisory, SecurityAdvisoryEvent);
+                        event_push!(security_advisory, SecurityAdvisoryEvent)
                     }
                     EventTypes::Star => {
-                        event_push!(star_event, StarEvent);
+                        event_push!(star_event, StarEvent)
                     }
                     EventTypes::Watch => {
-                        event_push!(watch_event, WatchEvent);
+                        event_push!(watch_event, WatchEvent)
                     }
                     EventTypes::PullRequest => {
-                        event_push!(pull_request_event, PullRequestEvent);
+                        event_push!(pull_request_event, PullRequestEvent)
                     }
                     EventTypes::PullRequestReview => {
-                        event_push!(pull_request_review_event, PullRequestReviewEvent);
+                        event_push!(pull_request_review_event, PullRequestReviewEvent)
                     }
                     EventTypes::PullRequestReviewComment => {
-                        event_push!(pull_request_review_comment_event, PullRequestReviewCommentEvent);
+                        event_push!(pull_request_review_comment_event, PullRequestReviewCommentEvent)
                     }
                     EventTypes::CommitComment => {
-                        event_push!(commit_comment_event, CommitCommentEvent);
+                        event_push!(commit_comment_event, CommitCommentEvent)
                     }
                     EventTypes::Status => {
-                        event_push!(status_event, StatusEvent);
+                        event_push!(status_event, StatusEvent)
                     }
                     EventTypes::IssueComment => {
-                        event_push!(issue_comment_event, IssueCommentEvent);
+                        event_push!(issue_comment_event, IssueCommentEvent)
                     }
                     EventTypes::Issues => {
-                        event_push!(issue_event, IssueEvent);
+                        event_push!(issue_event, IssueEvent)
                     }
                     EventTypes::Label => {
-                        event_push!(label_event, LabelEvent);
+                        event_push!(label_event, LabelEvent)
                     }
                     EventTypes::Discussion => {
-                        event_push!(discussion_event, DiscussionEvent);
+                        event_push!(discussion_event, DiscussionEvent)
                     }
                     EventTypes::DiscussionComment => {
-                        event_push!(discussion_comment_event, DiscussionCommentEvent);
+                        event_push!(discussion_comment_event, DiscussionCommentEvent)
                     }
                     EventTypes::BranchProtectionRule => {
-                        event_push!(branch_protection_rule_event, BranchProtectionRuleEvent);
+                        event_push!(branch_protection_rule_event, BranchProtectionRuleEvent)
                     }
                     EventTypes::Create => {
-                        event_push!(tag_created, CreateEvent);
+                        event_push!(tag_created, CreateEvent)
                     }
                     EventTypes::Delete => {
-                        event_push!(tag_deleted, DeleteEvent);
+                        event_push!(tag_deleted, DeleteEvent)
                     }
                     EventTypes::Fork => {
-                        event_push!(repository_forked, ForkEvent);
+                        event_push!(repository_forked, ForkEvent)
                     }
                     EventTypes::CheckRun => {
-                        event_push!(check_run, CheckRunEvent);
+                        event_push!(check_run, CheckRunEvent)
                     }
                     EventTypes::CheckSuite => {
-                        event_push!(check_suite_event, CheckSuiteEvent);
+                        event_push!(check_suite_event, CheckSuiteEvent)
                     }
                     EventTypes::CodeScanningAlert => {
-                        event_push!(code_scanning_alert_event, CodeScanningAlertEvent);
+                        event_push!(code_scanning_alert_event, CodeScanningAlertEvent)
                     }
                     EventTypes::Deployment => {
-                        event_push!(deployment_event, DeploymentEvent);
+                        event_push!(deployment_event, DeploymentEvent)
                     }
                     EventTypes::DeploymentStatus => {
-                        event_push!(deployment_status_event, DeploymentStatusEvent);
+                        event_push!(deployment_status_event, DeploymentStatusEvent)
                     }
                     EventTypes::PageBuild => {
-                        event_push!(page_build_event, PageBuildEvent);
+                        event_push!(page_build_event, PageBuildEvent)
                     }
                     EventTypes::WorkflowDispatch => {
-                        event_push!(workflow_dispatch_event, WorkflowDispatchEvent);
+                        event_push!(workflow_dispatch_event, WorkflowDispatchEvent)
                     }
                     EventTypes::WorkflowJob => {
-                        event_push!(workflow_job, WorkflowJobEvent);
+                        event_push!(workflow_job, WorkflowJobEvent)
                     }
                     EventTypes::WorkflowRun => {
-                        event_push!(workflow_run, WorkflowRunEvent);
+                        event_push!(workflow_run, WorkflowRunEvent)
                     }
                     EventTypes::Membership => {
-                        event_push!(membership_event, MembershipEvent);
+                        event_push!(membership_event, MembershipEvent)
                     }
                     EventTypes::OrgBlock => {
-                        event_push!(org_block_event, OrgBlockEvent);
+                        event_push!(org_block_event, OrgBlockEvent)
                     }
                     EventTypes::Organization => {
-                        event_push!(organization_event, OrganizationEvent);
+                        event_push!(organization_event, OrganizationEvent)
                     }
                     EventTypes::Team => {
-                        event_push!(team_event, TeamEvent);
+                        event_push!(team_event, TeamEvent)
                     }
                     EventTypes::TeamAdd => {
-                        event_push!(team_add_event, TeamAddEvent);
+                        event_push!(team_add_event, TeamAddEvent)
                     }
                     EventTypes::Project => {
-                        event_push!(project_event, ProjectEvent);
+                        event_push!(project_event, ProjectEvent)
                     }
-                    EventTypes::ProjectCard => {}
-                    EventTypes::ProjectColumn => {}
-                    EventTypes::MarketplacePurchase => {}
-                    EventTypes::Meta => {}
-                    EventTypes::Package => {}
-                    EventTypes::Ping => {}
-                    EventTypes::Sponsorship => {}
+                    EventTypes::ProjectCard => {
+                        event_push!(project_card_event, ProjectCardEvent)
+                    }
+                    EventTypes::ProjectColumn => {
+                        event_push!(project_column_event, ProjectColumnEvent)
+                    }
+                    EventTypes::MarketplacePurchase => {
+                        event_push!(marketplace_purchase_event, MarketplacePurchaseEvent)
+                    }
+                    EventTypes::Meta => {
+                        event_push!(meta_event, MetaEvent)
+                    }
+                    EventTypes::Package => {
+                        event_push!(package_event, PackageEvent)
+                    }
+                    EventTypes::Ping => {
+                        event_push!(ping_event, PingEvent)
+                    }
+                    EventTypes::Sponsorship => {
+                        event_push!(sponsorship_event, SponsorshipEvent)
+                    }
                 };
 
                 if !user_cmd.is_empty() {

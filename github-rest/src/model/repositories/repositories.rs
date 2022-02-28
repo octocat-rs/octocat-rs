@@ -59,7 +59,7 @@ pub struct Repository {
     pub size: i64,
     pub stargazers_count: i64,
     pub watchers_count: i64,
-    pub language: String,
+    pub language: Option<String>,
     pub has_issues: bool,
     pub has_projects: bool,
     pub has_downloads: bool,
@@ -94,6 +94,33 @@ pub struct Project {
     pub number: usize,
     pub state: String,
     pub creator: Value,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCard {
+    pub url: String,
+    pub id: usize,
+    pub node_id: String,
+    pub note: String,
+    pub creator: User,
+    pub created_at: String,
+    pub updated_at: String,
+    pub archived: bool,
+    pub column_url: String,
+    pub content_url: String,
+    pub project_url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectColumn {
+    pub url: String,
+    pub project_url: String,
+    pub cards_url: String,
+    pub id: usize,
+    pub node_id: String,
+    pub name: String,
     pub created_at: String,
     pub updated_at: String,
 }

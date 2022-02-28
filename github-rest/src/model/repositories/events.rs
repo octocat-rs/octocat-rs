@@ -9,7 +9,7 @@ use crate::{
         pull_requests::events::nested::Change,
         repositories::{
             events::nested::{Commit, HeadCommit, Pusher},
-            CodeScanningAlert, DeployKey, Project, Repository,
+            CodeScanningAlert, DeployKey, Project, ProjectCard, ProjectColumn, Repository,
         },
         user::User,
     },
@@ -397,15 +397,111 @@ pub struct ProjectChanges {
     pub body: Option<Change>,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_card>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCardEvent {
+    pub action: ProjectCardAction,
+    pub changes: Option<ProjectCardChanges>,
+    pub after_id: usize,
+    pub project_card: ProjectCard,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum ProjectCardAction {
+    Created,
+    Edited,
+    Moved,
+    Converted,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCardChanges {
+    pub note: Option<Change>,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_column>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectColumnEvent {
+    pub action: ProjectColumnAction,
+    pub changes: Option<ProjectColumnChanges>,
+    pub after_id: usize,
+    pub project_column: ProjectColumn,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum ProjectColumnAction {
+    Created,
+    Edited,
+    Moved,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectColumnChanges {
+    pub name: Option<Change>,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#meta>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MetaEvent {
+    pub action: MetaAction,
+    pub hook_id: usize,
+    pub hook: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum MetaAction {
+    Deleted,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PackageEvent {
+    pub action: PackageAction,
+    pub package: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum PackageAction {
+    Published,
+    Updated,
+}
+
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#ping>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PingEvent {
+    pub zen: String,
+    pub hook_id: usize,
+    pub hook: Value,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
 repo_origin!(RepositoryVulnerabilityAlertEvent);
 repo_origin!(BranchProtectionRuleEvent);
 repo_origin!(SecretScanningAlertEvent);
 repo_origin!(CodeScanningAlertEvent);
 repo_origin!(RepositoryImportEvent);
+repo_origin!(ProjectColumnEvent);
+repo_origin!(ProjectCardEvent);
 repo_origin!(RepositoryEvent);
 repo_origin!(MilestoneEvent);
 repo_origin!(DeployKeyEvent);
 repo_origin!(TeamAddEvent);
+repo_origin!(PackageEvent);
 repo_origin!(ProjectEvent);
 repo_origin!(PublicEvent);
 repo_origin!(MemberEvent);
@@ -413,3 +509,5 @@ repo_origin!(WatchEvent);
 repo_origin!(PushEvent);
 repo_origin!(StarEvent);
 repo_origin!(ForkEvent);
+repo_origin!(MetaEvent);
+repo_origin!(PingEvent);

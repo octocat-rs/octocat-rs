@@ -1,3 +1,5 @@
+//! Contains the [`Command`] interface used in the event [`handler`].
+
 use std::fmt::Debug;
 
 use futures::{
