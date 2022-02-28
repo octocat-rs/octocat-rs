@@ -1,3 +1,5 @@
+//! Contains a builder for [`Client`].
+
 use std::{ffi::OsStr, fs::File, io::prelude::*, path::Path};
 
 use anyhow::{Error, Result};

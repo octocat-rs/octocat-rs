@@ -1,3 +1,6 @@
+//! This module includes various builders for Methods that require a lot of
+//! information
+
 use crate::{GithubRestError, Requester};
 use async_trait::async_trait;
 pub use commits::*;

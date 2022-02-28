@@ -1,3 +1,10 @@
+//! This module contains all API request/response types currently implemented.
+//! These include:
+//! * Webhook payloads
+//!     - Webhook payloads can be found at `./<directory>/events.rs`
+//! * Request bodies
+//! * Response bodies
+
 // Temporary
 #![allow(clippy::module_inception)]
 

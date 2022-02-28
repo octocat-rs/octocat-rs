@@ -1,3 +1,6 @@
+//! Contains the [`EventHandler`] trait and its default implementation
+//! ([`DefaultEventHandler`]).
+
 use std::sync::Arc;
 
 use async_trait::async_trait;

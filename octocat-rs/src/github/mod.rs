@@ -5,20 +5,11 @@ pub use handler::*;
 pub use http::*;
 pub use util::*;
 
-/// Contains the [`GitHubClient`] trait and its default implementation
-/// ([`Client`]).
 pub mod client;
-/// Contains a builder for [`Client`].
 pub mod client_builder;
-/// Contains the [`Command`] interface used in the event [`handler`].
 pub mod command;
-/// Contains the [`EventHandler`] trait and its default implementation
-/// ([`DefaultEventHandler`]).
 pub mod handler;
-/// Contains [`HttpClient`].
 pub mod http;
-/// Miscellaneous utilities including the [`OctocatConfig`] struct and
-/// [`Authorization`] enum.
 pub mod util;
 
 #[cfg(test)]

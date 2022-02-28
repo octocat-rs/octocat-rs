@@ -1,3 +1,6 @@
+//! Contains the [`GitHubClient`] trait and its default implementation
+//! ([`Client`]).
+
 use std::{fmt::Debug, sync::Arc};
 
 use anyhow::Result;
