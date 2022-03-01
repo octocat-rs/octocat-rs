@@ -59,7 +59,7 @@ impl Requester for DefaultRequest {
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
-        V: Into<Body> + std::marker::Send,
+        V: Into<Self::Body> + std::marker::Send,
     {
         let path = format!("https://api.github.com{}", url.path());
 
@@ -100,7 +100,7 @@ impl Requester for DefaultRequest {
     ) -> Result<A, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
-        V: Into<Body> + std::marker::Send,
+        V: Into<Self::Body> + std::marker::Send,
     {
         let r = self.raw_req(url, query, body).await?;
         Ok(serde_json::from_str(&r)?)

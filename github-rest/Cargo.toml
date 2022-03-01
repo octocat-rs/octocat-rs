@@ -8,7 +8,6 @@ edition = "2021"
 [dependencies]
 ## HTTP
 github-api = { git = "https://github.com/octocat-rs/github-api" }
-reqwest = { version = "0.11.8" }
 
 ## Serialization/Deserialization
 strum = { version = "0.23", features = ["derive"] }
@@ -19,6 +18,13 @@ serde_json = "^1"
 async-trait = "0.1.52"
 paste = "1"
 
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
+reqwest = { version = "0.11.8" }
+
+[target.'cfg(target_family = "wasm")'.dependencies]
+worker = "0.0.9"
+
+
 [features]
 default = ["builders"]
 full = ["builders", "client"]
@@ -26,5 +32,5 @@ builders = []
 client = []
 
 
-[dev-dependencies]
+[target.'cfg(not(target_family = "wasm"))'.dev-dependencies]
 tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }

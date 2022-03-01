@@ -1,3 +1,4 @@
+#![feature(associated_type_defaults)]
 #![deny(rust_2018_idioms)]
 
 use core::fmt;
@@ -6,8 +7,11 @@ use std::error::Error;
 use async_trait::async_trait;
 pub use github_api::end_points;
 use github_api::end_points::EndPoints;
+#[cfg(not(target_family = "wasm"))]
 use reqwest::{Body, StatusCode};
 use serde::{de::DeserializeOwned, Serialize};
+#[cfg(target_family = "wasm")]
+use worker::wasm_bindgen::JsValue;
 
 #[cfg(feature = "builders")]
 pub mod builders;
@@ -18,7 +22,10 @@ pub mod model;
 
 #[derive(Debug)]
 pub enum GithubRestError {
+    #[cfg(not(target_family = "wasm"))]
     ReqwestError(reqwest::Error),
+    #[cfg(target_family = "wasm")]
+    WorkerError(worker::Error),
     JsonError(serde_json::Error),
     ResponseError(StatusCode, String),
     AnyError(),
@@ -32,9 +39,17 @@ impl fmt::Display for GithubRestError {
 
 impl Error for GithubRestError {}
 
+#[cfg(not(target_family = "wasm"))]
 impl From<reqwest::Error> for GithubRestError {
     fn from(e: reqwest::Error) -> Self {
         GithubRestError::ReqwestError(e)
+    }
+}
+
+#[cfg(target_family = "wasm")]
+impl From<worker::Error> for GithubRestError {
+    fn from(e: worker::Error) -> Self {
+        GithubRestError::WorkerError(e)
     }
 }
 
@@ -46,6 +61,12 @@ impl From<serde_json::Error> for GithubRestError {
 
 #[async_trait]
 pub trait Requester: Send + Sync {
+    #[cfg(not(target_family = "wasm"))]
+    type Body: From<String> = Body;
+
+    #[cfg(target_family = "wasm")]
+    type Body: From<String> = JsValue;
+
     async fn raw_req<T, V>(
         &self,
         url: EndPoints,
@@ -54,7 +75,7 @@ pub trait Requester: Send + Sync {
     ) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
-        V: Into<Body> + std::marker::Send;
+        V: Into<Self::Body> + std::marker::Send;
 
     async fn req<T, V, A: DeserializeOwned>(
         &self,
@@ -64,5 +85,5 @@ pub trait Requester: Send + Sync {
     ) -> Result<A, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
-        V: Into<Body> + std::marker::Send;
+        V: Into<Self::Body> + std::marker::Send;
 }

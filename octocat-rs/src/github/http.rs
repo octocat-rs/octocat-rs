@@ -1,16 +1,17 @@
 //! Contains [`HttpClient`].
 
 use async_trait::async_trait;
-#[cfg(not(feature = "workers"))]
+#[cfg(feature = "native")]
 use reqwest::{
     header,
     header::{HeaderMap, HeaderValue},
     Body, RequestBuilder,
 };
 use serde::{de::DeserializeOwned, Serialize};
+#[cfg(feature = "native")]
 use tokio::time::Duration;
 
-#[cfg(feature = "workers")]
+#[cfg(all(target_family = "wasm", feature = "workers"))]
 use worker::{Fetch, Method, Request, RequestInit, ResponseBody::Body};
 
 use github_rest::{
@@ -27,11 +28,15 @@ const ACCEPT_HEADER_PARSE_ERROR: &str = "HttpClient: Parsing accept header";
 ///
 /// [`Requester`]: github_rest::Requester
 pub struct HttpClient {
+    #[cfg(feature = "native")]
     client: reqwest::Client,
+    #[cfg(all(target_family = "wasm", feature = "workers"))]
+    user_agent: Option<String>,
     auth: Option<Authorization>,
 }
 
 impl HttpClient {
+    #[cfg(feature = "native")]
     pub fn new(auth: Option<Authorization>, user_agent: Option<String>) -> Self {
         let mut headers = HeaderMap::new();
 
@@ -59,12 +64,18 @@ impl HttpClient {
         }
     }
 
+    #[cfg(all(target_family = "wasm", feature = "workers"))]
+    pub fn new(auth: Option<Authorization>, user_agent: Option<String>) -> Self {
+        HttpClient { user_agent, auth }
+    }
+
     /// Updates the authorization used by the current client.
     pub fn set_auth(&mut self, auth: Authorization) {
         self.auth = Some(auth);
     }
 
     /// Set the user agent used by the current client.
+    #[cfg(feature = "native")]
     pub fn set_ua(&mut self, user_agent: String) {
         let mut headers = HeaderMap::new();
 
@@ -84,7 +95,13 @@ impl HttpClient {
             .unwrap()
     }
 
-    #[cfg(not(feature = "workers"))]
+    /// Set the user agent used by the current client.
+    #[cfg(all(target_family = "wasm", feature = "workers"))]
+    pub fn set_ua(&mut self, user_agent: String) {
+        self.user_agent = Some(user_agent);
+    }
+
+    #[cfg(feature = "default")]
     fn http_auth(&self, req: RequestBuilder) -> RequestBuilder {
         if let Some(auth) = &self.auth {
             match auth {
@@ -94,21 +111,16 @@ impl HttpClient {
             req
         }
     }
-
-    #[cfg(feature = "workers")]
-    fn http_auth(&self, req: RequestBuilder) -> RequestBuilder {
-        todo!()
-    }
 }
 
 #[async_trait]
 impl github_rest::Requester for HttpClient {
-    #[cfg(not(feature = "workers"))]
     /// Returns the API response as a [`String`].
+    #[cfg(feature = "native")]
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + Send + Sync,
-        V: Into<Body> + Send,
+        V: Into<Self::Body> + Send,
     {
         let path = format!("https://api.github.com{}", url.path());
 
@@ -141,12 +153,12 @@ impl github_rest::Requester for HttpClient {
         Ok(txt)
     }
 
-    #[cfg(feature = "workers")]
     /// Returns the API response as a [`String`].
+    #[cfg(all(target_family = "wasm", feature = "workers"))]
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + Send + Sync,
-        V: Into<Body> + Send,
+        V: Into<Self::Body> + Send,
     {
         let path = format!("https://api.github.com{}", url.path());
 
@@ -189,7 +201,7 @@ impl github_rest::Requester for HttpClient {
     ) -> Result<A, GithubRestError>
     where
         T: Serialize + ?Sized + Send + Sync,
-        V: Into<Body> + Send,
+        V: Into<Self::Body> + Send,
     {
         let r = self.raw_req(url, query, body).await?;
         Ok(serde_json::from_str(&r)?)

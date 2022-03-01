@@ -19,12 +19,12 @@ github-rest = { path = "../github-rest" }
 github-api = { git = "https://github.com/octocat-rs/github-api" }
 
 ## Async
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["full"], optional = true }
 async-trait = "0.1.52"
 futures = "0.3"
 
 ## Webserver
-warp = { version = "0.3", optional = true}
+warp = { version = "0.3", optional = true }
 
 ## Serialization/Deserialization
 serde = { version = "^1", features = ["derive"] }
@@ -37,11 +37,12 @@ anyhow = "1.0.51"
 
 ## Util
 strum_macros = "0.23"
-reqwest = "^0.11.8"
+reqwest = { version = "^0.11.8", optional = true }
 strum = "0.23.0"
 worker = { version = "0.0.9", optional = true }
 serde_urlencoded = { version = "0.7.1", optional = true }
 
 [features]
-default = ["warp"]
+default = [ "native" ]
+native = ["warp", "tokio", "reqwest"]
 workers = ["worker", "serde_urlencoded"]

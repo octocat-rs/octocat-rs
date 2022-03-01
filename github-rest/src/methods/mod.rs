@@ -11,7 +11,7 @@ mod misc;
 mod users;
 pub(crate) mod util;
 
-///Prelude mod used for methods
+/// Prelude mod used for methods
 pub mod prelude {
     pub use github_api::end_points::*;
     pub use reqwest::Body;

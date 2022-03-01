@@ -34,6 +34,7 @@ mod tests {
         let _client = ClientBuilder::build_unconfigured();
     }
 
+    #[cfg(feature = "native")]
     #[tokio::test]
     async fn standard() {
         #[derive(Debug)]
