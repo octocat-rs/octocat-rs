@@ -7,8 +7,10 @@ use std::error::Error;
 use async_trait::async_trait;
 pub use github_api::end_points;
 use github_api::end_points::EndPoints;
+
 #[cfg(not(target_family = "wasm"))]
 use reqwest::{Body, StatusCode};
+
 use serde::{de::DeserializeOwned, Serialize};
 #[cfg(target_family = "wasm")]
 use worker::wasm_bindgen::JsValue;
@@ -26,7 +28,10 @@ pub enum GithubRestError {
     ReqwestError(reqwest::Error),
     #[cfg(target_family = "wasm")]
     WorkerError(worker::Error),
+    #[cfg(target_family = "wasm")]
+    ResponseError(u16, String),
     JsonError(serde_json::Error),
+    #[cfg(not(target_family = "wasm"))]
     ResponseError(StatusCode, String),
     AnyError(),
 }

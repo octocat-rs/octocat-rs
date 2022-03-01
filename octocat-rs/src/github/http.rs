@@ -12,7 +12,10 @@ use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
 
 #[cfg(all(target_family = "wasm", feature = "workers"))]
-use worker::{Fetch, Method, Request, RequestInit, ResponseBody::Body};
+use worker::{CfProperties, Fetch, Headers, Method, Request, RequestInit, RequestRedirect, ResponseBody::Body};
+
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use std::collections::HashMap;
 
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -23,6 +26,17 @@ use crate::github::Authorization;
 
 const USER_AGENT_PARSE_ERROR: &str = "HttpClient: Parsing user agent";
 const ACCEPT_HEADER_PARSE_ERROR: &str = "HttpClient: Parsing accept header";
+
+// TODO: Body field + actually use this to substitute RequestInit
+// Issue with some more info on why JsValue isn't `Send`: <https://github.com/rustwasm/wasm-bindgen/issues/999>
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+#[derive(Default, Debug)]
+pub struct RequestInitWrapper {
+    headers: HashMap<String, String>,
+    method: Method,
+    cf: CfProperties,
+    redirect: RequestRedirect,
+}
 
 /// An implementer of the [`Requester`] trait.
 ///
@@ -185,7 +199,7 @@ impl github_rest::Requester for HttpClient {
         match res.status_code() {
             200..=299 => {}
             _ => {
-                return Err(GithubRestError::ResponseError(res.status(), res.text().await?));
+                return Err(GithubRestError::ResponseError(res.status_code(), res.text().await?));
             }
         }
         let txt = res.text().await?;
