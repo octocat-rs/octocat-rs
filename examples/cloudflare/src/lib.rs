@@ -1,34 +1,35 @@
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use worker::{console_log, event, Date, Env, Request, Response};
+use worker::{console_log, event, Env, Request, Response, Router};
 
-use octocat_rs::{handler::EventHandler, rest::model::repositories::events::PushEvent, Client, ClientBuilder, Command};
+use octocat_rs::{
+    handler::EventHandler,
+    rest::model::{misc::events::MarketplacePurchaseEvent, repositories::events::PushEvent},
+    Client, ClientBuilder, Command,
+};
 
 mod utils;
 
 #[event(fetch)]
-pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> anyhow::Result<Response> {
-    log_request(&req);
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> worker::Result<Response> {
+    utils::set_panic_hook();
 
-    ClientBuilder::new()
-        .event_handler(Handler {})
-        .build()?
-        .handle(req)
-        .await;
+    let router = Router::new();
+    let r = router
+        .post_async("/payload", |mut req, _| async {
+            // TODO: Don't construct this every time
+            let client = ClientBuilder::new().event_handler(Handler {}).build().unwrap();
+            client.handle(req).await;
 
-    // This can't fail, so using anyhow::Result is preferred over worker::Result
-    Ok(Response::empty().unwrap())
-}
+            Response::empty()
+        })
+        .get("/worker-version", |_, ctx| {
+            let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
+            Response::ok(version)
+        });
 
-fn log_request(req: &Request) {
-    console_log!(
-        "{} - [{}], located at: {:?}, within: {}",
-        Date::now().to_string(),
-        req.path(),
-        req.cf().coordinates().unwrap_or_default(),
-        req.cf().region().unwrap_or_else(|| "unknown region".into())
-    );
+    r.run(req, env).await
 }
 
 #[derive(Debug)]
@@ -51,16 +52,17 @@ impl EventHandler for Handler {
     async fn message(&self, message: Self::Message) {
         match message {
             Message::Stuff(s) => {
-                println!("==> Message received: {s}");
+                console_log!("==> Message received: {s}");
             }
         }
     }
+
     async fn commit_event(
         &self,
         _github_client: Arc<Self::GitHubClient>,
         _commit: PushEvent,
     ) -> Command<Self::Message> {
-        println!("Commit pushed!");
+        console_log!("Commit pushed!");
 
         Command::perform(async { "Computation finished" }, Message::Stuff)
     }

@@ -14,20 +14,14 @@ pub mod util;
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
-
+    use crate::{github::ClientBuilder, handler::EventHandler, Client, Command, DefaultEventHandler};
     use async_trait::async_trait;
     use futures::FutureExt;
-
     use github_rest::{
         model::{commits::comments::CommitComment, repositories::events::PushEvent},
         GithubRestError,
     };
-
-    use crate::{
-        github::{command::Command, handler::EventHandler, ClientBuilder},
-        Client, DefaultEventHandler,
-    };
+    use std::sync::Arc;
 
     #[test]
     fn default_everything() {

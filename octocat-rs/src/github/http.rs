@@ -5,17 +5,14 @@ use async_trait::async_trait;
 use reqwest::{
     header,
     header::{HeaderMap, HeaderValue},
-    Body, RequestBuilder,
+    RequestBuilder,
 };
 use serde::{de::DeserializeOwned, Serialize};
 #[cfg(feature = "native")]
 use tokio::time::Duration;
 
 #[cfg(all(target_family = "wasm", feature = "workers"))]
-use worker::{CfProperties, Fetch, Headers, Method, Request, RequestInit, RequestRedirect, ResponseBody::Body};
-
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-use std::collections::HashMap;
+use worker::{Fetch, Method, Request, RequestInit};
 
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -26,17 +23,6 @@ use crate::github::Authorization;
 
 const USER_AGENT_PARSE_ERROR: &str = "HttpClient: Parsing user agent";
 const ACCEPT_HEADER_PARSE_ERROR: &str = "HttpClient: Parsing accept header";
-
-// TODO: Body field + actually use this to substitute RequestInit
-// Issue with some more info on why JsValue isn't `Send`: <https://github.com/rustwasm/wasm-bindgen/issues/999>
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-#[derive(Default, Debug)]
-pub struct RequestInitWrapper {
-    headers: HashMap<String, String>,
-    method: Method,
-    cf: CfProperties,
-    redirect: RequestRedirect,
-}
 
 /// An implementer of the [`Requester`] trait.
 ///
@@ -176,35 +162,31 @@ impl github_rest::Requester for HttpClient {
     {
         let path = format!("https://api.github.com{}", url.path());
 
-        let mut req: Request = match url.method() {
-            Methods::Get => Request::new(path.as_str(), Method::Get).unwrap(),
-            Methods::Post => Request::new(path.as_str(), Method::Post).unwrap(),
-            Methods::Patch => Request::new(path.as_str(), Method::Patch).unwrap(),
-            Methods::Delete => Request::new(path.as_str(), Method::Delete).unwrap(),
-            Methods::Put => Request::new(path.as_str(), Method::Put).unwrap(),
-        };
+        futures::executor::block_on(async move {
+            let mut init = RequestInit::new();
+            init.with_method(BadWrapper::new(url.method()).into());
 
-        let _init = RequestInit::new();
-
-        if let Some(query) = query {
-            // TODO: Query
-        }
-
-        if let Some(body) = body {
-            // TODO: Body
-        }
-
-        let mut res = Fetch::Request(req).send().await?;
-
-        match res.status_code() {
-            200..=299 => {}
-            _ => {
-                return Err(GithubRestError::ResponseError(res.status_code(), res.text().await?));
+            if let Some(_query) = query {
+                // TODO: Query
             }
-        }
-        let txt = res.text().await?;
 
-        Ok(txt)
+            if let Some(body) = body {
+                init.with_body(Some(body.into()));
+            }
+
+            let req = Request::new_with_init(path.as_str(), &init)?;
+
+            let mut res = Fetch::Request(req).send().await?;
+
+            match res.status_code() {
+                200..=299 => {}
+                _ => {
+                    return Err(GithubRestError::ResponseError(res.status_code(), res.text().await?));
+                }
+            }
+
+            Ok(res.text().await?)
+        })
     }
 
     async fn req<T, V, A: DeserializeOwned>(
@@ -219,5 +201,30 @@ impl github_rest::Requester for HttpClient {
     {
         let r = self.raw_req(url, query, body).await?;
         Ok(serde_json::from_str(&r)?)
+    }
+}
+
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+struct BadWrapper<T> {
+    pub(crate) inner: T,
+}
+
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+impl<T> BadWrapper<T> {
+    fn new(inner: T) -> Self {
+        BadWrapper { inner }
+    }
+}
+
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+impl From<BadWrapper<Methods>> for Method {
+    fn from(v: BadWrapper<Methods>) -> Self {
+        match v.inner {
+            Methods::Get => Method::Get,
+            Methods::Post => Method::Post,
+            Methods::Patch => Method::Patch,
+            Methods::Delete => Method::Delete,
+            Methods::Put => Method::Put,
+        }
     }
 }

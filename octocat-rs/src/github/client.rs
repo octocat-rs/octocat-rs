@@ -13,6 +13,9 @@ use tokio::sync::mpsc;
 #[cfg(feature = "native")]
 use warp::Filter;
 
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use std::str::FromStr;
+
 use github_rest::{
     model::{
         apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
@@ -69,6 +72,7 @@ where
     T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     handler: T,
+    // TODO: Wasm support for this field
     max_payload_size: u64,
     http_client: HttpClient,
 }
@@ -302,13 +306,12 @@ where
 {
     #[cfg(all(target_family = "wasm", feature = "workers"))]
     pub async fn handle(self, mut req: worker::Request) {
-        let _ = self.run().await.expect("Starting application: User-defined code");
-
         let self_arc = Arc::new(self);
         let thread_self = self_arc.clone();
         let thread_self_2 = self_arc.clone();
+        worker::console_log!("{:#?}", &req.headers().get("X-GitHub-Event"));
 
-        let ev = serde_json::from_str(&req.headers().get("x-github-event").unwrap().unwrap())
+        let ev = EventTypes::from_str(req.headers().get("X-GitHub-Event").unwrap().unwrap().as_str())
             .expect("Failed to parse headers");
 
         macro_rules! event_push {
