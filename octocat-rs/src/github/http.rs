@@ -12,7 +12,11 @@ use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
 
 #[cfg(all(target_family = "wasm", feature = "workers"))]
-use worker::{Fetch, Method, Request, RequestInit, Headers};
+use base64::write::EncoderWriter as Base64Encoder;
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use std::io::Write;
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use worker::{Fetch, Headers, Method, Request, RequestInit};
 
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -101,7 +105,7 @@ impl HttpClient {
         self.user_agent = Some(user_agent);
     }
 
-    #[cfg(feature = "default")]
+    #[cfg(feature = "native")]
     fn http_auth(&self, req: RequestBuilder) -> RequestBuilder {
         if let Some(auth) = &self.auth {
             match auth {
@@ -174,6 +178,28 @@ impl github_rest::Requester for HttpClient {
             headers
                 .append("accept", "application/vnd.github.v3+json")
                 .expect(ACCEPT_HEADER_PARSE_ERROR);
+
+            if let Some(auth) = &self.auth {
+                match auth {
+                    Authorization::PersonalToken { username, token } => {
+                        let mut header_value = b"Basic ".to_vec();
+
+                        {
+                            let mut encoder = Base64Encoder::new(&mut header_value, base64::STANDARD);
+
+                            write!(encoder, "{username}:").unwrap();
+                            write!(encoder, "{token}").unwrap();
+                        }
+
+                        headers
+                            .append(
+                                "authorization",
+                                std::str::from_utf8(&header_value).expect("Failed to parse header value"),
+                            )
+                            .unwrap();
+                    }
+                }
+            }
 
             if let Some(ua) = &self.user_agent {
                 headers.append("user-agent", ua).expect(USER_AGENT_PARSE_ERROR);

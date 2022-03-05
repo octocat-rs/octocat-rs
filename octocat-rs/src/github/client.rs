@@ -14,6 +14,10 @@ use tokio::sync::mpsc;
 use warp::Filter;
 
 #[cfg(all(target_family = "wasm", feature = "workers"))]
+use hmac::{Hmac, Mac};
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use sha2::Sha256;
+#[cfg(all(target_family = "wasm", feature = "workers"))]
 use std::str::FromStr;
 
 use github_rest::{
@@ -48,6 +52,9 @@ use github_rest::{
 };
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
+
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+type HmacSha256 = Hmac<Sha256>;
 
 #[async_trait]
 pub trait GitHubClient: Requester + Sized {
@@ -305,7 +312,7 @@ where
     T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync + 'static,
 {
     #[cfg(all(target_family = "wasm", feature = "workers"))]
-    pub async fn handle(self, mut req: worker::Request) {
+    pub async fn handle(self, mut req: worker::Request) -> Option<(&'static str, u16)> {
         let self_arc = Arc::new(self);
         let thread_self = self_arc.clone();
         let thread_self_2 = self_arc.clone();
@@ -313,6 +320,24 @@ where
 
         let ev = EventTypes::from_str(req.headers().get("X-GitHub-Event").unwrap().unwrap().as_str())
             .expect("Failed to parse headers");
+
+        if let Some(secret) = self_arc.handler.listener_secret() {
+            match req.headers().get("X-Hub-Signature-256").unwrap() {
+                Some(hash) => {
+                    if !secret.is_empty() {
+                        let mut mac = HmacSha256::new_from_slice(secret).unwrap();
+                        mac.update(req.text().await.unwrap().as_bytes());
+
+                        let result = mac.finalize().into_bytes();
+
+                        if !result[..].eq_ignore_ascii_case(&hash.as_bytes()[..]) {
+                            return Some(("Signatures don't match!", 400));
+                        }
+                    }
+                }
+                None => return Some(("Missing X-Hub-Signature-256 header!", 401)),
+            }
+        }
 
         macro_rules! event_push {
             ($f:ident, $t:ty) => {
@@ -333,6 +358,8 @@ where
         while let Some(c) = cmd.pop() {
             thread_self_2.event_handler().message(c.await).await;
         }
+
+        None
     }
 
     #[cfg(feature = "warp")]

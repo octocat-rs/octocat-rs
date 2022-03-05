@@ -13,12 +13,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> worker::Resu
 
     let router = Router::new();
     let r = router
-        .post_async("/payload", |mut req, _| async {
+        .post_async("/payload", |req, _| async {
             // TODO: Don't construct this every time
             let client = ClientBuilder::new().event_handler(Handler {}).build().unwrap();
-            client.handle(req).await;
 
-            Response::empty()
+            match client.handle(req).await {
+                Some((msg, code)) => Response::error(msg, code),
+                None => Response::empty(),
+            }
         })
         .get("/worker-version", |_, ctx| {
             let version = ctx.var("WORKERS_RS_VERSION")?.to_string();

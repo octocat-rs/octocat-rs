@@ -52,6 +52,11 @@ pub trait EventHandler {
         "/payload"
     }
 
+    /// The webhook secret. Defaults to none.
+    fn listener_secret(&self) -> Option<&[u8]> {
+        None
+    }
+
     async fn message(&self, message: Self::Message) {
         {}
     }
