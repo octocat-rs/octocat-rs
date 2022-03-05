@@ -145,7 +145,6 @@ pub struct CodeScanningAlert {
     pub url: String,
     pub html_url: String,
     pub instances: Vec<Value>,
-    // TODO: Find possible values
     pub state: String,
     // Don't know if it's unix millis or DateTime
     pub fixed_at: Option<Value>,

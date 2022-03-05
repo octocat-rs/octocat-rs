@@ -12,7 +12,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use tokio::time::Duration;
 
 #[cfg(all(target_family = "wasm", feature = "workers"))]
-use worker::{Fetch, Method, Request, RequestInit};
+use worker::{Fetch, Method, Request, RequestInit, Headers};
 
 use github_rest::{
     methods::prelude::{EndPoints, Methods},
@@ -160,15 +160,26 @@ impl github_rest::Requester for HttpClient {
         T: Serialize + ?Sized + Send + Sync,
         V: Into<Self::Body> + Send,
     {
-        let path = format!("https://api.github.com{}", url.path());
+        let mut path = format!("https://api.github.com{}", url.path());
+
+        if let Some(q) = query {
+            path.push_str(serde_urlencoded::to_string(q).expect("Invalid query").as_str());
+        }
 
         futures::executor::block_on(async move {
             let mut init = RequestInit::new();
             init.with_method(BadWrapper::new(url.method()).into());
 
-            if let Some(_query) = query {
-                // TODO: Query
+            let mut headers = Headers::new();
+            headers
+                .append("accept", "application/vnd.github.v3+json")
+                .expect(ACCEPT_HEADER_PARSE_ERROR);
+
+            if let Some(ua) = &self.user_agent {
+                headers.append("user-agent", ua).expect(USER_AGENT_PARSE_ERROR);
             }
+
+            init.with_headers(headers);
 
             if let Some(body) = body {
                 init.with_body(Some(body.into()));

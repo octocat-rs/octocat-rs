@@ -3,11 +3,7 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use worker::{console_log, event, Env, Request, Response, Router};
 
-use octocat_rs::{
-    handler::EventHandler,
-    rest::model::{misc::events::MarketplacePurchaseEvent, repositories::events::PushEvent},
-    Client, ClientBuilder, Command,
-};
+use octocat_rs::{handler::EventHandler, rest::model::repositories::events::PushEvent, Client, ClientBuilder, Command};
 
 mod utils;
 

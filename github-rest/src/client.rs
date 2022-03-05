@@ -2,13 +2,11 @@
 //! own client. you can still do this though by implementing the [`Requester`]
 //! trait
 
-use std::fmt::Display;
-//TODO: lock this behind a feature
-//TODO: Replace all Strings with T: into<String>
 use async_trait::async_trait;
 use github_api::end_points::{EndPoints, Methods};
-use reqwest::{header, Body};
+use reqwest::header;
 use serde::{de::DeserializeOwned, Serialize};
+use std::fmt::Display;
 
 use crate::{GithubRestError, Requester};
 

@@ -49,7 +49,6 @@ pub mod nested {
         Unlocked,
     }
 
-    // TODO: Move this to some type of shared module as `IssueEvent` uses it
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct IssueChanges {
         pub title: Option<Change>,
