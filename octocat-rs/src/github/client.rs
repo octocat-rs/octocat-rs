@@ -322,6 +322,7 @@ where
         let ev = EventTypes::from_str(req.headers().get("X-GitHub-Event").unwrap().unwrap().as_str())
             .expect("Failed to parse headers");
 
+        // TODO: Native support for this.
         if let Some(secret) = self_arc.handler.listener_secret() {
             match req.headers().get("X-Hub-Signature-256").unwrap() {
                 Some(hash) => {
