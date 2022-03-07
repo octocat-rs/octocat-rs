@@ -10,16 +10,18 @@ use github_rest::model::{
     commits::events::{CommitCommentEvent, StatusEvent},
     discussions::events::{DiscussionCommentEvent, DiscussionEvent},
     issues::events::{IssueCommentEvent, IssueEvent},
-    misc::events::{DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, SponsorshipEvent},
+    misc::events::{
+        DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, MetaEvent, SponsorshipEvent,
+    },
     organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
     repositories::{
         events::{
-            BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MetaEvent,
-            MilestoneEvent, PackageEvent, PingEvent, ProjectCardEvent, ProjectColumnEvent, ProjectEvent, PublicEvent,
-            PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
-            RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
+            BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MilestoneEvent,
+            PackageEvent, PingEvent, ProjectCardEvent, ProjectColumnEvent, ProjectEvent, PublicEvent, PushEvent,
+            RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent, RepositoryVulnerabilityAlertEvent,
+            SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
         },
         security_advisory::events::SecurityAdvisoryEvent,
         wiki::events::GollumEvent,

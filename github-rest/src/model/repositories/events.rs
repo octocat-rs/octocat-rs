@@ -448,22 +448,6 @@ pub struct ProjectColumnChanges {
     pub name: Option<Change>,
 }
 
-/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#meta>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct MetaEvent {
-    pub action: MetaAction,
-    pub hook_id: usize,
-    pub hook: Value,
-    #[serde(flatten)]
-    pub event_info: RepoEventInfo,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[serde(rename_all = "snake_case")]
-pub enum MetaAction {
-    Deleted,
-}
-
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PackageEvent {
@@ -509,5 +493,4 @@ repo_origin!(WatchEvent);
 repo_origin!(PushEvent);
 repo_origin!(StarEvent);
 repo_origin!(ForkEvent);
-repo_origin!(MetaEvent);
 repo_origin!(PingEvent);

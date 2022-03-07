@@ -28,14 +28,14 @@ use github_rest::{
         event_types::EventTypes,
         issues::events::{IssueCommentEvent, IssueEvent},
         misc::events::{
-            DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, SponsorshipEvent,
+            DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, MetaEvent, SponsorshipEvent,
         },
         organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
         pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
         repositories::{
             events::{
-                BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent, MetaEvent,
+                BranchProtectionRuleEvent, CodeScanningAlertEvent, DeployKeyEvent, ForkEvent, MemberEvent,
                 MilestoneEvent, PackageEvent, PingEvent, ProjectCardEvent, ProjectColumnEvent, ProjectEvent,
                 PublicEvent, PushEvent, RepositoryDispatchEvent, RepositoryEvent, RepositoryImportEvent,
                 RepositoryVulnerabilityAlertEvent, SecretScanningAlertEvent, StarEvent, TeamAddEvent, WatchEvent,
