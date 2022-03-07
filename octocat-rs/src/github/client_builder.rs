@@ -14,6 +14,7 @@ where
     handler: Option<T>,
     auth: Option<Authorization>,
     user_agent: Option<String>,
+    #[cfg(feature = "native")]
     payload_size: Option<u64>,
 }
 
@@ -25,6 +26,7 @@ where
     pub fn new() -> Self {
         Self::default()
     }
+
     /// Adds an [`EventHandler`] to the current builder.
     pub fn event_handler(mut self, event_handler: T) -> Self {
         self.handler = Some(event_handler);
@@ -33,6 +35,7 @@ where
 
     /// Sets the maximum payload size that the listener can receive from GitHub
     /// in MiB. Default: 8.
+    #[cfg(feature = "native")]
     pub fn payload_size(mut self, size: u64) -> Self {
         self.payload_size = Some(size);
         self
@@ -110,6 +113,7 @@ where
             self.handler.unwrap(),
             self.auth,
             self.user_agent,
+            #[cfg(feature = "native")]
             self.payload_size,
         ))
     }
@@ -129,6 +133,7 @@ impl ClientBuilder<DefaultEventHandler> {
             DefaultEventHandler::new(),
             self.auth,
             self.user_agent,
+            #[cfg(feature = "native")]
             self.payload_size,
         ))
     }
@@ -142,6 +147,7 @@ where
         Self {
             handler: None,
             auth: None,
+            #[cfg(feature = "native")]
             payload_size: None,
             user_agent: None,
         }

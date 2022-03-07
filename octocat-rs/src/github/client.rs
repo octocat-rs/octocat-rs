@@ -79,7 +79,7 @@ where
     T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     handler: T,
-    // TODO: Wasm support for this field
+    #[cfg(feature = "native")]
     max_payload_size: u64,
     http_client: HttpClient,
 }
@@ -101,6 +101,7 @@ where
         &self.handler
     }
 
+    #[cfg(feature = "native")]
     fn payload_size(&self) -> u64 {
         self.max_payload_size
     }
@@ -421,10 +422,19 @@ where
     }
 
     /// Creates a new [`Client`].
+    #[cfg(feature = "native")]
     pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>, payload_size: Option<u64>) -> Self {
         Self {
             handler,
             max_payload_size: payload_size.unwrap_or(1024 * 8192),
+            http_client: HttpClient::new(auth, user_agent),
+        }
+    }
+
+    #[cfg(all(target_family = "wasm", feature = "workers"))]
+    pub fn new(handler: T, auth: Option<Authorization>, user_agent: Option<String>) -> Self {
+        Self {
+            handler,
             http_client: HttpClient::new(auth, user_agent),
         }
     }
@@ -440,6 +450,7 @@ impl Default for Client<DefaultEventHandler> {
     fn default() -> Client<DefaultEventHandler> {
         Client {
             handler: DefaultEventHandler,
+            #[cfg(feature = "native")]
             max_payload_size: 1024 * 8192,
             http_client: HttpClient::new(None, None),
         }
