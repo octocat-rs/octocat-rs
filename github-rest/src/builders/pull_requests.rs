@@ -45,7 +45,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_pulls_builder() {
-        // TODO: Fix the error in the model
         let r = GetPullsBuilder::new()
             .owner("microsoft")
             .repo("vscode")
