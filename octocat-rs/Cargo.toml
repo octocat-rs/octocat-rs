@@ -6,7 +6,7 @@ authors = [
     "Proudmuslim <proudmuslim-dev@protonmail.com>",
     "Tricked <tricked@duck.com>",
 ]
-#license = ""
+license = "MIT OR Apache-2.0"
 description = """
 (WIP) A GitHub API client.
 """
