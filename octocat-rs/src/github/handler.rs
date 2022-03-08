@@ -45,19 +45,20 @@ pub trait EventHandler {
     type GitHubClient: GitHubClient + Send + Sync;
 
     /// Utility function for setting the port used by the webhook.
+    #[cfg(feature = "native")]
     fn listener_port(&self) -> u16 {
         8080
     }
 
     /// The route at which the listener should listen for payloads from GitHub.
+    #[cfg(feature = "native")]
     fn route(&self) -> &'static str {
-        "/payload"
+        "payload"
     }
 
     /// The webhook secret. Defaults to none.
-    fn listener_secret(&self) -> Option<&[u8]> {
-        None
-    }
+    #[cfg(feature = "secret")]
+    fn listener_secret(&self) -> &[u8];
 
     async fn message(&self, message: Self::Message) {
         {}

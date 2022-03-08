@@ -1,6 +1,9 @@
 //! Contains the [`GitHubClient`] trait and its default implementation
 //! ([`Client`]).
 
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use std::str::FromStr;
+
 use std::{fmt::Debug, sync::Arc};
 
 use anyhow::Result;
@@ -8,17 +11,15 @@ use async_trait::async_trait;
 use github_api::end_points::EndPoints;
 use serde::{de::DeserializeOwned, Serialize};
 
+#[cfg(feature = "secret")]
+use hmac::{Hmac, Mac};
+#[cfg(feature = "secret")]
+use sha2::Sha256;
+
 #[cfg(feature = "native")]
 use tokio::sync::mpsc;
 #[cfg(feature = "native")]
 use warp::Filter;
-
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-use hmac::{Hmac, Mac};
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-use sha2::Sha256;
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-use std::str::FromStr;
 
 use github_rest::{
     model::{
@@ -53,8 +54,16 @@ use github_rest::{
 
 use crate::github::{handler::EventHandler, util::Authorization, DefaultEventHandler, HttpClient};
 
-#[cfg(all(target_family = "wasm", feature = "workers"))]
+#[cfg(all(feature = "native", feature = "secret"))]
+use crate::Command;
+
+#[cfg(feature = "secret")]
 type HmacSha256 = Hmac<Sha256>;
+
+const GITHUB_EVENT_HEADER: &str = "X-GitHub-Event";
+
+#[cfg(feature = "secret")]
+const GITHUB_SIGNATURE_HEADER: &str = "X-Hub-Signature-256";
 
 #[async_trait]
 pub trait GitHubClient: Requester + Sized {
@@ -317,28 +326,29 @@ where
         let self_arc = Arc::new(self);
         let thread_self = self_arc.clone();
         let thread_self_2 = self_arc.clone();
-        worker::console_log!("{:#?}", &req.headers().get("X-GitHub-Event"));
+        worker::console_log!("{:#?}", &req.headers().get(GITHUB_EVENT_HEADER));
 
-        let ev = EventTypes::from_str(req.headers().get("X-GitHub-Event").unwrap().unwrap().as_str())
+        let ev = EventTypes::from_str(req.headers().get(GITHUB_EVENT_HEADER).unwrap().unwrap().as_str())
             .expect("Failed to parse headers");
 
-        // TODO: Native support for this.
-        if let Some(secret) = self_arc.handler.listener_secret() {
-            match req.headers().get("X-Hub-Signature-256").unwrap() {
-                Some(hash) => {
-                    if !secret.is_empty() {
-                        let mut mac = HmacSha256::new_from_slice(secret).unwrap();
-                        mac.update(req.text().await.unwrap().as_bytes());
+        #[cfg(feature = "secret")]
+        let secret = self_arc.handler.listener_secret();
 
-                        let result = mac.finalize().into_bytes();
+        #[cfg(feature = "secret")]
+        match req.headers().get(GITHUB_SIGNATURE_HEADER).unwrap() {
+            Some(hash) => {
+                if !secret.is_empty() {
+                    let mut mac = HmacSha256::new_from_slice(secret).unwrap();
+                    mac.update(req.text().await.unwrap().as_bytes());
 
-                        if !result[..].eq_ignore_ascii_case(&hash.as_bytes()[..]) {
-                            return Some(("Signatures don't match!", 400));
-                        }
+                    let result = mac.finalize().into_bytes();
+
+                    if !result[..].eq_ignore_ascii_case(&hash.as_bytes()[..]) {
+                        return Some(("Signatures don't match!", 400));
                     }
                 }
-                None => return Some(("Missing X-Hub-Signature-256 header!", 401)),
             }
+            None => return Some(("Missing X-Hub-Signature-256 header!", 401)),
         }
 
         macro_rules! event_push {
@@ -364,7 +374,7 @@ where
         None
     }
 
-    #[cfg(feature = "warp")]
+    #[cfg(feature = "native")]
     pub async fn start(self) {
         let _ = self.run().await.expect("Starting application: User-defined code");
 
@@ -375,10 +385,54 @@ where
 
         let event_type = warp::post()
             .and(warp::path(self_arc.handler.route()))
-            .and(warp::header::<EventTypes>("X-GitHub-Event"))
+            .and(warp::header::<EventTypes>(GITHUB_EVENT_HEADER))
             .and(warp::body::content_length_limit(self_arc.max_payload_size)) // 8Kb
             .and(warp::body::json());
 
+        #[cfg(feature = "secret")]
+        let event_type = event_type.and(warp::header::<String>(GITHUB_SIGNATURE_HEADER));
+
+        #[cfg(feature = "secret")]
+        let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value, hash: String| {
+            let secret = thread_self.event_handler().listener_secret();
+
+            if !secret.is_empty() {
+                let mut mac = HmacSha256::new_from_slice(secret).unwrap();
+                mac.update(body.to_string().as_bytes());
+
+                let result = mac.finalize().into_bytes();
+
+                if !result[..].eq_ignore_ascii_case(&hash.as_bytes()[..]) {
+                    return "Invalid hash";
+                }
+            }
+            macro_rules! event_push {
+                ($f:ident, $t:ty) => {
+                    thread_self
+                        .event_handler()
+                        .$f(
+                            thread_self.clone(),
+                            serde_json::from_str::<$t>(body.to_string().as_str()).expect("Failed to parse json"),
+                        )
+                        .await
+                };
+            }
+
+            let ev_h = async {
+                let user_cmd = event_handle!(ev);
+
+                if !user_cmd.is_empty() {
+                    let _ = &tx.send(user_cmd).await;
+                }
+            };
+
+            futures::executor::block_on(ev_h);
+
+            // Needed due to trait bounds
+            ""
+        });
+
+        #[cfg(not(feature = "secret"))]
         let routes = event_type.map(move |ev: EventTypes, body: serde_json::Value| {
             macro_rules! event_push {
                 ($f:ident, $t:ty) => {

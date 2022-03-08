@@ -43,10 +43,6 @@ impl EventHandler for Handler {
     type Message = Message;
     type GitHubClient = Client<Self>;
 
-    fn listener_port(&self) -> u16 {
-        2022
-    }
-
     async fn message(&self, message: Self::Message) {
         match message {
             Message::Stuff(s) => {
