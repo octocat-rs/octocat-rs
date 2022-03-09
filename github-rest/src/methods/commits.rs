@@ -187,13 +187,13 @@ where
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequest;
+    use crate::client::DefaultRequester;
 
     use super::*;
 
     #[tokio::test]
     async fn test_get_commits() {
-        let reqester = DefaultRequest::new_none();
+        let reqester = DefaultRequester::new_none();
 
         let r = get_commits(&reqester, "microsoft", "vscode", None).await.unwrap();
         println!("{:#?}", r)

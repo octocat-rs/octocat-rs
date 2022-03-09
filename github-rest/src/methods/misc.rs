@@ -94,20 +94,20 @@ where
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequest;
+    use crate::client::DefaultRequester;
 
     use super::*;
 
     #[tokio::test]
     async fn test_zen() {
-        let reqester = DefaultRequest::new_none();
+        let reqester = DefaultRequester::new_none();
         let r = zen(&reqester).await.unwrap();
         println!("{}", r)
     }
 
     #[tokio::test]
     async fn test_api_info() {
-        let reqester = DefaultRequest::new_none();
+        let reqester = DefaultRequester::new_none();
         let r = api_info(&reqester).await.unwrap();
         println!("{:#?}", r)
     }

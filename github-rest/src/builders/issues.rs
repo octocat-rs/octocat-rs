@@ -92,13 +92,13 @@ impl Builder for CreateIssueBuilder {
 #[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequest;
+    use crate::client::DefaultRequester;
 
     use super::*;
 
     #[tokio::test]
     async fn test_get_issues_builder() {
-        let requester = DefaultRequest::new("TOKEN");
+        let requester = DefaultRequester::new("TOKEN");
 
         let r = GetIssuesBuilder::new()
             .owner("microsoft")
@@ -115,7 +115,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_issue_builder() {
-        let requester = DefaultRequest::new("TOKEN");
+        let requester = DefaultRequester::new("TOKEN");
 
         let r = CreateIssueBuilder::new()
             .owner("octocat-rs")

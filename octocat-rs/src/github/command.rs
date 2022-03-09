@@ -1,4 +1,8 @@
-//! Contains the [`Command`] interface used in the event [`handler`].
+//! Contains the [`Command`] interface used in the [`handler`] module by the
+//! [`EventHandler`] trait.
+//!
+//! [`handler`]: crate::handler
+//! [`EventHandler`]: crate::handler::EventHandler
 
 use std::fmt::Debug;
 

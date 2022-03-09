@@ -6,9 +6,11 @@ use crate::{
         issues::milestones::Milestone,
         organizations::Team,
         prelude::*,
-        pull_requests::events::nested::Change,
         repositories::{
-            events::nested::{Commit, HeadCommit, Pusher},
+            events::nested::{
+                BranchProtectionRule, Commit, HeadCommit, MemberChanges, MilestoneChanges, ProjectCardChanges,
+                ProjectChanges, ProjectColumnChanges, Pusher,
+            },
             CodeScanningAlert, DeployKey, Project, ProjectCard, ProjectColumn, Repository,
         },
         user::User,
@@ -125,46 +127,6 @@ impl PushEvent {
     }
 }
 
-pub mod nested {
-    use crate::model::{prelude::*, user::SimpleUser};
-
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-    pub struct Pusher {
-        pub name: String,
-        pub email: String,
-    }
-
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-    pub struct Commit {
-        pub id: String,
-        pub tree_id: String,
-        pub distinct: bool,
-        pub message: String,
-        pub timestamp: String,
-        pub url: String,
-        pub author: SimpleUser,
-        pub committer: SimpleUser,
-        pub added: Vec<String>,
-        pub removed: Vec<Value>,
-        pub modified: Vec<Value>,
-    }
-
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-    pub struct HeadCommit {
-        pub id: String,
-        pub tree_id: String,
-        pub distinct: bool,
-        pub message: String,
-        pub timestamp: String,
-        pub url: String,
-        pub author: SimpleUser,
-        pub committer: SimpleUser,
-        pub added: Vec<String>,
-        pub removed: Vec<Value>,
-        pub modified: Vec<Value>,
-    }
-}
-
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#branch_protection_rule>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BranchProtectionRuleEvent {
@@ -181,42 +143,6 @@ pub enum BranchProtectionRuleAction {
     Created,
     Edited,
     Deleted,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BranchProtectionRule {
-    pub id: usize,
-    pub repository_id: usize,
-    pub name: String,
-    pub created_at: String,
-    pub updated_at: String,
-    pub pull_request_reviews_enforcement_level: MultiLevelConfiguration,
-    pub required_approving_review_count: usize,
-    pub dismiss_stale_reviews_on_push: bool,
-    pub require_code_owner_review: bool,
-    pub authorized_dismissal_actors_only: bool,
-    pub ignore_approvals_from_contributors: bool,
-    pub required_status_checks: Vec<String>,
-    pub required_status_checks_enforcement_level: MultiLevelConfiguration,
-    pub strict_required_status_checks_policy: bool,
-    pub signature_requirement_enforcement_level: String,
-    pub linear_history_requirement_enforcement_level: MultiLevelConfiguration,
-    pub admin_enforced: bool,
-    pub allow_force_pushes_enforcement_level: MultiLevelConfiguration,
-    pub allow_deletions_enforcement_level: MultiLevelConfiguration,
-    pub merge_queue_enforcement_level: MultiLevelConfiguration,
-    pub required_deployments_enforcement_level: MultiLevelConfiguration,
-    pub required_conversation_resolution_level: MultiLevelConfiguration,
-    pub authorized_actors_only: bool,
-    pub authorized_actor_names: Vec<String>,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[serde(rename_all = "snake_case")]
-pub enum MultiLevelConfiguration {
-    Off,
-    NonAdmins,
-    Everyone,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star>
@@ -314,13 +240,6 @@ pub struct MilestoneEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct MilestoneChanges {
-    pub title: Option<Change>,
-    pub description: Option<Change>,
-    pub due_on: Option<Change>,
-}
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MilestoneAction {
@@ -358,11 +277,6 @@ pub struct MemberEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct MemberChanges {
-    pub old_permission: Option<Change>,
-}
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MemberAction {
@@ -391,12 +305,6 @@ pub enum ProjectAction {
     Deleted,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ProjectChanges {
-    pub name: Option<Change>,
-    pub body: Option<Change>,
-}
-
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_card>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectCardEvent {
@@ -418,11 +326,6 @@ pub enum ProjectCardAction {
     Deleted,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ProjectCardChanges {
-    pub note: Option<Change>,
-}
-
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_column>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectColumnEvent {
@@ -441,11 +344,6 @@ pub enum ProjectColumnAction {
     Edited,
     Moved,
     Deleted,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ProjectColumnChanges {
-    pub name: Option<Change>,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package>
@@ -472,6 +370,110 @@ pub struct PingEvent {
     pub hook: Value,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
+}
+
+pub mod nested {
+    use crate::model::{prelude::*, pull_requests::events::nested::Change, user::SimpleUser};
+
+    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    pub struct Pusher {
+        pub name: String,
+        pub email: String,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    pub struct Commit {
+        pub id: String,
+        pub tree_id: String,
+        pub distinct: bool,
+        pub message: String,
+        pub timestamp: String,
+        pub url: String,
+        pub author: SimpleUser,
+        pub committer: SimpleUser,
+        pub added: Vec<String>,
+        pub removed: Vec<Value>,
+        pub modified: Vec<Value>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    pub struct HeadCommit {
+        pub id: String,
+        pub tree_id: String,
+        pub distinct: bool,
+        pub message: String,
+        pub timestamp: String,
+        pub url: String,
+        pub author: SimpleUser,
+        pub committer: SimpleUser,
+        pub added: Vec<String>,
+        pub removed: Vec<Value>,
+        pub modified: Vec<Value>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct BranchProtectionRule {
+        pub id: usize,
+        pub repository_id: usize,
+        pub name: String,
+        pub created_at: String,
+        pub updated_at: String,
+        pub pull_request_reviews_enforcement_level: MultiLevelConfiguration,
+        pub required_approving_review_count: usize,
+        pub dismiss_stale_reviews_on_push: bool,
+        pub require_code_owner_review: bool,
+        pub authorized_dismissal_actors_only: bool,
+        pub ignore_approvals_from_contributors: bool,
+        pub required_status_checks: Vec<String>,
+        pub required_status_checks_enforcement_level: MultiLevelConfiguration,
+        pub strict_required_status_checks_policy: bool,
+        pub signature_requirement_enforcement_level: String,
+        pub linear_history_requirement_enforcement_level: MultiLevelConfiguration,
+        pub admin_enforced: bool,
+        pub allow_force_pushes_enforcement_level: MultiLevelConfiguration,
+        pub allow_deletions_enforcement_level: MultiLevelConfiguration,
+        pub merge_queue_enforcement_level: MultiLevelConfiguration,
+        pub required_deployments_enforcement_level: MultiLevelConfiguration,
+        pub required_conversation_resolution_level: MultiLevelConfiguration,
+        pub authorized_actors_only: bool,
+        pub authorized_actor_names: Vec<String>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[serde(rename_all = "snake_case")]
+    pub enum MultiLevelConfiguration {
+        Off,
+        NonAdmins,
+        Everyone,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct MemberChanges {
+        pub old_permission: Option<Change>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct MilestoneChanges {
+        pub title: Option<Change>,
+        pub description: Option<Change>,
+        pub due_on: Option<Change>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct ProjectChanges {
+        pub name: Option<Change>,
+        pub body: Option<Change>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct ProjectCardChanges {
+        pub note: Option<Change>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct ProjectColumnChanges {
+        pub name: Option<Change>,
+    }
 }
 
 repo_origin!(RepositoryVulnerabilityAlertEvent);

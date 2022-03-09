@@ -5,10 +5,7 @@ use crate::model::{
         events::{CommentChanges, IssueCommentAction},
     },
     prelude::*,
-    pull_requests::{
-        events::nested::{IssueChanges, PullRequestAction},
-        PullRequest,
-    },
+    pull_requests::{events::nested::IssueChanges, PullRequest},
 };
 
 // TODO: Convenience method to get changes if the action is `Edited`.
@@ -23,42 +20,27 @@ pub struct PullRequestEvent {
     pub event_info: RepoEventInfo,
 }
 
-pub mod nested {
-    use crate::model::prelude::*;
-
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-    #[serde(rename_all = "snake_case")]
-    pub enum PullRequestAction {
-        Assigned,
-        AutoMergeDisabled,
-        AutoMergeEnabled,
-        // = merged/closed
-        Closed,
-        ConvertedToDraft,
-        Edited,
-        Labeled,
-        Locked,
-        Opened,
-        ReadyForReview,
-        Reopened,
-        ReviewRequested,
-        ReviewRequestRemoved,
-        Synchronize,
-        Unassigned,
-        Unlabeled,
-        Unlocked,
-    }
-
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct IssueChanges {
-        pub title: Option<Change>,
-        pub body: Option<Change>,
-    }
-
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct Change {
-        pub from: String,
-    }
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum PullRequestAction {
+    Assigned,
+    AutoMergeDisabled,
+    AutoMergeEnabled,
+    // = merged/closed
+    Closed,
+    ConvertedToDraft,
+    Edited,
+    Labeled,
+    Locked,
+    Opened,
+    ReadyForReview,
+    Reopened,
+    ReviewRequested,
+    ReviewRequestRemoved,
+    Synchronize,
+    Unassigned,
+    Unlabeled,
+    Unlocked,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review>
@@ -89,6 +71,21 @@ pub struct PullRequestReviewCommentEvent {
     pub comment: IssueComment,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
+}
+
+pub mod nested {
+    use crate::model::prelude::*;
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct IssueChanges {
+        pub title: Option<Change>,
+        pub body: Option<Change>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Change {
+        pub from: String,
+    }
 }
 
 repo_origin!(PullRequestEvent);

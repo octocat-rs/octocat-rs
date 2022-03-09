@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
             }
         }
 
-        async fn commit_event(
+        async fn push_event(
             &self,
             _github_client: Arc<Self::GitHubClient>,
             _commit: PushEvent,

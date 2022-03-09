@@ -33,9 +33,9 @@ use github_rest::model::{
 
 use crate::{client::GitHubClient, github::command::Command, Client};
 
-/// An event handler that is used in all clients. For end users, this is passed
-/// to a [`ClientBuilder`] instance when creating the client in your main
-/// function.
+/// An event handler that is used in all clients. For end users, an implementer
+/// of this trait is passed to a [`ClientBuilder`] instance when creating the
+/// client in your main function.
 ///
 /// [`ClientBuilder`]: crate::github::ClientBuilder
 #[async_trait]
@@ -68,7 +68,7 @@ pub trait EventHandler {
     async fn app_authorization_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        app_event: AppAuthorizationEvent,
+        app_authorization_event: AppAuthorizationEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -93,7 +93,7 @@ pub trait EventHandler {
     }
 
     /// Commit pushed to a repository
-    async fn commit_event(
+    async fn push_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
         push_event: PushEvent,
@@ -232,7 +232,7 @@ pub trait EventHandler {
     async fn repository_dispatch_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        repository_event: RepositoryDispatchEvent,
+        repository_dispatch_event: RepositoryDispatchEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -241,7 +241,7 @@ pub trait EventHandler {
     async fn repository_import_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        repository_event: RepositoryImportEvent,
+        repository_import_event: RepositoryImportEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -319,10 +319,10 @@ pub trait EventHandler {
     }
 
     /// Activity related to code scanning alerts in a repository
-    async fn code_scanning_alert_event(
+    async fn code_scanning_alert(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        code_scanning_alert_event: CodeScanningAlertEvent,
+        code_scanning_alert: CodeScanningAlertEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -378,7 +378,7 @@ pub trait EventHandler {
     async fn gollum_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        deploy_key_event: GollumEvent,
+        gollum_event: GollumEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -429,25 +429,37 @@ pub trait EventHandler {
     }
 
     /// Git branch or tag created
-    async fn tag_created(&self, github_client: Arc<Self::GitHubClient>, event: CreateEvent) -> Command<Self::Message> {
+    async fn tag_created(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        create_event: CreateEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
     /// Git branch or tag deleted
-    async fn tag_deleted(&self, github_client: Arc<Self::GitHubClient>, event: DeleteEvent) -> Command<Self::Message> {
+    async fn tag_deleted(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        delete_event: DeleteEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
     /// Repository receives a star
-    async fn star_event(&self, github_client: Arc<Self::GitHubClient>, event: StarEvent) -> Command<Self::Message> {
+    async fn star_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        star_event: StarEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
     // Repository gets a new security advisory
-    async fn security_advisory(
+    async fn security_advisory_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: SecurityAdvisoryEvent,
+        security_advisory_event: SecurityAdvisoryEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -465,7 +477,7 @@ pub trait EventHandler {
     async fn repository_forked(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: ForkEvent,
+        fork_event: ForkEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -474,7 +486,7 @@ pub trait EventHandler {
     async fn pull_request_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: PullRequestEvent,
+        pull_request_event: PullRequestEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -483,7 +495,7 @@ pub trait EventHandler {
     async fn pull_request_review_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: PullRequestReviewEvent,
+        pull_request_review_event: PullRequestReviewEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -493,7 +505,7 @@ pub trait EventHandler {
     async fn pull_request_review_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: PullRequestReviewCommentEvent,
+        pull_request_review_comment_event: PullRequestReviewCommentEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -502,7 +514,7 @@ pub trait EventHandler {
     async fn workflow_run(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: WorkflowRunEvent,
+        workflow_run: WorkflowRunEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
@@ -512,18 +524,26 @@ pub trait EventHandler {
     async fn workflow_job(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: WorkflowJobEvent,
+        workflow_job: WorkflowJobEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }
 
     /// Check run activity has occurred
-    async fn check_run(&self, github_client: Arc<Self::GitHubClient>, event: CheckRunEvent) -> Command<Self::Message> {
+    async fn check_run(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        check_run: CheckRunEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
     /// Activity related to an issue
-    async fn issue_event(&self, github_client: Arc<Self::GitHubClient>, event: IssueEvent) -> Command<Self::Message> {
+    async fn issue_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        issue_event: IssueEvent,
+    ) -> Command<Self::Message> {
         Command::none()
     }
 
@@ -531,7 +551,7 @@ pub trait EventHandler {
     async fn issue_comment_event(
         &self,
         github_client: Arc<Self::GitHubClient>,
-        event: IssueCommentEvent,
+        issue_comment_event: IssueCommentEvent,
     ) -> Command<Self::Message> {
         Command::none()
     }

@@ -51,7 +51,7 @@ pub struct StatusEvent {
     pub target_url: Option<String>,
     pub commit: Commit,
     pub state: StatusState,
-    pub branches: Vec<Branch>,
+    pub branches: Vec<nested::Branch>,
     pub created_at: Value,
     pub updated_at: Value,
     #[serde(flatten)]
@@ -67,17 +67,21 @@ pub enum StatusState {
     Error,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Branch {
-    pub name: String,
-    pub commit: NestedCommit,
-    pub protected: bool,
-}
+pub mod nested {
+    use crate::model::prelude::*;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct NestedCommit {
-    pub sha: String,
-    pub url: String,
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Branch {
+        pub name: String,
+        pub commit: NestedCommit,
+        pub protected: bool,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct NestedCommit {
+        pub sha: String,
+        pub url: String,
+    }
 }
 
 impl Default for CommitCommentAction {

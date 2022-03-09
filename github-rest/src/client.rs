@@ -10,11 +10,12 @@ use std::fmt::Display;
 
 use crate::{GithubRestError, Requester};
 
-pub struct DefaultRequest {
+/// A default implementation of the [`Requester`] trait.
+pub struct DefaultRequester {
     client: reqwest::Client,
 }
 
-impl DefaultRequest {
+impl DefaultRequester {
     pub fn new<T>(auth: T) -> Self
     where
         T: Into<String> + Display,
@@ -33,7 +34,7 @@ impl DefaultRequest {
             header::HeaderValue::from_str(auth.to_string().as_str()).unwrap(),
         );
         let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
-        DefaultRequest { client }
+        DefaultRequester { client }
     }
 
     pub fn new_none() -> Self {
@@ -48,12 +49,12 @@ impl DefaultRequest {
         );
 
         let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
-        DefaultRequest { client }
+        DefaultRequester { client }
     }
 }
 
 #[async_trait]
-impl Requester for DefaultRequest {
+impl Requester for DefaultRequester {
     async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,

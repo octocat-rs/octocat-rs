@@ -176,13 +176,13 @@ where
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequest;
+    use crate::client::DefaultRequester;
 
     use super::*;
 
     #[tokio::test]
     async fn test_create_issue() {
-        let requester = DefaultRequest::new("TOKEN");
+        let requester = DefaultRequester::new("TOKEN");
 
         let body = CreateIssueBody {
             title: "tricked is cool".to_owned(),
@@ -202,7 +202,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_issues() {
-        let requester = DefaultRequest::new_none();
+        let requester = DefaultRequester::new_none();
 
         let r = get_issues(&requester, "microsoft", "vscode", None).await.unwrap();
         println!("{:#?}", r)
@@ -210,7 +210,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_issues2() {
-        let requester = DefaultRequest::new_none();
+        let requester = DefaultRequester::new_none();
         let body = GetIssuesBody {
             milestone: None,
             state: None,

@@ -152,7 +152,7 @@ macro_rules! event_handle {
     ($ev:ident) => {
         match $ev {
             EventTypes::Push => {
-                event_push!(commit_event, PushEvent)
+                event_push!(push_event, PushEvent)
             }
             EventTypes::GithubAppAuthorization => {
                 event_push!(app_authorization_event, AppAuthorizationEvent)
@@ -197,7 +197,7 @@ macro_rules! event_handle {
                 event_push!(secret_scanning_alert, SecretScanningAlertEvent)
             }
             EventTypes::SecurityAdvisory => {
-                event_push!(security_advisory, SecurityAdvisoryEvent)
+                event_push!(security_advisory_event, SecurityAdvisoryEvent)
             }
             EventTypes::Star => {
                 event_push!(star_event, StarEvent)
@@ -254,7 +254,7 @@ macro_rules! event_handle {
                 event_push!(check_suite_event, CheckSuiteEvent)
             }
             EventTypes::CodeScanningAlert => {
-                event_push!(code_scanning_alert_event, CodeScanningAlertEvent)
+                event_push!(code_scanning_alert, CodeScanningAlertEvent)
             }
             EventTypes::Deployment => {
                 event_push!(deployment_event, DeploymentEvent)

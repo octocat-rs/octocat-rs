@@ -39,7 +39,7 @@ impl Builder for GetPullsBuilder {
 #[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequest;
+    use crate::client::DefaultRequester;
 
     use super::*;
 
@@ -51,7 +51,7 @@ mod tests {
             .per_page(1.to_string())
             .page(1.to_string())
             .state(PullRequestState::Open)
-            .execute(&DefaultRequest::new_none())
+            .execute(&DefaultRequester::new_none())
             .await
             .unwrap();
 

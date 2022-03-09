@@ -54,8 +54,6 @@ pub enum IssueCommentAction {
     Deleted,
 }
 
-// TODO: Move this to some type of shared module as `PullRequestReviewEvent`
-// uses it
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CommentChanges {
     pub body: Option<Change>,

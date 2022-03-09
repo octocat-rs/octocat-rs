@@ -57,7 +57,7 @@ impl Builder for CommitCommentBuilder {
 mod tests {
     use crate::{
         builders::{Builder, CommitCommentBuilder},
-        client::DefaultRequest,
+        client::DefaultRequester,
     };
 
     #[tokio::test]
@@ -69,7 +69,7 @@ mod tests {
             .body("Losing my mind");
 
         // You'll need to add your auth to get this to pass
-        let a = comment.execute(&DefaultRequest::new_none()).await.unwrap();
+        let a = comment.execute(&DefaultRequester::new_none()).await.unwrap();
 
         dbg!(a);
     }

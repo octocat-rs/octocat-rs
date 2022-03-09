@@ -1,8 +1,10 @@
 use crate::model::{
     event_types::{macros::org_origin, OrgEventInfo},
-    organizations::Team,
+    organizations::{
+        events::nested::{MembershipScope, TeamChanges},
+        Team,
+    },
     prelude::*,
-    pull_requests::events::nested::Change,
     user::User,
 };
 
@@ -48,14 +50,6 @@ pub enum TeamAction {
     RemovedFromRepository,
 }
 
-// TODO: Complete this
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TeamChanges {
-    pub description: Option<Change>,
-    pub name: Option<Change>,
-    pub privacy: Option<Change>,
-}
-
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#membership>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MembershipEvent {
@@ -73,11 +67,6 @@ pub enum MembershipAction {
     Added,
     Removed,
 }
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-#[serde(rename_all = "snake_case")]
-pub enum MembershipScope {
-    Team,
-}
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#org_block>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -93,6 +82,24 @@ pub struct OrgBlockEvent {
 pub enum OrgBlockAction {
     Blocked,
     Unblocked,
+}
+
+pub mod nested {
+    use crate::model::{prelude::*, pull_requests::events::nested::Change};
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[serde(rename_all = "snake_case")]
+    pub enum MembershipScope {
+        Team,
+    }
+
+    // TODO: Complete this
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct TeamChanges {
+        pub description: Option<Change>,
+        pub name: Option<Change>,
+        pub privacy: Option<Change>,
+    }
 }
 
 org_origin!(OrganizationEvent);

@@ -44,7 +44,7 @@ impl Builder for CommentReactionBuilder {
 mod tests {
     use crate::{
         builders::{Builder, CommentReactionBuilder},
-        client::DefaultRequest,
+        client::DefaultRequester,
         model::reactions::Reaction,
     };
 
@@ -55,7 +55,7 @@ mod tests {
             .repo("octocat-rs")
             .comment_id(62802084)
             .reaction(Reaction::Rocket)
-            .execute(&DefaultRequest::new_none())
+            .execute(&DefaultRequester::new_none())
             .await;
 
         // You'll need to add your auth to get this to pass

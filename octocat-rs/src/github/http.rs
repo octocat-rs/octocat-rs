@@ -28,7 +28,9 @@ use crate::github::Authorization;
 const USER_AGENT_PARSE_ERROR: &str = "HttpClient: Parsing user agent";
 const ACCEPT_HEADER_PARSE_ERROR: &str = "HttpClient: Parsing accept header";
 
-/// An implementer of the [`Requester`] trait.
+/// An implementer of the [`Requester`] trait. This is all most users will need,
+/// however it may be helpful to look at the trait implementation details here
+/// if you're writing your own implementation.
 ///
 /// [`Requester`]: github_rest::Requester
 pub struct HttpClient {
@@ -40,6 +42,7 @@ pub struct HttpClient {
 }
 
 impl HttpClient {
+    /// Creates a new `HttpClient`.
     #[cfg(feature = "native")]
     pub fn new(auth: Option<Authorization>, user_agent: Option<String>) -> Self {
         let mut headers = HeaderMap::new();
@@ -68,6 +71,7 @@ impl HttpClient {
         }
     }
 
+    /// Creates a new `HttpClient`.
     #[cfg(all(target_family = "wasm", feature = "workers"))]
     pub fn new(auth: Option<Authorization>, user_agent: Option<String>) -> Self {
         HttpClient { user_agent, auth }
@@ -226,6 +230,30 @@ impl github_rest::Requester for HttpClient {
         })
     }
 
+    /// A function for performing HTTP requests utilizing the [`EndPoints`]
+    /// enum.
+    ///
+    /// Usage example:
+    ///
+    /// ```rust
+    /// # use crate::HttpClient;
+    /// # use github_rest::{
+    /// #     methods::GetCommitsBody,
+    /// #     model::commits::Commits,
+    /// # };
+    /// # use github_api::end_points::EndPoints;
+    /// #
+    /// HttpClient::new(None, None)
+    ///     .req::<GetCommitsBody, String, Commits>(
+    ///         EndPoints::GetReposownerrepoCommits("octocat-rs".to_owned(), "octocat-rs".to_owned()),
+    ///             None,
+    ///             None,
+    ///         )
+    ///         .await
+    /// ```
+    ///
+    ///
+    /// [`EndPoints`]: github_api::end_points::EndPoints
     async fn req<T, V, A: DeserializeOwned>(
         &self,
         url: EndPoints,

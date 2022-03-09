@@ -59,7 +59,7 @@ pub mod deployments {
         // TODO: Create enum repr for this field.
         /// Can either be a [`User`] or [`Organization`]
         ///
-        /// [`User`]: crate::model::User
+        /// [`User`]: crate::model::user::User
         /// [`Organization`]: crate::model::organizations::Organization
         pub account: Value,
         pub billing_cycle: MarketplaceBillingCycle,

@@ -7,27 +7,23 @@ use crate::model::{
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseEvent {
-    pub action: nested::ReleaseAction,
+    pub action: ReleaseAction,
     pub release: Release,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
 
-pub mod nested {
-    use crate::model::prelude::*;
-
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
-    #[strum(serialize_all = "snake_case")]
-    pub enum ReleaseAction {
-        Published,
-        Unpublished,
-        Created,
-        Edited,
-        Deleted,
-        #[strum(serialize = "prereleased")]
-        PreReleased,
-        Released,
-    }
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum ReleaseAction {
+    Published,
+    Unpublished,
+    Created,
+    Edited,
+    Deleted,
+    #[strum(serialize = "prereleased")]
+    PreReleased,
+    Released,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#create>
