@@ -8,7 +8,6 @@ use crate::model::{
     pull_requests::{events::nested::IssueChanges, PullRequest},
 };
 
-// TODO: Convenience method to get changes if the action is `Edited`.
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PullRequestEvent {

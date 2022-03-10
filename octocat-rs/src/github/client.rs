@@ -27,10 +27,8 @@ use github_rest::{
         commits::events::{CommitCommentEvent, StatusEvent},
         discussions::events::{DiscussionCommentEvent, DiscussionEvent},
         event_types::EventTypes,
-        issues::events::{IssueCommentEvent, IssueEvent},
-        misc::events::{
-            DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, MetaEvent, SponsorshipEvent,
-        },
+        issues::events::{IssueCommentEvent, IssueEvent, LabelEvent},
+        misc::events::{DeploymentEvent, DeploymentStatusEvent, MarketplacePurchaseEvent, MetaEvent, SponsorshipEvent},
         organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
         pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
         releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
@@ -101,7 +99,7 @@ where
     type HttpClient = HttpClient;
     type EventHandler = T;
 
-    // TODO: User-facing API to set this?
+    // TODO: User-facing API to set this? (This can be ignored for now)
     async fn run(&self) -> Result<()> {
         Ok(())
     }

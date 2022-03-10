@@ -1,5 +1,5 @@
 pub mod deployments {
-    use crate::model::{prelude::*, user::User};
+    use crate::model::{organizations::Organization, prelude::*, user::User};
 
     /// <https://docs.github.com/en/rest/reference/deployments#get-a-deployment>
     #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -56,18 +56,25 @@ pub mod deployments {
     /// See this documentation page for a detailed overview of what this struct can contain: <https://docs.github.com/en/developers/github-marketplace/using-the-github-marketplace-api-in-your-app/webhook-events-for-the-github-marketplace-api#github-marketplace-purchase-webhook-payload>
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct MarketplacePurchase {
-        // TODO: Create enum repr for this field.
         /// Can either be a [`User`] or [`Organization`]
         ///
         /// [`User`]: crate::model::user::User
         /// [`Organization`]: crate::model::organizations::Organization
-        pub account: Value,
+        #[serde(flatten)]
+        pub account: UserOrOrg,
         pub billing_cycle: MarketplaceBillingCycle,
         pub unit_count: usize,
         pub on_free_trial: bool,
         pub free_trial_ends_on: String,
         pub next_billing_date: String,
         pub plan: MarketplacePlan,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[serde(untagged)]
+    pub enum UserOrOrg {
+        User(User),
+        Organization(Organization),
     }
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]

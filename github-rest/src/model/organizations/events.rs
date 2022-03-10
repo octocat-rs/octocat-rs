@@ -93,12 +93,17 @@ pub mod nested {
         Team,
     }
 
-    // TODO: Complete this
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct TeamChanges {
         pub description: Option<Change>,
         pub name: Option<Change>,
         pub privacy: Option<Change>,
+        /// Schema:
+        ///
+        /// `repository[permissions][from][pull]` boolean
+        ///
+        /// `repository[permissions][from][push]` boolean
+        pub repository: Option<Value>,
     }
 }
 

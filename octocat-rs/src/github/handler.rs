@@ -9,10 +9,8 @@ use github_rest::model::{
     apps::events::{AppAuthorizationEvent, InstallationEvent, InstallationRepositoriesEvent},
     commits::events::{CommitCommentEvent, StatusEvent},
     discussions::events::{DiscussionCommentEvent, DiscussionEvent},
-    issues::events::{IssueCommentEvent, IssueEvent},
-    misc::events::{
-        DeploymentEvent, DeploymentStatusEvent, LabelEvent, MarketplacePurchaseEvent, MetaEvent, SponsorshipEvent,
-    },
+    issues::events::{IssueCommentEvent, IssueEvent, LabelEvent},
+    misc::events::{DeploymentEvent, DeploymentStatusEvent, MarketplacePurchaseEvent, MetaEvent, SponsorshipEvent},
     organizations::events::{MembershipEvent, OrgBlockEvent, OrganizationEvent, TeamEvent},
     pull_requests::events::{PullRequestEvent, PullRequestReviewCommentEvent, PullRequestReviewEvent},
     releases::events::{CreateEvent, DeleteEvent, ReleaseEvent},
@@ -564,6 +562,11 @@ pub struct DefaultEventHandler;
 impl EventHandler for DefaultEventHandler {
     type Message = ();
     type GitHubClient = Client<Self>;
+
+    #[cfg(feature = "secret")]
+    fn listener_secret(&self) -> &[u8] {
+        std::env::var("WEBHOOK_SECRET").unwrap().as_bytes()
+    }
 
     async fn message(&self, _message: Self::Message) {}
 }

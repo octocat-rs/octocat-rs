@@ -1,6 +1,6 @@
 use crate::model::{
     event_types::{macros::repo_origin, RepoEventInfo},
-    issues::{comments::IssueComment, Issue},
+    issues::{comments::IssueComment, Issue, Label},
     prelude::*,
     pull_requests::events::nested::{Change, IssueChanges},
 };
@@ -59,5 +59,30 @@ pub struct CommentChanges {
     pub body: Option<Change>,
 }
 
+/// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#label>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LabelEvent {
+    pub action: LabelAction,
+    pub label: Label,
+    pub changes: Option<LabelChanges>,
+    #[serde(flatten)]
+    pub event_info: RepoEventInfo,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum LabelAction {
+    Created,
+    Edited,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LabelChanges {
+    pub name: Option<Change>,
+    pub color: Option<Change>,
+}
+
 repo_origin!(IssueEvent);
+repo_origin!(LabelEvent);
 repo_origin!(IssueCommentEvent);

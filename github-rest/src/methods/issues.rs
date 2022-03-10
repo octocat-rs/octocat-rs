@@ -15,7 +15,6 @@ pub struct CreateIssueBody {
     pub assignees: Option<Vec<String>>,
 }
 
-//TODO: TEST THIS
 /// * tags issues
 /// * post `/repos/{owner}/{repo}/issues`
 /// * docs <https://docs.github.com/rest/reference/issues#create-an-issue>
