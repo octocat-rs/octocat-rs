@@ -30,6 +30,13 @@ use github_rest::model::{
 };
 
 use crate::{client::GitHubClient, github::command::Command, Client};
+#[cfg(feature = "secrets")]
+use lazy_static::lazy_static;
+
+#[cfg(feature = "secrets")]
+lazy_static! {
+    static ref WEBHOOK_SECRET: String = std::env::var("WEBHOOK_SECRET").unwrap();
+}
 
 /// An event handler that is used in all clients. For end users, an implementer
 /// of this trait is passed to a [`ClientBuilder`] instance when creating the
@@ -55,8 +62,8 @@ pub trait EventHandler {
     }
 
     /// The webhook secret. Defaults to none.
-    #[cfg(feature = "secret")]
-    fn listener_secret(&self) -> &[u8];
+    #[cfg(feature = "secrets")]
+    fn listener_secret(&self) -> &'static [u8];
 
     async fn message(&self, message: Self::Message) {
         {}
@@ -563,9 +570,9 @@ impl EventHandler for DefaultEventHandler {
     type Message = ();
     type GitHubClient = Client<Self>;
 
-    #[cfg(feature = "secret")]
-    fn listener_secret(&self) -> &[u8] {
-        std::env::var("WEBHOOK_SECRET").unwrap().as_bytes()
+    #[cfg(feature = "secrets")]
+    fn listener_secret(&self) -> &'static [u8] {
+        WEBHOOK_SECRET.as_bytes()
     }
 
     async fn message(&self, _message: Self::Message) {}

@@ -1,3 +1,4 @@
+#![feature(str_split_as_str)]
 #![warn(clippy::if_then_some_else_none)]
 #![warn(clippy::str_to_string)]
 #![deny(rust_2018_idioms)]

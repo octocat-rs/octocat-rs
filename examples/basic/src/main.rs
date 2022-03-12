@@ -22,7 +22,11 @@ async fn main() -> Result<()> {
         type GitHubClient = Client<Self>;
 
         fn listener_port(&self) -> u16 {
-            2022
+            8787
+        }
+
+        fn listener_secret(&self) -> &'static [u8] {
+            "1".as_bytes()
         }
 
         async fn message(&self, message: Self::Message) {
