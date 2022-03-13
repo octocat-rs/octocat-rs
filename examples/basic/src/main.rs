@@ -8,42 +8,39 @@ use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    #[derive(Debug)]
-    struct Handler {}
+    ClientBuilder::new().event_handler(Handler {}).build()?.start().await;
 
-    #[derive(Debug)]
-    enum Message {
-        Stuff(&'static str),
+    Ok(())
+}
+
+#[derive(Debug)]
+struct Handler {}
+
+#[derive(Debug)]
+enum Message {
+    Stuff(&'static str),
+}
+
+#[async_trait]
+impl EventHandler for Handler {
+    type Message = Message;
+    type GitHubClient = Client<Self>;
+
+    fn listener_port(&self) -> u16 {
+        2022
     }
 
-    #[async_trait]
-    impl EventHandler for Handler {
-        type Message = Message;
-        type GitHubClient = Client<Self>;
-
-        fn listener_port(&self) -> u16 {
-            2022
-        }
-
-        async fn message(&self, message: Self::Message) {
-            match message {
-                Message::Stuff(s) => {
-                    println!("==> Message received: {s}");
-                }
+    async fn message(&self, message: Self::Message) {
+        match message {
+            Message::Stuff(s) => {
+                println!("==> Message received: {s}");
             }
         }
-
-        async fn push_event(
-            &self,
-            _github_client: Arc<Self::GitHubClient>,
-            _commit: PushEvent,
-        ) -> Command<Self::Message> {
-            println!("Commit pushed!");
-
-            Command::perform(async { "Computation finished" }, Message::Stuff)
-        }
     }
 
-    ClientBuilder::new().event_handler(Handler {}).build()?.start().await;
-    Ok(())
+    async fn push_event(&self, _github_client: Arc<Self::GitHubClient>, _commit: PushEvent) -> Command<Self::Message> {
+        println!("Commit pushed!");
+
+        Command::perform(async { "Computation finished" }, Message::Stuff)
+    }
 }

@@ -13,46 +13,43 @@ lazy_static! {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    #[derive(Debug)]
-    struct Handler {}
+    ClientBuilder::new().event_handler(Handler {}).build()?.start().await;
 
-    #[derive(Debug)]
-    enum Message {
-        Stuff(&'static str),
+    Ok(())
+}
+
+#[derive(Debug)]
+struct Handler {}
+
+#[derive(Debug)]
+enum Message {
+    Stuff(&'static str),
+}
+
+#[async_trait]
+impl EventHandler for Handler {
+    type Message = Message;
+    type GitHubClient = Client<Self>;
+
+    fn listener_port(&self) -> u16 {
+        2022
     }
 
-    #[async_trait]
-    impl EventHandler for Handler {
-        type Message = Message;
-        type GitHubClient = Client<Self>;
+    fn listener_secret(&self) -> &'static [u8] {
+        WEBHOOK_SECRET.as_bytes()
+    }
 
-        fn listener_port(&self) -> u16 {
-            2022
-        }
-
-        fn listener_secret(&self) -> &'static [u8] {
-            WEBHOOK_SECRET.as_bytes()
-        }
-
-        async fn message(&self, message: Self::Message) {
-            match message {
-                Message::Stuff(s) => {
-                    println!("==> Message received: {s}");
-                }
+    async fn message(&self, message: Self::Message) {
+        match message {
+            Message::Stuff(s) => {
+                println!("==> Message received: {s}");
             }
         }
-
-        async fn ping_event(
-            &self,
-            _github_client: Arc<Self::GitHubClient>,
-            _commit: PingEvent,
-        ) -> Command<Self::Message> {
-            println!("Secure webhook created!");
-
-            Command::perform(async { "Computation finished" }, Message::Stuff)
-        }
     }
 
-    ClientBuilder::new().event_handler(Handler {}).build()?.start().await;
-    Ok(())
+    async fn ping_event(&self, _github_client: Arc<Self::GitHubClient>, _commit: PingEvent) -> Command<Self::Message> {
+        println!("Secure webhook created!");
+
+        Command::perform(async { "Computation finished" }, Message::Stuff)
+    }
 }
