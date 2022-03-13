@@ -45,6 +45,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "basic-secret"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "github-rest",
+ "hex-literal",
+ "lazy_static",
+ "octocat-rs",
+ "reqwest",
+ "tokio",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -149,7 +163,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cloudflare"
+name = "cloudflare-secret"
 version = "0.1.0"
 dependencies = [
  "anyhow",

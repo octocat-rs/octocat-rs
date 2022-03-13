@@ -2,9 +2,14 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use async_trait::async_trait;
+use lazy_static::lazy_static;
 
-use github_rest::model::repositories::events::PushEvent;
+use github_rest::model::repositories::events::PingEvent;
 use octocat_rs::{handler::EventHandler, Client, ClientBuilder, Command};
+
+lazy_static! {
+    static ref WEBHOOK_SECRET: String = std::env::var("WEBHOOK_SECRET").unwrap();
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -25,6 +30,10 @@ async fn main() -> Result<()> {
             2022
         }
 
+        fn listener_secret(&self) -> &'static [u8] {
+            WEBHOOK_SECRET.as_bytes()
+        }
+
         async fn message(&self, message: Self::Message) {
             match message {
                 Message::Stuff(s) => {
@@ -33,12 +42,12 @@ async fn main() -> Result<()> {
             }
         }
 
-        async fn push_event(
+        async fn ping_event(
             &self,
             _github_client: Arc<Self::GitHubClient>,
-            _commit: PushEvent,
+            _commit: PingEvent,
         ) -> Command<Self::Message> {
-            println!("Commit pushed!");
+            println!("Secure webhook created!");
 
             Command::perform(async { "Computation finished" }, Message::Stuff)
         }

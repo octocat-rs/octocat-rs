@@ -1,5 +1,5 @@
 [package]
-name = "cloudflare"
+name = "cloudflare-secret"
 version = "0.1.0"
 authors = ["Tricked <tricked@duck.com>"]
 edition = "2018"
