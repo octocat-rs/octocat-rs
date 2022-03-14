@@ -38,7 +38,7 @@ impl EventHandler for Handler {
         }
     }
 
-    async fn push_event(&self, _github_client: Arc<Self::GitHubClient>, _commit: PushEvent) -> Command<Self::Message> {
+    async fn push_event(&self, _github_client: Arc<Self::GitHubClient>, _push_event: PushEvent) -> Command<Self::Message> {
         println!("Commit pushed!");
 
         Command::perform(async { "Computation finished" }, Message::Stuff)

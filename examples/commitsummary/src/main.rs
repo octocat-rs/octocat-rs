@@ -43,10 +43,10 @@ impl EventHandler for Handler {
         }
     }
 
-    async fn push_event(&self, github_client: Arc<Self::GitHubClient>, commit: PushEvent) -> Command<Self::Message> {
+    async fn push_event(&self, github_client: Arc<Self::GitHubClient>, push_event: PushEvent) -> Command<Self::Message> {
         println!("Commit pushed!");
 
-        let text = commit
+        let text = push_event
             .commits
             .iter()
             .map(|x| {
@@ -66,7 +66,7 @@ impl EventHandler for Handler {
 
         Command::perform(
             async move {
-                commit
+                push_event
                     .add_comment_to_commit(&*github_client, text, None, None)
                     .await
                     .unwrap();
