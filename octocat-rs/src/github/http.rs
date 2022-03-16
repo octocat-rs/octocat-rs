@@ -236,12 +236,9 @@ impl github_rest::Requester for HttpClient {
     /// Usage example:
     ///
     /// ```rust
-    /// # use crate::HttpClient;
-    /// # use github_rest::{
-    /// #     methods::GetCommitsBody,
-    /// #     model::commits::Commits,
-    /// # };
-    /// # use github_api::end_points::EndPoints;
+    /// # use github_rest::{methods::GetCommitsBody, model::commits::Commits, Requester};
+    /// # use github_api_octocat::end_points::EndPoints;
+    /// # use octocat_rs::HttpClient;
     /// #
     /// HttpClient::new(None, None)
     ///     .req::<GetCommitsBody, String, Commits>(
@@ -249,11 +246,11 @@ impl github_rest::Requester for HttpClient {
     ///             None,
     ///             None,
     ///         )
-    ///         .await
+    ///         .await;
     /// ```
     ///
     ///
-    /// [`EndPoints`]: github_api::end_points::EndPoints
+    /// [`EndPoints`]: github_api_octocat::end_points::EndPoints
     async fn req<T, V, A: DeserializeOwned>(
         &self,
         url: EndPoints,
