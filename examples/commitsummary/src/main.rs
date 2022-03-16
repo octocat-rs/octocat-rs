@@ -43,7 +43,11 @@ impl EventHandler for Handler {
         }
     }
 
-    async fn push_event(&self, github_client: Arc<Self::GitHubClient>, push_event: PushEvent) -> Command<Self::Message> {
+    async fn push_event(
+        &self,
+        github_client: Arc<Self::GitHubClient>,
+        push_event: PushEvent,
+    ) -> Command<Self::Message> {
         println!("Commit pushed!");
 
         let text = push_event

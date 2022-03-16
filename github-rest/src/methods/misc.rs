@@ -100,15 +100,15 @@ mod tests {
 
     #[tokio::test]
     async fn test_zen() {
-        let reqester = DefaultRequester::new_none();
-        let r = zen(&reqester).await.unwrap();
-        println!("{}", r)
+        let requester = DefaultRequester::new_none();
+        let res = zen(&requester).await.unwrap();
+        println!("{res}")
     }
 
     #[tokio::test]
     async fn test_api_info() {
-        let reqester = DefaultRequester::new_none();
-        let r = api_info(&reqester).await.unwrap();
-        println!("{:#?}", r)
+        let requester = DefaultRequester::new_none();
+        let res = api_info(&requester).await.unwrap();
+        println!("{res:#?}")
     }
 }

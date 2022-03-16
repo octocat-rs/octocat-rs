@@ -193,9 +193,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_commits() {
-        let reqester = DefaultRequester::new_none();
+        let requester = DefaultRequester::new_none();
 
-        let r = get_commits(&reqester, "microsoft", "vscode", None).await.unwrap();
-        println!("{:#?}", r)
+        let res = get_commits(&requester, "microsoft", "vscode", None).await.unwrap();
+        println!("{res:#?}")
     }
 }

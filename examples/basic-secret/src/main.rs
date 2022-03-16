@@ -47,7 +47,11 @@ impl EventHandler for Handler {
         }
     }
 
-    async fn ping_event(&self, _github_client: Arc<Self::GitHubClient>, _ping_event: PingEvent) -> Command<Self::Message> {
+    async fn ping_event(
+        &self,
+        _github_client: Arc<Self::GitHubClient>,
+        _ping_event: PingEvent,
+    ) -> Command<Self::Message> {
         println!("Secure webhook created!");
 
         Command::perform(async { "Computation finished" }, Message::Stuff)

@@ -8,10 +8,15 @@ use super::prelude::*;
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct CreateIssueBody {
     pub title: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub body: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assignee: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub milestone: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assignees: Option<Vec<String>>,
 }
 
@@ -47,33 +52,44 @@ pub struct GetIssuesBody {
     /// field. If the string * is passed, issues with any milestone are
     /// accepted. If the string none is passed, issues without milestones are
     /// returned.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub milestone: Option<String>,
     /// Indicates the state of the issues to return. Can be either open, closed,
     /// or all. Default: open
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<IssueState>,
     /// Can be the name of a user. Pass in none for issues with no assigned
     /// user, and * for issues assigned to any user.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assignee: Option<String>,
     /// The user that created the issue.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
     /// A user that's mentioned in the issue.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mentioned: Option<String>,
     /// A list of comma separated label names. Example: bug,ui,@high
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<String>,
     /// What to sort results by. Can be either created, updated, comments.
     /// Default: created
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
     /// One of asc (ascending) or desc (descending).
     /// Default: desc
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub direction: Option<String>,
     /// Only show notifications updated after the given time. This is a
     /// timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub since: Option<String>,
     /// Results per page (max 100)
     /// Default: 30
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub per_page: Option<String>,
     /// Page number of the results to fetch.
     /// Default: 1
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<String>,
 }
 
@@ -123,28 +139,36 @@ where
 pub struct GetPullsBody {
     /// Either open, closed, or all to filter by state.
     /// Default: open
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<PullRequestState>,
     /// Filter pulls by head user or head organization and branch name in the
     /// format of user:ref-name or organization:ref-name. For example:
     /// github:new-script-format or octocat:test-branch.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub head: Option<String>,
     /// Filter pulls by base branch name. Example: gh-pages.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub base: Option<String>,
     /// What to sort results by. Can be either created, updated, popularity
     /// (comment count) or long-running (age, filtering by pulls updated in the
     /// last month). Default: created
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
     /// One of asc (ascending) or desc (descending).
     /// Default: desc
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub direction: Option<String>,
     /// Only show notifications updated after the given time. This is a
     /// timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub since: Option<String>,
     /// Results per page (max 100)
     /// Default: 30
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub per_page: Option<String>,
     /// Page number of the results to fetch.
     /// Default: 1
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<String>,
 }
 
@@ -210,6 +234,7 @@ mod tests {
     #[tokio::test]
     async fn test_get_issues2() {
         let requester = DefaultRequester::new_none();
+
         let body = GetIssuesBody {
             milestone: None,
             state: None,

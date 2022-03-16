@@ -76,9 +76,11 @@ where
 pub struct Pagination {
     ///Results per page (max 100)
     ///Default: 30
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub per_page: Option<String>,
     ///Page number of the results to fetch.
     ///Default: 1
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<String>,
 }
 
