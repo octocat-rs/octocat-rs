@@ -19,4 +19,9 @@ A GitHub API library written in Rust.
 
 ## Documentation
 
-Beginner's documentation can be found in the [book](https://github.com/octocat-rs/book) repository.
+Beginner's documentation can be found in the [book](https://octocat-rs.github.io/book/)
+
+## FAQ
+
+* How does this line up compared to [Octocrab](https://github.com/XAMPPRocky/octocrab)?
+    *  See the [comparison page](https://octocat-rs.github.io/book/ch-2/comparison-with-octocrab.html) in the book for more information.
