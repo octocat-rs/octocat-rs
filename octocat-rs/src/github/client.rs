@@ -8,7 +8,7 @@ use std::{fmt::Debug, sync::Arc};
 
 use anyhow::Result;
 use async_trait::async_trait;
-use github_api::end_points::EndPoints;
+use github_api_octocat::end_points::EndPoints;
 use serde::{de::DeserializeOwned, Serialize};
 
 #[cfg(all(feature = "secrets", not(target_family = "wasm")))]

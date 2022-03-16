@@ -16,7 +16,7 @@ description = """
 [dependencies]
 ## GitHub
 github-rest = { path = "../github-rest" }
-github-api = { git = "https://github.com/octocat-rs/github-api" }
+github-api-octocat = "0.1.0"
 
 ## Async
 tokio = { version = "1", features = ["full"], optional = true }

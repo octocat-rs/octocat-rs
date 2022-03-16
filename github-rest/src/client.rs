@@ -3,7 +3,7 @@
 //! trait
 
 use async_trait::async_trait;
-use github_api::end_points::{EndPoints, Methods};
+use github_api_octocat::end_points::{EndPoints, Methods};
 use reqwest::header;
 use serde::{de::DeserializeOwned, Serialize};
 use std::fmt::Display;

@@ -415,9 +415,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "github-api"
+name = "github-api-octocat"
 version = "0.1.0"
-source = "git+https://github.com/octocat-rs/github-api#638ff4e6ce16e112d74845e04146b6d29d0543f2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28607cefc6b2fc41a338f25bdcc3a53f23b46b484b7a79602f19f41b9ae70a02"
 dependencies = [
  "serde",
  "serde_json",
@@ -428,7 +429,7 @@ name = "github-rest"
 version = "0.0.0"
 dependencies = [
  "async-trait",
- "github-api",
+ "github-api-octocat",
  "paste",
  "reqwest",
  "serde",
@@ -818,7 +819,7 @@ dependencies = [
  "base64",
  "bytes",
  "futures",
- "github-api",
+ "github-api-octocat",
  "github-rest",
  "hex",
  "hmac",

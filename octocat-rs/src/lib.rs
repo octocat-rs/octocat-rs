@@ -11,7 +11,7 @@ pub use github::*;
 
 pub mod github;
 
-pub use github_api as api;
+pub use github_api_octocat as api;
 pub use github_rest as rest;
 
 #[cfg(all(feature = "default", feature = "workers"))]

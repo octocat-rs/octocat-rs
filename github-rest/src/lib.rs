@@ -5,8 +5,8 @@ use core::fmt;
 use std::error::Error;
 
 use async_trait::async_trait;
-pub use github_api::end_points;
-use github_api::end_points::EndPoints;
+pub use github_api_octocat::end_points;
+use github_api_octocat::end_points::EndPoints;
 
 #[cfg(not(target_family = "wasm"))]
 use reqwest::{Body, StatusCode};

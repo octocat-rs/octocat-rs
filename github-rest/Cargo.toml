@@ -12,7 +12,7 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 ## HTTP
-github-api = { git = "https://github.com/octocat-rs/github-api" }
+github-api-octocat = "0.1.0"
 
 ## Serialization/Deserialization
 strum = { version = "0.23", features = ["derive"] }
