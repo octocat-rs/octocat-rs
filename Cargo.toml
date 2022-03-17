@@ -3,6 +3,7 @@ members = [
     "octocat-rs",
     "github-rest",
     "examples/basic",
+    "examples/builders",
     "examples/basic-secret",
     "examples/commitsummary",
     "examples/cloudflare",

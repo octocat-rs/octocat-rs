@@ -71,6 +71,11 @@ impl HttpClient {
         }
     }
 
+    /// Creates a new `HttpClient` with no authorization.
+    pub fn new_none() -> Self {
+        Self::new(None, None)
+    }
+
     /// Creates a new `HttpClient`.
     #[cfg(all(target_family = "wasm", feature = "workers"))]
     pub fn new(auth: Option<Authorization>, user_agent: Option<String>) -> Self {
@@ -240,7 +245,7 @@ impl github_rest::Requester for HttpClient {
     /// # use github_api_octocat::end_points::EndPoints;
     /// # use octocat_rs::HttpClient;
     /// #
-    /// HttpClient::new(None, None)
+    /// HttpClient::new_none()
     ///     .req::<GetCommitsBody, String, Commits>(
     ///         EndPoints::GetReposownerrepoCommits("octocat-rs".to_owned(), "octocat-rs".to_owned()),
     ///             None,

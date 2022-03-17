@@ -1,6 +1,6 @@
 # Commit summary
 
-Creates a simple comment with the changes that happend after every commit.
+Creates a simple comment with the changes that happened after every commit.
 
 ![example](example.png)
 
