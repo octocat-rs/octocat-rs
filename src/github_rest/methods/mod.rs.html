@@ -32,16 +32,16 @@
 </pre><pre class="rust"><code><span class="doccomment">//! This module contains helper functions for writing API requests.</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">commits</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">gists</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">issues</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">misc</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">users</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">gists</span>::<span class="kw-2">*</span>;
 
 <span class="kw">mod</span> <span class="ident">commits</span>;
+<span class="kw">mod</span> <span class="ident">gists</span>;
 <span class="kw">mod</span> <span class="ident">issues</span>;
 <span class="kw">mod</span> <span class="ident">misc</span>;
 <span class="kw">mod</span> <span class="ident">users</span>;
-<span class="kw">mod</span> <span class="ident">gists</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">util</span>;
 
 <span class="doccomment">/// Prelude mod used for methods</span>

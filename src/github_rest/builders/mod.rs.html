@@ -185,18 +185,22 @@
 <span id="178">178</span>
 <span id="179">179</span>
 <span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This module includes various builders for Methods that require a lot of</span>
 <span class="doccomment">//! information</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">GithubRestError</span>, <span class="ident">Requester</span>};
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">commits</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">gists</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">issues</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pull_requests</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">reactions</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">serde::de::DeserializeOwned</span>;
 
 <span class="kw">mod</span> <span class="ident">commits</span>;
+<span class="kw">mod</span> <span class="ident">gists</span>;
 <span class="kw">mod</span> <span class="ident">issues</span>;
 <span class="kw">mod</span> <span class="ident">pull_requests</span>;
 <span class="kw">mod</span> <span class="ident">reactions</span>;

@@ -36,9 +36,21 @@
 <span id="29">29</span>
 <span id="30">30</span>
 <span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">methods::Pagination</span>, <span class="ident">model::gists::Gist</span>};
 
+<span class="doccomment">/// * tags gists</span>
+<span class="doccomment">/// * get `/users/{username}/gists`</span>
+<span class="doccomment">/// * docs &lt;https://docs.github.com/rest/reference/gists#list-gists-for-a-user&gt;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// List gists for a user</span>
+<span class="doccomment">/// Lists public gists for the specified user:</span>
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_user_gists</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">A</span><span class="op">&gt;</span>(
     <span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>,
     <span class="ident">user</span>: <span class="ident">A</span>,
@@ -62,8 +74,8 @@
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_gists</span>() {
-        <span class="kw">let</span> <span class="ident">reqester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
-        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">get_user_gists</span>(<span class="kw-2">&amp;</span><span class="ident">reqester</span>, <span class="string">&quot;tricked-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">get_user_gists</span>(<span class="kw-2">&amp;</span><span class="ident">requester</span>, <span class="string">&quot;tricked-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">r</span>);
     }
 }
