@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["github_rest","octocat_rs"];

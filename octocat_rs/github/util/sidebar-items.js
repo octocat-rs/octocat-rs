@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Authorization","Used in `Client` to represent the authorization method"],["BuildError","Used to represent errors when building a `ClientBuilder`"]],"struct":[["OctocatConfig","Used to represent the default Octocat configuration file format."]]});

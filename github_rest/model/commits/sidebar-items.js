@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["association",""],["comments",""],["events",""],["nested",""]],"struct":[["Commit",""]],"type":[["Commits",""]]});

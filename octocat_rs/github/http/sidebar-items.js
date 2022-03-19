@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["HttpClient","An implementer of the `Requester` trait. This is all most users will need, however it may be helpful to look at the trait implementation details here if you’re writing your own implementation."]]});

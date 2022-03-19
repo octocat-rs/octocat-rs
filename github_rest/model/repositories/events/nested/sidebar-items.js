@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["MultiLevelConfiguration",""]],"struct":[["BranchProtectionRule",""],["Commit",""],["HeadCommit",""],["MemberChanges",""],["MilestoneChanges",""],["ProjectCardChanges",""],["ProjectChanges",""],["ProjectColumnChanges",""],["Pusher",""]]});

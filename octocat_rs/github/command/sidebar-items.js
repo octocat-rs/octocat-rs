@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Command","This struct contains code adapted from the `Command` struct written in the iced library. It is currently identical to the aforementioned struct, however modifications will be made to fit our needs with time."]],"type":[["BoxFuture",""]]});

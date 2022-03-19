@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["PullRequestState",""]],"mod":[["events",""],["nested",""]],"struct":[["Pull","Only used when getting pull requests in a list."],["PullRequest",""]],"type":[["Pulls",""]]});

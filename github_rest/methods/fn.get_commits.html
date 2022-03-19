@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="tags reposget `/repos/{owner}/{repo}/commits`docs https://docs.github.com/rest/reference/repos#list-commitsList commits Signature verification object"><meta name="keywords" content="rust, rustlang, rust-lang, get_commits"><title>get_commits in github_rest::methods - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" 
+        data-theme="ayu"
+        data-use_system_theme="false"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../github_rest/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../github_rest/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><div class="sidebar-elems"><h2 class="location"><a href="index.html">In github_rest::methods</a></h2><div id="sidebar-vars" data-name="get_commits" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../github_rest/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Function <a href="../index.html">github_rest</a>::<wbr><a href="index.html">methods</a>::<wbr><a class="fn" href="#">get_commits</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/github_rest/methods/commits.rs.html#99-115">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><div class="docblock item-decl"><pre class="rust fn"><code>pub async fn get_commits&lt;T&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;client: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>T, <br>&nbsp;&nbsp;&nbsp;&nbsp;owner: impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;repo: impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;options: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.GetCommitsBody.html" title="struct github_rest::methods::GetCommitsBody">GetCommitsBody</a>&gt;<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="type" href="../model/commits/type.Commits.html" title="type github_rest::model::commits::Commits">Commits</a>, <a class="enum" href="../enum.GithubRestError.html" title="enum github_rest::GithubRestError">GithubRestError</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../trait.Requester.html" title="trait github_rest::Requester">Requester</a>,&nbsp;</span></code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><ul>
+<li>tags repos</li>
+<li>get <code>/repos/{owner}/{repo}/commits</code></li>
+<li>docs <a href="https://docs.github.com/rest/reference/repos#list-commits">https://docs.github.com/rest/reference/repos#list-commits</a></li>
+</ul>
+<p>List commits
+<strong>Signature verification object</strong></p>
+<p>The response will include a <code>verification</code> object that describes the result
+of verifying the commit’s signature. The following fields are included in
+the <code>verification</code> object:</p>
+<div><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>verified</code></td><td><code>boolean</code></td><td>Indicates whether GitHub considers the signature</td></tr>
+<tr><td>in this commit to be verified.</td><td></td><td><code>reason</code></td></tr>
+<tr><td>verified value. Possible values and their meanings are enumerated in table</td><td></td><td></td></tr>
+<tr><td>below.</td><td></td><td><code>signature</code></td></tr>
+<tr><td>the commit.</td><td></td><td><code>payload</code></td></tr>
+</tbody></table>
+</div>
+<p>These are the possible values for <code>reason</code> in the <code>verification</code> object:</p>
+<div><table><thead><tr><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>expired_key</code></td><td>The key that made the signature is expired.</td></tr>
+<tr><td><code>not_signing_key</code></td><td>The “signing” flag is not among the usage flags in the</td></tr>
+<tr><td>GPG key that made the signature.</td><td></td></tr>
+<tr><td>communicating with the signature verification service.</td><td></td></tr>
+<tr><td><code>gpgverify_unavailable</code></td><td>The signature verification service is currently</td></tr>
+<tr><td>unavailable.</td><td></td></tr>
+<tr><td><code>unknown_signature_type</code></td><td>A non-PGP signature was found in the commit.</td></tr>
+<tr><td><code>no_user</code></td><td>No user was associated with the <code>committer</code> email address in</td></tr>
+<tr><td>the commit.</td><td></td></tr>
+<tr><td>commit was associated with a user, but the email address is not verified on</td><td></td></tr>
+<tr><td>her/his account.</td><td></td></tr>
+<tr><td>commit is not included in the identities of the PGP key that made the</td><td></td></tr>
+<tr><td>signature.</td><td></td></tr>
+<tr><td>registered with any user’s account.</td><td></td></tr>
+<tr><td>error parsing the signature.</td><td></td></tr>
+<tr><td>cryptographically verified using the key whose key-id was found in the</td><td></td></tr>
+<tr><td>signature.</td><td></td></tr>
+<tr><td>is considered to be verified.</td><td></td></tr>
+</tbody></table>
+</div></div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (1bfe40d11 2022-03-18)" ></div>
+</body></html>

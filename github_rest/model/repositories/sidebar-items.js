@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["events",""],["security_advisory",""],["wiki",""],["workflows",""]],"struct":[["CodeScanningAlert",""],["CodeScanningAlertRule",""],["DeployKey","https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key"],["Project",""],["ProjectCard",""],["ProjectColumn",""],["Repository",""],["Tool",""]]});

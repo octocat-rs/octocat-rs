@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Client","Where the magic happens."]],"trait":[["GitHubClient",""]]});

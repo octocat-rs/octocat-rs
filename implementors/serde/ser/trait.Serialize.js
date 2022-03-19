@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["octocat_rs"] = [{"text":"impl <a class=\"trait\" href=\"https://docs.rs/serde/1.0.136/serde/ser/trait.Serialize.html\" title=\"trait serde::ser::Serialize\">Serialize</a> for <a class=\"struct\" href=\"octocat_rs/github/util/struct.OctocatConfig.html\" title=\"struct octocat_rs::github::util::OctocatConfig\">OctocatConfig</a>","synthetic":false,"types":["octocat_rs::github::util::OctocatConfig"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
