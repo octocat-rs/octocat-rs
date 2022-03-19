@@ -4,6 +4,8 @@
 //!     - Webhook payloads can be found at `./<directory>/events.rs`
 //! * Request bodies
 //! * Response bodies
+//!
+//! To create new structs please use the following tool: https://transform.tools/json-to-rust-serde
 
 // Temporary
 #![allow(clippy::module_inception)]
@@ -12,6 +14,7 @@ pub mod apps;
 pub mod commits;
 pub mod discussions;
 pub mod event_types;
+pub mod gists;
 pub mod issues;
 pub mod misc;
 pub mod organizations;
