@@ -72,7 +72,7 @@ where
         .await
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct Pagination {
     ///Results per page (max 100)
     ///Default: 30

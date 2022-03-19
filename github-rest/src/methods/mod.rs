@@ -1,16 +1,16 @@
 //! This module contains helper functions for writing API requests.
 
 pub use commits::*;
+pub use gists::*;
 pub use issues::*;
 pub use misc::*;
 pub use users::*;
-pub use gists::*;
 
 mod commits;
+mod gists;
 mod issues;
 mod misc;
 mod users;
-mod gists;
 pub(crate) mod util;
 
 /// Prelude mod used for methods

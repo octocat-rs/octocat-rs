@@ -4,12 +4,14 @@
 use crate::{GithubRestError, Requester};
 use async_trait::async_trait;
 pub use commits::*;
+pub use gists::*;
 pub use issues::*;
 pub use pull_requests::*;
 pub use reactions::*;
 use serde::de::DeserializeOwned;
 
 mod commits;
+mod gists;
 mod issues;
 mod pull_requests;
 mod reactions;
