@@ -33,12 +33,17 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This module contains all API request/response types currently implemented.</span>
 <span class="doccomment">//! These include:</span>
 <span class="doccomment">//! * Webhook payloads</span>
 <span class="doccomment">//!     - Webhook payloads can be found at `./&lt;directory&gt;/events.rs`</span>
 <span class="doccomment">//! * Request bodies</span>
 <span class="doccomment">//! * Response bodies</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! To create new structs please use the following tool: https://transform.tools/json-to-rust-serde</span>
 
 <span class="comment">// Temporary</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::module_inception</span>)]</span>
@@ -47,6 +52,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">commits</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">discussions</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">event_types</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">gists</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">issues</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">misc</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">organizations</span>;
