@@ -14,8 +14,8 @@ pub mod github;
 pub use github_api_octocat as api;
 pub use github_rest as rest;
 
-#[cfg(all(feature = "default", feature = "workers"))]
-compile_error!("feature \"default\" and feature \"workers\" cannot be enabled at the same time");
+#[cfg(all(feature = "native", feature = "workers"))]
+compile_error!("feature \"native\" and feature \"workers\" cannot be enabled at the same time");
 
 #[cfg(test)]
 mod tests {
