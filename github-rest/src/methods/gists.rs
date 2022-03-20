@@ -86,12 +86,51 @@ where
         .await
 }
 
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
+pub struct PatchGistBody {
+    /// schema:
+    /// ```json
+    /// "files": {
+    ///     "filename": {
+    ///         "content": "file contents"
+    ///     }
+    /// }
+    /// ```
+    pub files: HashMap<String, FileContents>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+/// * tags gists
+/// * patch `/gists/{gist_id}`
+/// * docs <https://docs.github.com/rest/reference/gists/#update-a-gist>
+///
+/// Update a gist
+/// Allows you to update or delete a gist file and rename gist files. Files from
+/// the previous version of the gist that aren't explicitly changed during an
+/// edit are unchanged.
+pub async fn patch_gist<T, A>(client: &T, gist_id: A, body: &PatchGistBody) -> Result<Gist, GithubRestError>
+where
+    T: Requester,
+    A: Into<String>,
+{
+    client
+        .req::<String, String, Gist>(
+            EndPoints::PatchGistsgistId(gist_id.into()),
+            None,
+            Some(serde_json::to_string(&body).unwrap()),
+        )
+        .await
+}
+
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
     use crate::client::DefaultRequester;
 
     use super::*;
+
+    const GIST_ID: &'static str = "";
 
     #[tokio::test]
     async fn test_get_gists() {
@@ -120,6 +159,19 @@ mod tests {
     async fn test_delete_gist() {
         let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
 
-        delete_gist(&requester, "GIST_ID").await.unwrap()
+        delete_gist(&requester, GIST_ID).await.unwrap()
+    }
+
+    #[tokio::test]
+    async fn test_patch_gist() {
+        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
+
+        let body = PatchGistBody {
+            description: Some("Something".to_owned()),
+            ..Default::default()
+        };
+
+        let r = patch_gist(&requester, GIST_ID, &body).await.unwrap();
+        dbg!(r);
     }
 }
