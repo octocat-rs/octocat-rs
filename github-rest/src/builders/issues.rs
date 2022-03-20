@@ -98,7 +98,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_issues_builder() {
-        let requester = DefaultRequester::new("TOKEN");
+        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
 
         let r = GetIssuesBuilder::new()
             .owner("microsoft")
@@ -115,7 +115,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_issue_builder() {
-        let requester = DefaultRequester::new("TOKEN");
+        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
 
         let r = CreateIssueBuilder::new()
             .owner("octocat-rs")

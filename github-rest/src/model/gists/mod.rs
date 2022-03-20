@@ -16,7 +16,7 @@ pub struct Gist {
     pub public: bool,
     pub created_at: String,
     pub updated_at: String,
-    pub description: String,
+    pub description: Option<String>,
     pub comments: i64,
     pub user: Value,
     pub comments_url: String,

@@ -3,10 +3,11 @@
 //! trait
 
 use async_trait::async_trait;
+use base64::write::EncoderWriter as Base64Encoder;
 use github_api_octocat::end_points::{EndPoints, Methods};
 use reqwest::header;
 use serde::{de::DeserializeOwned, Serialize};
-use std::fmt::Display;
+use std::{fmt::Display, io::Write};
 
 use crate::{GithubRestError, Requester};
 
@@ -18,8 +19,16 @@ pub struct DefaultRequester {
 impl DefaultRequester {
     pub fn new<T>(auth: T) -> Self
     where
-        T: Into<String> + Display,
+        T: Display,
     {
+        let mut auth_header = b"Basic ".to_vec();
+
+        {
+            let mut encoder = Base64Encoder::new(&mut auth_header, base64::STANDARD);
+
+            write!(encoder, "{}", auth).unwrap();
+        }
+
         let mut headers = header::HeaderMap::new();
         headers.insert(
             header::USER_AGENT,
@@ -31,7 +40,8 @@ impl DefaultRequester {
         );
         headers.insert(
             header::AUTHORIZATION,
-            header::HeaderValue::from_str(auth.to_string().as_str()).unwrap(),
+            header::HeaderValue::from_str(std::str::from_utf8(&auth_header).expect("Failed to parse authorization!"))
+                .unwrap(),
         );
         let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
         DefaultRequester { client }

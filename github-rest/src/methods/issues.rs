@@ -205,7 +205,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_issue() {
-        let requester = DefaultRequester::new("TOKEN");
+        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
 
         let body = CreateIssueBody {
             title: "tricked is cool".to_owned(),

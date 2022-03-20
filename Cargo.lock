@@ -431,6 +431,7 @@ name = "github-rest"
 version = "0.0.0"
 dependencies = [
  "async-trait",
+ "base64",
  "github-api-octocat",
  "paste",
  "reqwest",
