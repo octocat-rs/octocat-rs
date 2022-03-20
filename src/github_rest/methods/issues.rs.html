@@ -470,7 +470,7 @@
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_create_issue</span>() {
-        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="string">&quot;TOKEN&quot;</span>);
+        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="ident">std::env::var</span>(<span class="string">&quot;GH_LOGIN&quot;</span>).<span class="ident">unwrap</span>());
 
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">CreateIssueBody</span> {
             <span class="ident">title</span>: <span class="string">&quot;tricked is cool&quot;</span>.<span class="ident">to_owned</span>(),
@@ -522,5 +522,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (1bfe40d11 2022-03-18)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (8d60bf427 2022-03-19)" ></div>
 </body></html>
