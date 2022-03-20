@@ -234,7 +234,7 @@
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_create_gist</span>() {
-        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="string">&quot;proudmuslim-dev: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&quot;</span>);
+        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="ident">std::env::var</span>(<span class="string">&quot;GH_LOGIN&quot;</span>).<span class="ident">unwrap</span>());
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">files</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
         <span class="ident">files</span>.<span class="ident">insert</span>(<span class="string">&quot;1.rs&quot;</span>.<span class="ident">to_owned</span>(), <span class="string">r#&quot;fn main() { println!(&quot;testing&quot;)}&quot;#</span>.<span class="ident">into</span>());
