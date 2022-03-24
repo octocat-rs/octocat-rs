@@ -174,8 +174,32 @@ macro_rules! builder_nested_setters {
     }
 }
 
+/// Build an impl block with setters. This expands to:
+///
+///     impl S {
+///         pub fn a(mut self, v: A) -> Self {
+///             self.f.a = v;
+///             self
+///         }
+///     }
+macro_rules! builder_nested_setters_non_optional {
+    ($name:ident { $field:ident { $($subfield:ident: $subfield_type:ty),* } }) => {
+        paste::paste! {
+            impl $name {
+                $(
+                    pub fn $subfield(mut self, $subfield: $subfield_type) -> Self {
+                        self.$field.$subfield = $subfield;
+                        self
+                    }
+                )*
+            }
+        }
+    }
+}
+
 pub(crate) use builder;
 pub(crate) use builder_nested_setters;
+pub(crate) use builder_nested_setters_non_optional;
 pub(crate) use builder_nested_string_setters;
 pub(crate) use builder_nested_string_setters_required;
 pub(crate) use builder_setters;

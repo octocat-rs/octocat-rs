@@ -1,6 +1,8 @@
 use crate::{
-    builders::{builder, builder_nested_string_setters, builder_string_setters, Builder},
-    methods::{get_user_gists, patch_gist, FileContents, Pagination, PatchGistBody},
+    builders::{
+        builder, builder_nested_setters_non_optional, builder_nested_string_setters, builder_string_setters, Builder,
+    },
+    methods::{create_gist, get_user_gists, patch_gist, CreateGistBody, FileContents, Pagination, PatchGistBody},
     model::gists::Gist,
     GithubRestError, Requester,
 };
@@ -32,6 +34,46 @@ impl Builder for GetGistsBuilder {
         T: Requester,
     {
         get_user_gists(client, self.owner, Some(&self.options)).await
+    }
+}
+
+builder!(
+    /// * tags gists
+    /// * post `/gists`
+    /// * docs <https://docs.github.com/rest/reference/gists#create-a-gist>
+    ///
+    /// Create a gist
+    /// Allows you to add a new gist with one or more files.
+    ///
+    /// **Note:** Don't name your files "gistfile" with a numerical suffix. This
+    /// is the format of the automatic naming scheme that Gist uses
+    /// internally.
+    CreateGistBuilder { body: CreateGistBody }
+);
+
+builder_nested_string_setters!(CreateGistBuilder { body { description } });
+builder_nested_setters_non_optional!(CreateGistBuilder { body { public: bool } });
+
+impl CreateGistBuilder {
+    pub fn file<A, B>(mut self, name: A, contents: B) -> Self
+    where
+        A: Into<String>,
+        B: Display,
+    {
+        self.body.files.insert(name.into(), FileContents::from(contents));
+        self
+    }
+}
+
+#[async_trait]
+impl Builder for CreateGistBuilder {
+    type Response = Gist;
+
+    async fn execute<T>(self, client: &T) -> Result<Self::Response, GithubRestError>
+    where
+        T: Requester,
+    {
+        create_gist(client, &self.body).await
     }
 }
 
@@ -80,7 +122,7 @@ impl Builder for PatchGistBuilder {
 #[cfg(test)]
 mod tests {
     use crate::{
-        builders::{Builder, GetGistsBuilder, PatchGistBuilder},
+        builders::{Builder, CreateGistBuilder, GetGistsBuilder, PatchGistBuilder},
         client::DefaultRequester,
     };
 
@@ -100,6 +142,19 @@ mod tests {
     async fn test_patch_gist_builder() {
         let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
         let req = PatchGistBuilder::new().gist_id(GIST_ID).description("Test description");
+
+        let res = req.execute(&requester).await.unwrap();
+
+        dbg!(res);
+    }
+
+    #[tokio::test]
+    async fn test_create_gist_builder() {
+        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
+        let req = CreateGistBuilder::new()
+            .description("Test description")
+            .file("hello.rs", r#"fn main() { println!("Hello, world!") }"#)
+            .file("goodbye.rs", r#"fn main() { println!("Goodbye, world!") }"#);
 
         let res = req.execute(&requester).await.unwrap();
 
