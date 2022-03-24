@@ -88,7 +88,7 @@ where
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct PatchGistBody {
-    /// schema:
+    /// Schema:
     /// ```json
     /// "files": {
     ///     "filename": {
