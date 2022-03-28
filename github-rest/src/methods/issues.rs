@@ -216,19 +216,19 @@ mod tests {
             assignees: None,
         };
 
-        let r = create_issue(&requester, "Tricked-dev", "octo-computing-machine", &body)
+        let res = create_issue(&requester, "Tricked-dev", "octo-computing-machine", &body)
             .await
             .unwrap();
 
-        dbg!(r);
+        dbg!(res);
     }
 
     #[tokio::test]
     async fn test_get_issues() {
         let requester = DefaultRequester::new_none();
 
-        let r = get_issues(&requester, "microsoft", "vscode", None).await.unwrap();
-        println!("{:#?}", r)
+        let res = get_issues(&requester, "microsoft", "vscode", None).await.unwrap();
+        println!("{:#?}", res)
     }
 
     #[tokio::test]
@@ -249,10 +249,10 @@ mod tests {
             page: None,
         };
 
-        let r = get_issues(&requester, "microsoft", "vscode", Some(&body))
+        let res = get_issues(&requester, "microsoft", "vscode", Some(&body))
             .await
             .unwrap();
 
-        dbg!(r);
+        dbg!(res);
     }
 }

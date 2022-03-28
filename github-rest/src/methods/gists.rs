@@ -41,7 +41,7 @@ where
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct CreateGistBody {
-    /// schema:
+    /// Schema:
     /// ```json
     /// "files": {
     ///     "filename": {

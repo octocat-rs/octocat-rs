@@ -1,4 +1,4 @@
-use crate::model::user::User;
+use crate::model::{organizations::Organization, user::User};
 
 use super::prelude::*;
 
@@ -50,6 +50,50 @@ where
     client
         .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowing(user.into()), params, None)
         .await
+}
+
+/// * tags packages
+/// * get `/users/{username}/packages`
+/// * docs <https://docs.github.com/rest/reference/packages#list-packages-for-user>
+///
+/// List packages for a user
+/// Lists all packages in a user's namespace for which the requesting user has
+/// access.
+///
+/// To use this endpoint, you must authenticate using an access token with the
+/// `packages:read` scope. If `package_type` is not `container`, your token must
+/// also include the `repo` scope.
+pub async fn get_user_organizations<T, A>(client: &T, user: A) -> Result<Vec<Organization>, GithubRestError>
+where
+    T: Requester,
+    A: Into<String>,
+{
+    client
+        .req::<String, String, Vec<Organization>>(EndPoints::GetUsersusernameOrgs(user.into()), None, None)
+        .await
+}
+
+/// * tags users
+/// * get `/users/{username}/keys`
+/// * docs <https://docs.github.com/rest/reference/users#list-public-keys-for-a-user>
+///
+/// List public keys for a user
+/// Lists the _verified_ public SSH keys for a user. This is accessible by
+/// anyone.
+pub async fn get_user_keys<T, A>(client: &T, user: A) -> Result<Vec<Key>, GithubRestError>
+where
+    T: Requester,
+    A: Into<String>,
+{
+    client
+        .req::<String, String, Vec<Key>>(EndPoints::GetUsersusernameKeys(user.into()), None, None)
+        .await
+}
+
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
+pub struct Key {
+    pub id: usize,
+    pub key: String,
 }
 
 /// * tags users
@@ -118,6 +162,19 @@ mod tests {
     async fn test_get_user_followers() {
         let client = DefaultRequester::new_none();
         let res = get_user_followers(&client, "bors", None).await.unwrap();
+        dbg!(res);
+    }
+
+    #[tokio::test]
+    async fn test_get_user_organizations() {
+        let client = DefaultRequester::new_none();
+        let res = get_user_organizations(&client, "proudmuslim-dev").await.unwrap();
+        dbg!(res);
+    }
+    #[tokio::test]
+    async fn test_get_user_keys() {
+        let client = DefaultRequester::new_none();
+        let res = get_user_keys(&client, "proudmuslim-dev").await.unwrap();
         dbg!(res);
     }
 }
