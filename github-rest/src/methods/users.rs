@@ -32,88 +32,52 @@ where
         .await
 }
 
-/// * tags users
-/// * get `/users/{username}/following`
-/// * docs <https://docs.github.com/rest/reference/users#list-the-people-a-user-follows>
-///
-/// List the people a user follows
-/// Lists the people who the specified user follows.
-pub async fn get_user_following<T, A>(
-    client: &T,
-    user: A,
-    params: Option<&Pagination>,
-) -> Result<Vec<User>, GithubRestError>
-where
-    T: Requester,
-    A: Into<String>,
-{
-    client
-        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowing(user.into()), params, None)
-        .await
-}
-
-/// * tags packages
-/// * get `/users/{username}/packages`
-/// * docs <https://docs.github.com/rest/reference/packages#list-packages-for-user>
-///
-/// List packages for a user
-/// Lists all packages in a user's namespace for which the requesting user has
-/// access.
-///
-/// To use this endpoint, you must authenticate using an access token with the
-/// `packages:read` scope. If `package_type` is not `container`, your token must
-/// also include the `repo` scope.
-pub async fn get_user_organizations<T, A>(client: &T, user: A) -> Result<Vec<Organization>, GithubRestError>
-where
-    T: Requester,
-    A: Into<String>,
-{
-    client
-        .req::<String, String, Vec<Organization>>(EndPoints::GetUsersusernameOrgs(user.into()), None, None)
-        .await
-}
-
-/// * tags users
-/// * get `/users/{username}/keys`
-/// * docs <https://docs.github.com/rest/reference/users#list-public-keys-for-a-user>
-///
-/// List public keys for a user
-/// Lists the _verified_ public SSH keys for a user. This is accessible by
-/// anyone.
-pub async fn get_user_keys<T, A>(client: &T, user: A) -> Result<Vec<Key>, GithubRestError>
-where
-    T: Requester,
-    A: Into<String>,
-{
-    client
-        .req::<String, String, Vec<Key>>(EndPoints::GetUsersusernameKeys(user.into()), None, None)
-        .await
-}
+user_and_pagination_methods!(
+    /// * tags users
+    /// * get `/users/{username}/keys`
+    /// * docs <https://docs.github.com/rest/reference/users#list-public-keys-for-a-user>
+    ///
+    /// List public keys for a user
+    /// Lists the _verified_ public SSH keys for a user. This is accessible by
+    /// anyone.
+    get_user_keys,
+    EndPoints::GetUsersusernameKeys,
+    Vec<Key>,
+    /// * tags orgs
+    /// * get `/users/{username}/orgs`
+    /// * docs <https://docs.github.com/rest/reference/orgs#list-organizations-for-a-user>
+    ///
+    /// List organizations for a user
+    /// List [public organization memberships](https://docs.github.com/articles/publicizing-or-concealing-organization-membership) for the specified user.
+    ///
+    /// This method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/rest/reference/orgs#list-organizations-for-the-authenticated-user) API instead.
+    get_user_organizations,
+    EndPoints::GetUsersusernameOrgs,
+    Vec<Organization>,
+    /// * tags users
+    /// * get `/users/{username}/following`
+    /// * docs <https://docs.github.com/rest/reference/users#list-the-people-a-user-follows>
+    ///
+    /// List the people a user follows
+    /// Lists the people who the specified user follows.
+    get_user_following,
+    EndPoints::GetUsersusernameFollowing,
+    Vec<User>,
+    /// * tags users
+    /// * get `/users/{username}/followers`
+    /// * docs <https://docs.github.com/rest/reference/users#list-followers-of-a-user>
+    ///
+    /// List followers of a user
+    /// Lists the people following the specified user.
+    get_user_followers,
+    EndPoints::GetUsersusernameFollowers,
+    Vec<User>
+);
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct Key {
     pub id: usize,
     pub key: String,
-}
-
-/// * tags users
-/// * get `/users/{username}/followers`
-/// * docs <https://docs.github.com/rest/reference/users#list-followers-of-a-user>
-///
-/// List followers of a user
-/// Lists the people following the specified user.
-pub async fn get_user_followers<T, A>(
-    client: &T,
-    user: A,
-    params: Option<&Pagination>,
-) -> Result<Vec<User>, GithubRestError>
-where
-    T: Requester,
-    A: Into<String>,
-{
-    client
-        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowers(user.into()), params, None)
-        .await
 }
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
@@ -161,20 +125,20 @@ mod tests {
     #[tokio::test]
     async fn test_get_user_followers() {
         let client = DefaultRequester::new_none();
-        let res = get_user_followers(&client, "bors", None).await.unwrap();
+        let res = get_user_followers(&client, "proudmuslim-dev", None).await.unwrap();
         dbg!(res);
     }
 
     #[tokio::test]
     async fn test_get_user_organizations() {
         let client = DefaultRequester::new_none();
-        let res = get_user_organizations(&client, "proudmuslim-dev").await.unwrap();
+        let res = get_user_organizations(&client, "proudmuslim-dev", None).await.unwrap();
         dbg!(res);
     }
     #[tokio::test]
     async fn test_get_user_keys() {
         let client = DefaultRequester::new_none();
-        let res = get_user_keys(&client, "proudmuslim-dev").await.unwrap();
+        let res = get_user_keys(&client, "proudmuslim-dev", None).await.unwrap();
         dbg!(res);
     }
 }

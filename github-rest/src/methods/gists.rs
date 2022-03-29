@@ -2,25 +2,17 @@ use super::prelude::*;
 use crate::{methods::Pagination, model::gists::Gist};
 use std::{collections::HashMap, fmt::Display};
 
-/// * tags gists
-/// * get `/users/{username}/gists`
-/// * docs <https://docs.github.com/rest/reference/gists#list-gists-for-a-user>
-///
-/// List gists for a user
-/// Lists public gists for the specified user:
-pub async fn get_user_gists<T, A>(
-    client: &T,
-    user: A,
-    params: Option<&Pagination>,
-) -> Result<Vec<Gist>, GithubRestError>
-where
-    T: Requester,
-    A: Into<String>,
-{
-    client
-        .req::<Pagination, String, Vec<Gist>>(EndPoints::GetUsersusernameGists(user.into()), params, None)
-        .await
-}
+user_and_pagination_methods!(
+    /// * tags gists
+    /// * get `/users/{username}/gists`
+    /// * docs <https://docs.github.com/rest/reference/gists#list-gists-for-a-user>
+    ///
+    /// List gists for a user
+    /// Lists public gists for the specified user:
+    get_user_gists,
+    EndPoints::GetUsersusernameGists,
+    Vec<Gist>
+);
 
 /// * tags gists
 /// * delete `/gists/{gist_id}`
@@ -133,10 +125,10 @@ mod tests {
     const GIST_ID: &'static str = "";
 
     #[tokio::test]
-    async fn test_get_gists() {
+    async fn test_get_user_gists() {
         let requester = DefaultRequester::new_none();
-        let r = get_user_gists(&requester, "tricked-dev", None).await.unwrap();
-        dbg!(r);
+        let res = get_user_gists(&requester, "tricked-dev", None).await.unwrap();
+        dbg!(res);
     }
 
     #[tokio::test]
@@ -151,8 +143,8 @@ mod tests {
             ..Default::default()
         };
 
-        let r = create_gist(&requester, &body).await.unwrap();
-        dbg!(r);
+        let res = create_gist(&requester, &body).await.unwrap();
+        dbg!(res);
     }
 
     #[tokio::test]
@@ -171,7 +163,7 @@ mod tests {
             ..Default::default()
         };
 
-        let r = patch_gist(&requester, GIST_ID, &body).await.unwrap();
-        dbg!(r);
+        let res = patch_gist(&requester, GIST_ID, &body).await.unwrap();
+        dbg!(res);
     }
 }
