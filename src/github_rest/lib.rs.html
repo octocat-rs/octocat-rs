@@ -99,6 +99,9 @@
 <span id="92">92</span>
 <span id="93">93</span>
 <span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">feature</span>(<span class="ident">associated_type_defaults</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
 
@@ -113,6 +116,8 @@
 <span class="kw">use</span> <span class="ident">reqwest</span>::{<span class="ident">Body</span>, <span class="ident">StatusCode</span>};
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">std::num::NonZeroU16</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">worker::wasm_bindgen::JsValue</span>;
 
@@ -130,16 +135,17 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>)]</span>
     <span class="ident">WorkerError</span>(<span class="ident">worker::Error</span>),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>)]</span>
-    <span class="ident">ResponseError</span>(<span class="ident">u16</span>, <span class="ident">String</span>),
+    <span class="ident">ResponseError</span>(<span class="ident">NonZeroU16</span>, <span class="ident">String</span>),
     <span class="ident">JsonError</span>(<span class="ident">serde_json::Error</span>),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>))]</span>
     <span class="ident">ResponseError</span>(<span class="ident">StatusCode</span>, <span class="ident">String</span>),
+    <span class="ident">NotAuthorized</span>(<span class="ident">String</span>),
     <span class="ident">AnyError</span>(),
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">GithubRestError</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Error ocurred as you can see&quot;</span>)
+        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Error occurred as you can see&quot;</span>)
     }
 }
 
@@ -194,5 +200,5 @@
         <span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Body</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">std::marker::Send</span>;
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (ee915c34e 2022-03-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (9c06e1ba4 2022-03-29)" ></div>
 </body></html>

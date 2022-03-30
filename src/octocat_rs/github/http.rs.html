@@ -302,6 +302,16 @@
 <span id="295">295</span>
 <span id="296">296</span>
 <span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Contains [`HttpClient`].</span>
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -318,7 +328,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
 <span class="kw">use</span> <span class="ident">base64::write::EncoderWriter</span> <span class="kw">as</span> <span class="ident">Base64Encoder</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">std::io::Write</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::Write</span>, <span class="ident">num::NonZeroU16</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
 <span class="kw">use</span> <span class="ident">worker</span>::{<span class="ident">Fetch</span>, <span class="ident">Headers</span>, <span class="ident">Method</span>, <span class="ident">Request</span>, <span class="ident">RequestInit</span>};
 
@@ -461,10 +471,14 @@
 
         <span class="kw">match</span> <span class="ident">res</span>.<span class="ident">status</span>().<span class="ident">as_u16</span>() {
             <span class="number">200</span>..<span class="op">=</span><span class="number">299</span> =&gt; {}
+            <span class="number">401</span> =&gt; {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">GithubRestError::NotAuthorized</span>(<span class="ident">res</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>));
+            }
             <span class="kw">_</span> =&gt; {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">GithubRestError::ResponseError</span>(<span class="ident">res</span>.<span class="ident">status</span>(), <span class="ident">res</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>));
             }
         }
+
         <span class="kw">let</span> <span class="ident">txt</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">txt</span>)
@@ -530,8 +544,14 @@
 
             <span class="kw">match</span> <span class="ident">res</span>.<span class="ident">status_code</span>() {
                 <span class="number">200</span>..<span class="op">=</span><span class="number">299</span> =&gt; {}
+                <span class="number">401</span> =&gt; {
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">GithubRestError::NotAuthorized</span>(<span class="ident">res</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>));
+                }
                 <span class="kw">_</span> =&gt; {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">GithubRestError::ResponseError</span>(<span class="ident">res</span>.<span class="ident">status_code</span>(), <span class="ident">res</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>));
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">GithubRestError::ResponseError</span>(
+                        <span class="ident">NonZeroU16::new</span>(<span class="ident">res</span>.<span class="ident">status_code</span>()).<span class="ident">unwrap</span>(),
+                        <span class="ident">res</span>.<span class="ident">text</span>().<span class="kw">await</span><span class="question-mark">?</span>,
+                    ));
                 }
             }
 
@@ -600,5 +620,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="octocat_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (ee915c34e 2022-03-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="octocat_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (9c06e1ba4 2022-03-29)" ></div>
 </body></html>

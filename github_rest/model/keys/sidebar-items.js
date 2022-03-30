@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Email",""],["GpgKey",""],["Key",""],["KeyInfo","Contains general info about a key, including:"],["SubKey",""]]});
+initSidebarItems({"struct":[["Email",""],["GpgKey",""],["KeyInfo","Contains general info about a key, including:"],["SshKey",""],["SubKey",""]]});

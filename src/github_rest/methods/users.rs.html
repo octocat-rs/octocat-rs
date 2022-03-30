@@ -165,7 +165,7 @@
 <span id="158">158</span>
 <span id="159">159</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
-    <span class="ident">keys</span>::{<span class="ident">GpgKey</span>, <span class="ident">Key</span>},
+    <span class="ident">keys</span>::{<span class="ident">GpgKey</span>, <span class="ident">SshKey</span>},
     <span class="ident">organizations::Organization</span>,
     <span class="ident">user::User</span>,
 };
@@ -212,7 +212,7 @@
     <span class="doccomment">/// anyone.</span>
     <span class="ident">get_user_keys</span>,
     <span class="ident">EndPoints::GetUsersusernameKeys</span>,
-    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>,
+    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SshKey</span><span class="op">&gt;</span>,
     <span class="doccomment">/// * tags users</span>
     <span class="doccomment">/// * get `/users/{username}/gpg_keys`</span>
     <span class="doccomment">/// * docs &lt;https://docs.github.com/rest/reference/users#list-gpg-keys-for-a-user&gt;</span>
@@ -324,5 +324,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (ee915c34e 2022-03-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (9c06e1ba4 2022-03-29)" ></div>
 </body></html>
