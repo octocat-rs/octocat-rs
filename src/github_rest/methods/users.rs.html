@@ -149,7 +149,26 @@
 <span id="142">142</span>
 <span id="143">143</span>
 <span id="144">144</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">user::User</span>};
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
+    <span class="ident">keys</span>::{<span class="ident">GpgKey</span>, <span class="ident">Key</span>},
+    <span class="ident">organizations::Organization</span>,
+    <span class="ident">user::User</span>,
+};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
 
@@ -194,6 +213,15 @@
     <span class="ident">get_user_keys</span>,
     <span class="ident">EndPoints::GetUsersusernameKeys</span>,
     <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// * tags users</span>
+    <span class="doccomment">/// * get `/users/{username}/gpg_keys`</span>
+    <span class="doccomment">/// * docs &lt;https://docs.github.com/rest/reference/users#list-gpg-keys-for-a-user&gt;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// List GPG keys for a user</span>
+    <span class="doccomment">/// Lists the GPG keys for a user. This information is accessible by anyone.</span>
+    <span class="ident">get_user_gpg_keys</span>,
+    <span class="ident">EndPoints::GetUsersusernameGpgKeys</span>,
+    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GpgKey</span><span class="op">&gt;</span>,
     <span class="doccomment">/// * tags orgs</span>
     <span class="doccomment">/// * get `/users/{username}/orgs`</span>
     <span class="doccomment">/// * docs &lt;https://docs.github.com/rest/reference/orgs#list-organizations-for-a-user&gt;</span>
@@ -224,12 +252,6 @@
     <span class="ident">EndPoints::GetUsersusernameFollowers</span>,
     <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>
 );
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Key</span> {
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">String</span>,
-}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Pagination</span> {
@@ -286,13 +308,21 @@
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_organizations</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="string">&quot;proudmuslim-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
+
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_user_keys</span>() {
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_keys</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="string">&quot;proudmuslim-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
+
+    <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_user_gpg_keys</span>() {
+        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_gpg_keys</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="string">&quot;proudmuslim-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">dbg!</span>(<span class="ident">res</span>);
+    }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (ab0c2e18d 2022-03-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (ee915c34e 2022-03-28)" ></div>
 </body></html>
