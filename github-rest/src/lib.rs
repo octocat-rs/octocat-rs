@@ -13,6 +13,8 @@ use reqwest::{Body, StatusCode};
 
 use serde::{de::DeserializeOwned, Serialize};
 #[cfg(target_family = "wasm")]
+use std::num::NonZeroU16;
+#[cfg(target_family = "wasm")]
 use worker::wasm_bindgen::JsValue;
 
 #[cfg(feature = "builders")]
@@ -29,16 +31,17 @@ pub enum GithubRestError {
     #[cfg(target_family = "wasm")]
     WorkerError(worker::Error),
     #[cfg(target_family = "wasm")]
-    ResponseError(u16, String),
+    ResponseError(NonZeroU16, String),
     JsonError(serde_json::Error),
     #[cfg(not(target_family = "wasm"))]
     ResponseError(StatusCode, String),
+    NotAuthorized(String),
     AnyError(),
 }
 
 impl fmt::Display for GithubRestError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Error ocurred as you can see")
+        write!(f, "Error occurred as you can see")
     }
 }
 

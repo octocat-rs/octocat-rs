@@ -43,7 +43,9 @@ impl DefaultRequester {
             header::HeaderValue::from_str(std::str::from_utf8(&auth_header).expect("Failed to parse authorization!"))
                 .unwrap(),
         );
+
         let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
+
         DefaultRequester { client }
     }
 
@@ -92,6 +94,9 @@ impl Requester for DefaultRequester {
 
         match res.status().as_u16() {
             200..=299 => {}
+            401 => {
+                return Err(GithubRestError::NotAuthorized(res.text().await?));
+            }
             _ => {
                 return Err(GithubRestError::ResponseError(res.status(), res.text().await?));
             }

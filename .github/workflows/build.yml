@@ -24,11 +24,12 @@ jobs:
             target/
             examples/cloudflare/build/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          target: wasm32-unknown-unknown
 
-      - name: Build (native)
-        run: cargo build --release --all-targets
-
-      - name: Build (wasm)
-        run: |
-          cd examples/cloudflare
-          cargo install -q worker-build && worker-build --release 
+      - name: Build
+        run: make build-release

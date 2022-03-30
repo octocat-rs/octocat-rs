@@ -122,7 +122,7 @@ mod tests {
 
     use super::*;
 
-    const GIST_ID: &'static str = "";
+    const GIST_ID: &str = "";
 
     #[tokio::test]
     async fn test_get_user_gists() {

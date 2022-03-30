@@ -14,7 +14,7 @@ use tokio::time::Duration;
 #[cfg(all(target_family = "wasm", feature = "workers"))]
 use base64::write::EncoderWriter as Base64Encoder;
 #[cfg(all(target_family = "wasm", feature = "workers"))]
-use std::io::Write;
+use std::{io::Write, num::NonZeroU16};
 #[cfg(all(target_family = "wasm", feature = "workers"))]
 use worker::{Fetch, Headers, Method, Request, RequestInit};
 
@@ -157,10 +157,14 @@ impl github_rest::Requester for HttpClient {
 
         match res.status().as_u16() {
             200..=299 => {}
+            401 => {
+                return Err(GithubRestError::NotAuthorized(res.text().await?));
+            }
             _ => {
                 return Err(GithubRestError::ResponseError(res.status(), res.text().await?));
             }
         }
+
         let txt = res.text().await?;
 
         Ok(txt)
@@ -226,8 +230,14 @@ impl github_rest::Requester for HttpClient {
 
             match res.status_code() {
                 200..=299 => {}
+                401 => {
+                    return Err(GithubRestError::NotAuthorized(res.text().await?));
+                }
                 _ => {
-                    return Err(GithubRestError::ResponseError(res.status_code(), res.text().await?));
+                    return Err(GithubRestError::ResponseError(
+                        NonZeroU16::new(res.status_code()).unwrap(),
+                        res.text().await?,
+                    ));
                 }
             }
 

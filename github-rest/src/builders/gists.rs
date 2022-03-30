@@ -126,7 +126,7 @@ mod tests {
         client::DefaultRequester,
     };
 
-    const GIST_ID: &'static str = "";
+    const GIST_ID: &str = "";
 
     #[tokio::test]
     async fn test_get_gists_builder() {

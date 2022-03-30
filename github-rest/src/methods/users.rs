@@ -1,5 +1,5 @@
 use crate::model::{
-    keys::{GpgKey, Key},
+    keys::{GpgKey, SshKey},
     organizations::Organization,
     user::User,
 };
@@ -46,7 +46,7 @@ user_and_pagination_methods!(
     /// anyone.
     get_user_keys,
     EndPoints::GetUsersusernameKeys,
-    Vec<Key>,
+    Vec<SshKey>,
     /// * tags users
     /// * get `/users/{username}/gpg_keys`
     /// * docs <https://docs.github.com/rest/reference/users#list-gpg-keys-for-a-user>

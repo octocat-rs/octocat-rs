@@ -1,7 +1,7 @@
 use crate::model::prelude::*;
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
-pub struct Key {
+pub struct SshKey {
     pub id: usize,
     pub key: String,
 }
