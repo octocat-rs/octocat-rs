@@ -16,6 +16,7 @@ pub mod discussions;
 pub mod event_types;
 pub mod gists;
 pub mod issues;
+pub mod keys;
 pub mod misc;
 pub mod organizations;
 pub mod pull_requests;

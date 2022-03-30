@@ -1,4 +1,8 @@
-use crate::model::{organizations::Organization, user::User};
+use crate::model::{
+    keys::{GpgKey, Key},
+    organizations::Organization,
+    user::User,
+};
 
 use super::prelude::*;
 
@@ -43,6 +47,15 @@ user_and_pagination_methods!(
     get_user_keys,
     EndPoints::GetUsersusernameKeys,
     Vec<Key>,
+    /// * tags users
+    /// * get `/users/{username}/gpg_keys`
+    /// * docs <https://docs.github.com/rest/reference/users#list-gpg-keys-for-a-user>
+    ///
+    /// List GPG keys for a user
+    /// Lists the GPG keys for a user. This information is accessible by anyone.
+    get_user_gpg_keys,
+    EndPoints::GetUsersusernameGpgKeys,
+    Vec<GpgKey>,
     /// * tags orgs
     /// * get `/users/{username}/orgs`
     /// * docs <https://docs.github.com/rest/reference/orgs#list-organizations-for-a-user>
@@ -73,12 +86,6 @@ user_and_pagination_methods!(
     EndPoints::GetUsersusernameFollowers,
     Vec<User>
 );
-
-#[derive(Serialize, Deserialize, Default, Clone, Debug)]
-pub struct Key {
-    pub id: usize,
-    pub key: String,
-}
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct Pagination {
@@ -135,10 +142,18 @@ mod tests {
         let res = get_user_organizations(&client, "proudmuslim-dev", None).await.unwrap();
         dbg!(res);
     }
+
     #[tokio::test]
     async fn test_get_user_keys() {
         let client = DefaultRequester::new_none();
         let res = get_user_keys(&client, "proudmuslim-dev", None).await.unwrap();
+        dbg!(res);
+    }
+
+    #[tokio::test]
+    async fn test_get_user_gpg_keys() {
+        let client = DefaultRequester::new_none();
+        let res = get_user_gpg_keys(&client, "proudmuslim-dev", None).await.unwrap();
         dbg!(res);
     }
 }

@@ -4,7 +4,11 @@ use anyhow::Result;
 use async_trait::async_trait;
 use lazy_static::lazy_static;
 
-use octocat_rs::{handler::EventHandler, rest::model::repositories::events::PingEvent, Client, ClientBuilder, Command};
+use octocat_rs::{
+    handler::EventHandler,
+    rest::{methods::get_user_keys, model::repositories::events::PingEvent},
+    Client, ClientBuilder, Command,
+};
 
 lazy_static! {
     static ref WEBHOOK_SECRET: String = std::env::var("WEBHOOK_SECRET").unwrap();
