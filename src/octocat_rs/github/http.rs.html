@@ -314,7 +314,12 @@
 <span id="307">307</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Contains [`HttpClient`].</span>
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::Write</span>, <span class="ident">num::NonZeroU16</span>};
+
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
+<span class="kw">use</span> <span class="ident">base64::write::EncoderWriter</span> <span class="kw">as</span> <span class="ident">Base64Encoder</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">reqwest</span>::{
     <span class="ident">header</span>,
@@ -324,11 +329,6 @@
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">tokio::time::Duration</span>;
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">base64::write::EncoderWriter</span> <span class="kw">as</span> <span class="ident">Base64Encoder</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::Write</span>, <span class="ident">num::NonZeroU16</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_family</span> <span class="op">=</span> <span class="string">&quot;wasm&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;workers&quot;</span>))]</span>
 <span class="kw">use</span> <span class="ident">worker</span>::{<span class="ident">Fetch</span>, <span class="ident">Headers</span>, <span class="ident">Method</span>, <span class="ident">Request</span>, <span class="ident">RequestInit</span>};
 
@@ -620,5 +620,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="octocat_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (eb82facb1 2022-04-01)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="octocat_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (52ca603da 2022-04-12)" ></div>
 </body></html>

@@ -160,10 +160,6 @@
 <span id="153">153</span>
 <span id="154">154</span>
 <span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
     <span class="ident">keys</span>::{<span class="ident">GpgKey</span>, <span class="ident">SshKey</span>},
     <span class="ident">organizations::Organization</span>,
@@ -268,23 +264,19 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;client&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client::DefaultRequester</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">client::DefaultRequester</span>, <span class="ident">methods::util</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_followers</span>() {
-        <span class="comment">// Note: this requires auth</span>
-        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_followers</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_followers</span>(<span class="kw-2">&amp;</span><span class="ident">util::github_auth</span>(), <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_following</span>() {
-        <span class="comment">// Note: this requires auth</span>
-        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_followers</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_followers</span>(<span class="kw-2">&amp;</span><span class="ident">util::github_auth</span>(), <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
 
@@ -324,5 +316,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (eb82facb1 2022-04-01)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (52ca603da 2022-04-12)" ></div>
 </body></html>

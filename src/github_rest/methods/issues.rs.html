@@ -261,8 +261,6 @@
 <span id="254">254</span>
 <span id="255">255</span>
 <span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
     <span class="ident">issues</span>::{<span class="ident">Issue</span>, <span class="ident">Issues</span>},
     <span class="ident">pull_requests</span>::{<span class="ident">PullRequestState</span>, <span class="ident">Pulls</span>},
@@ -464,14 +462,12 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;client&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client::DefaultRequester</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">client::DefaultRequester</span>, <span class="ident">methods::util</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_create_issue</span>() {
-        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="ident">std::env::var</span>(<span class="string">&quot;GH_LOGIN&quot;</span>).<span class="ident">unwrap</span>());
-
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">CreateIssueBody</span> {
             <span class="ident">title</span>: <span class="string">&quot;tricked is cool&quot;</span>.<span class="ident">to_owned</span>(),
             <span class="ident">body</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;This is very true&quot;</span>.<span class="ident">to_owned</span>()),
@@ -481,7 +477,7 @@
             <span class="ident">assignees</span>: <span class="prelude-val">None</span>,
         };
 
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">create_issue</span>(<span class="kw-2">&amp;</span><span class="ident">requester</span>, <span class="string">&quot;Tricked-dev&quot;</span>, <span class="string">&quot;octo-computing-machine&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>)
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">create_issue</span>(<span class="kw-2">&amp;</span><span class="ident">util::github_auth</span>(), <span class="string">&quot;Tricked-dev&quot;</span>, <span class="string">&quot;octo-computing-machine&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
 
@@ -522,5 +518,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (eb82facb1 2022-04-01)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (52ca603da 2022-04-12)" ></div>
 </body></html>

@@ -168,12 +168,6 @@
 <span id="161">161</span>
 <span id="162">162</span>
 <span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">methods::Pagination</span>, <span class="ident">model::gists::Gist</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">fmt::Display</span>};
@@ -294,7 +288,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;client&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client::DefaultRequester</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">client::DefaultRequester</span>, <span class="ident">methods::util</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
@@ -309,8 +303,6 @@
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_create_gist</span>() {
-        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="ident">std::env::var</span>(<span class="string">&quot;GH_LOGIN&quot;</span>).<span class="ident">unwrap</span>());
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">files</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
         <span class="ident">files</span>.<span class="ident">insert</span>(<span class="string">&quot;1.rs&quot;</span>.<span class="ident">to_owned</span>(), <span class="string">r#&quot;fn main() { println!(&quot;testing&quot;)}&quot;#</span>.<span class="ident">into</span>());
 
@@ -319,30 +311,26 @@
             ..<span class="ident">Default::default</span>()
         };
 
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">create_gist</span>(<span class="kw-2">&amp;</span><span class="ident">requester</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">create_gist</span>(<span class="kw-2">&amp;</span><span class="ident">util::github_auth</span>(), <span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_delete_gist</span>() {
-        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="ident">std::env::var</span>(<span class="string">&quot;GH_LOGIN&quot;</span>).<span class="ident">unwrap</span>());
-
-        <span class="ident">delete_gist</span>(<span class="kw-2">&amp;</span><span class="ident">requester</span>, <span class="ident">GIST_ID</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>()
+        <span class="ident">delete_gist</span>(<span class="kw-2">&amp;</span><span class="ident">util::github_auth</span>(), <span class="ident">GIST_ID</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>()
     }
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_patch_gist</span>() {
-        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new</span>(<span class="ident">std::env::var</span>(<span class="string">&quot;GH_LOGIN&quot;</span>).<span class="ident">unwrap</span>());
-
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">PatchGistBody</span> {
             <span class="ident">description</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;Something&quot;</span>.<span class="ident">to_owned</span>()),
             ..<span class="ident">Default::default</span>()
         };
 
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">patch_gist</span>(<span class="kw-2">&amp;</span><span class="ident">requester</span>, <span class="ident">GIST_ID</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">patch_gist</span>(<span class="kw-2">&amp;</span><span class="ident">util::github_auth</span>(), <span class="ident">GIST_ID</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (eb82facb1 2022-04-01)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (52ca603da 2022-04-12)" ></div>
 </body></html>
