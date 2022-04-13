@@ -118,7 +118,7 @@ where
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequester;
+    use crate::{client::DefaultRequester, methods::util};
 
     use super::*;
 
@@ -133,8 +133,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_gist() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
-
         let mut files = HashMap::new();
         files.insert("1.rs".to_owned(), r#"fn main() { println!("testing")}"#.into());
 
@@ -143,27 +141,23 @@ mod tests {
             ..Default::default()
         };
 
-        let res = create_gist(&requester, &body).await.unwrap();
+        let res = create_gist(&util::github_auth(), &body).await.unwrap();
         dbg!(res);
     }
 
     #[tokio::test]
     async fn test_delete_gist() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
-
-        delete_gist(&requester, GIST_ID).await.unwrap()
+        delete_gist(&util::github_auth(), GIST_ID).await.unwrap()
     }
 
     #[tokio::test]
     async fn test_patch_gist() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
-
         let body = PatchGistBody {
             description: Some("Something".to_owned()),
             ..Default::default()
         };
 
-        let res = patch_gist(&requester, GIST_ID, &body).await.unwrap();
+        let res = patch_gist(&util::github_auth(), GIST_ID, &body).await.unwrap();
         dbg!(res);
     }
 }

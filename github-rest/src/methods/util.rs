@@ -4,6 +4,27 @@ use crate::{
     GithubRestError, Requester,
 };
 
+#[cfg(test)]
+mod tests {
+    use lazy_static::lazy_static;
+
+    #[cfg(feature = "client")]
+    use crate::client::DefaultRequester;
+
+    lazy_static! {
+        static ref GH_LOGIN: String = std::env::var("GH_LOGIN").unwrap();
+    }
+
+    #[cfg(feature = "client")]
+    pub(crate) fn github_auth() -> DefaultRequester {
+        DefaultRequester::new(GH_LOGIN.as_str())
+    }
+}
+
+#[cfg(test)]
+#[cfg(feature = "client")]
+pub(crate) use tests::github_auth;
+
 /// Help I'm going insane
 pub async fn helper_for_helper_for_helper(
     client: &impl Requester,

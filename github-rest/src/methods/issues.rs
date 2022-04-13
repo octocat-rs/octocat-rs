@@ -199,14 +199,12 @@ where
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequester;
+    use crate::{client::DefaultRequester, methods::util};
 
     use super::*;
 
     #[tokio::test]
     async fn test_create_issue() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
-
         let body = CreateIssueBody {
             title: "tricked is cool".to_owned(),
             body: Some("This is very true".to_owned()),
@@ -216,7 +214,7 @@ mod tests {
             assignees: None,
         };
 
-        let res = create_issue(&requester, "Tricked-dev", "octo-computing-machine", &body)
+        let res = create_issue(&util::github_auth(), "Tricked-dev", "octo-computing-machine", &body)
             .await
             .unwrap();
 

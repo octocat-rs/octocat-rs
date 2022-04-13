@@ -102,23 +102,19 @@ pub struct Pagination {
 #[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequester;
+    use crate::{client::DefaultRequester, methods::util};
 
     use super::*;
 
     #[tokio::test]
     async fn test_get_followers() {
-        // Note: this requires auth
-        let client = DefaultRequester::new_none();
-        let res = get_followers(&client, None).await.unwrap();
+        let res = get_followers(&util::github_auth(), None).await.unwrap();
         dbg!(res);
     }
 
     #[tokio::test]
     async fn test_get_following() {
-        // Note: this requires auth
-        let client = DefaultRequester::new_none();
-        let res = get_followers(&client, None).await.unwrap();
+        let res = get_followers(&util::github_auth(), None).await.unwrap();
         dbg!(res);
     }
 

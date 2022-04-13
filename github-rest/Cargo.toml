@@ -8,8 +8,6 @@ authors = [
 ]
 license = "MIT OR Apache-2.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 # TODO: Organize feature-specific deps
 [dependencies]
 ## HTTP
@@ -31,13 +29,14 @@ reqwest = { version = "0.11.8" }
 [target.'cfg(target_family = "wasm")'.dependencies]
 worker = "0.0.9"
 
-
 [features]
 default = ["builders"]
 full = ["builders", "client"]
 builders = []
 client = ["base64"]
 
+[dev-dependencies]
+lazy_static = "1.4.0"
 
 [target.'cfg(not(target_family = "wasm"))'.dev-dependencies]
 tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }

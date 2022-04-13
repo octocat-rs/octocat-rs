@@ -124,6 +124,7 @@ mod tests {
     use crate::{
         builders::{Builder, CreateGistBuilder, GetGistsBuilder, PatchGistBuilder},
         client::DefaultRequester,
+        methods::util,
     };
 
     const GIST_ID: &str = "";
@@ -140,23 +141,21 @@ mod tests {
 
     #[tokio::test]
     async fn test_patch_gist_builder() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
         let req = PatchGistBuilder::new().gist_id(GIST_ID).description("Test description");
 
-        let res = req.execute(&requester).await.unwrap();
+        let res = req.execute(&util::github_auth()).await.unwrap();
 
         dbg!(res);
     }
 
     #[tokio::test]
     async fn test_create_gist_builder() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
         let req = CreateGistBuilder::new()
             .description("Test description")
             .file("hello.rs", r#"fn main() { println!("Hello, world!") }"#)
             .file("goodbye.rs", r#"fn main() { println!("Goodbye, world!") }"#);
 
-        let res = req.execute(&requester).await.unwrap();
+        let res = req.execute(&util::github_auth()).await.unwrap();
 
         dbg!(res);
     }

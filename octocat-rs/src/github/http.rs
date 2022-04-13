@@ -1,6 +1,11 @@
 //! Contains [`HttpClient`].
 
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use std::{io::Write, num::NonZeroU16};
+
 use async_trait::async_trait;
+#[cfg(all(target_family = "wasm", feature = "workers"))]
+use base64::write::EncoderWriter as Base64Encoder;
 #[cfg(feature = "native")]
 use reqwest::{
     header,
@@ -10,11 +15,6 @@ use reqwest::{
 use serde::{de::DeserializeOwned, Serialize};
 #[cfg(feature = "native")]
 use tokio::time::Duration;
-
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-use base64::write::EncoderWriter as Base64Encoder;
-#[cfg(all(target_family = "wasm", feature = "workers"))]
-use std::{io::Write, num::NonZeroU16};
 #[cfg(all(target_family = "wasm", feature = "workers"))]
 use worker::{Fetch, Headers, Method, Request, RequestInit};
 

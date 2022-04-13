@@ -92,40 +92,36 @@ impl Builder for CreateIssueBuilder {
 #[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
-    use crate::client::DefaultRequester;
+    use crate::methods::util;
 
     use super::*;
 
     #[tokio::test]
     async fn test_get_issues_builder() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
-
-        let r = GetIssuesBuilder::new()
+        let res = GetIssuesBuilder::new()
             .owner("microsoft")
             .repo("vscode")
             .per_page(1.to_string())
             .page(2.to_string())
             .state(IssueState::Open)
-            .execute(&requester)
+            .execute(&util::github_auth())
             .await
             .unwrap();
 
-        dbg!(r);
+        dbg!(res);
     }
 
     #[tokio::test]
     async fn test_create_issue_builder() {
-        let requester = DefaultRequester::new(std::env::var("GH_LOGIN").unwrap());
-
-        let r = CreateIssueBuilder::new()
+        let res = CreateIssueBuilder::new()
             .owner("octocat-rs")
             .repo("octocat-rs")
             .title("Title")
             .body("body")
-            .execute(&requester)
+            .execute(&util::github_auth())
             .await
             .unwrap();
 
-        dbg!(r);
+        dbg!(res);
     }
 }
