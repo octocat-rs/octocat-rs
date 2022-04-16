@@ -21,20 +21,6 @@ compile_error!("feature \"native\" and feature \"workers\" cannot be enabled at 
 mod tests {
     use crate::{github::ClientBuilder, DefaultEventHandler};
 
-    #[cfg(feature = "native")]
-    use crate::{handler::EventHandler, Client, Command};
-    #[cfg(feature = "native")]
-    use async_trait::async_trait;
-    #[cfg(feature = "native")]
-    use futures::FutureExt;
-    #[cfg(feature = "native")]
-    use github_rest::{
-        model::{commits::comments::CommitComment, repositories::events::PushEvent},
-        GithubRestError,
-    };
-    #[cfg(feature = "native")]
-    use std::sync::Arc;
-
     #[test]
     fn default_everything() {
         let _client = ClientBuilder::build_unconfigured();
@@ -43,6 +29,15 @@ mod tests {
     #[cfg(feature = "native")]
     #[tokio::test]
     async fn standard() {
+        use crate::{handler::EventHandler, Client, Command};
+        use async_trait::async_trait;
+        use futures::FutureExt;
+        use github_rest::{
+            model::{commits::comments::CommitComment, repositories::events::PushEvent},
+            GithubRestError,
+        };
+        use std::sync::Arc;
+
         #[derive(Debug)]
         struct Handler {}
 

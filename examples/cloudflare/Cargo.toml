@@ -24,8 +24,8 @@ cfg-if = "1"
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
-async-trait = "0.1.52"
-wasm-bindgen-futures = "0.4.1"
+async-trait = "0.1"
+wasm-bindgen-futures = "0.4"
 anyhow = "1"
 
 [profile.release]

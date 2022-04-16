@@ -20,11 +20,11 @@ serde_json = "^1"
 base64 = { version = "0.13", optional = true }
 
 # Misc
-async-trait = "0.1.52"
+async-trait = "0.1"
 paste = "1"
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
-reqwest = { version = "0.11.8" }
+reqwest = "0.11"
 
 [target.'cfg(target_family = "wasm")'.dependencies]
 worker = "0.0.9"
@@ -39,4 +39,4 @@ client = ["base64"]
 lazy_static = "1.4.0"
 
 [target.'cfg(not(target_family = "wasm"))'.dev-dependencies]
-tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

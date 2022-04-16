@@ -16,14 +16,14 @@ mod tests {
     }
 
     #[cfg(feature = "client")]
-    pub(crate) fn github_auth() -> DefaultRequester {
+    pub fn github_auth() -> DefaultRequester {
         DefaultRequester::new(GH_LOGIN.as_str())
     }
 }
 
 #[cfg(test)]
 #[cfg(feature = "client")]
-pub(crate) use tests::github_auth;
+pub use tests::github_auth;
 
 /// Help I'm going insane
 pub async fn helper_for_helper_for_helper(

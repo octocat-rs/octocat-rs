@@ -65,9 +65,7 @@ pub trait EventHandler {
     #[cfg(feature = "secrets")]
     fn listener_secret(&self) -> &'static [u8];
 
-    async fn message(&self, message: Self::Message) {
-        {}
-    }
+    async fn message(&self, message: Self::Message) {}
 
     /// Someone revokes their authorization of a GitHub App
     async fn app_authorization_event(

@@ -11,8 +11,8 @@ octocat-rs = { path = "../../octocat-rs", features = ["secrets"] }
 
 ## Async
 tokio = { version = "1", features = ["full"] }
-async-trait = "0.1.52"
+async-trait = "0.1"
 
 ## Util
-anyhow = "1.0.51"
+anyhow = "1.0"
 lazy_static = "1.4.0"
