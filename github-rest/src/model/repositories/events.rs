@@ -149,7 +149,7 @@ pub enum BranchProtectionRuleAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StarEvent {
     pub action: StarAction,
-    pub starred_at: String,
+    pub starred_at: Option<String>,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
