@@ -97,11 +97,6 @@
 <span id="90">90</span>
 <span id="91">91</span>
 <span id="92">92</span>
-<span id="93">93</span>
-<span id="94">94</span>
-<span id="95">95</span>
-<span id="96">96</span>
-<span id="97">97</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">feature</span>(<span class="ident">str_split_as_str</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::if_then_some_else_none</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::str_to_string</span>)]</span>
@@ -125,20 +120,6 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">github::ClientBuilder</span>, <span class="ident">DefaultEventHandler</span>};
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">handler::EventHandler</span>, <span class="ident">Client</span>, <span class="ident">Command</span>};
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
-    <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
-    <span class="kw">use</span> <span class="ident">futures::FutureExt</span>;
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
-    <span class="kw">use</span> <span class="ident">github_rest</span>::{
-        <span class="ident">model</span>::{<span class="ident">commits::comments::CommitComment</span>, <span class="ident">repositories::events::PushEvent</span>},
-        <span class="ident">GithubRestError</span>,
-    };
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
-    <span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
-
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">default_everything</span>() {
         <span class="kw">let</span> <span class="ident">_client</span> <span class="op">=</span> <span class="ident">ClientBuilder::build_unconfigured</span>();
@@ -147,6 +128,15 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;native&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">standard</span>() {
+        <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">handler::EventHandler</span>, <span class="ident">Client</span>, <span class="ident">Command</span>};
+        <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
+        <span class="kw">use</span> <span class="ident">futures::FutureExt</span>;
+        <span class="kw">use</span> <span class="ident">github_rest</span>::{
+            <span class="ident">model</span>::{<span class="ident">commits::comments::CommitComment</span>, <span class="ident">repositories::events::PushEvent</span>},
+            <span class="ident">GithubRestError</span>,
+        };
+        <span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
         <span class="kw">struct</span> <span class="ident">Handler</span> {}
 
@@ -200,5 +190,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="octocat_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (52ca603da 2022-04-12)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="octocat_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (3f391b845 2022-04-15)" ></div>
 </body></html>
