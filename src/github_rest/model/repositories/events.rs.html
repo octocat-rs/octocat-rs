@@ -654,7 +654,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StarEvent</span> {
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">StarAction</span>,
-    <span class="kw">pub</span> <span class="ident">starred_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">starred_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">RepoEventInfo</span>,
 }
