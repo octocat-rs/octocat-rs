@@ -1,67 +1,72 @@
-use crate::model::{
-    issues::{milestones::Milestone, nested::PullRequest},
-    prelude::*,
-    user::User,
+use crate::{
+    methods::IssueState,
+    model::{
+        commits::association::Association,
+        issues::{milestones::Milestone, nested::PullRequest},
+        prelude::*,
+        repositories::Repository,
+        user::User,
+    },
 };
 
 pub type Issues = Vec<Issue>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Issue {
-    id: i64,
-    node_id: String,
-    url: String,
-    repository_url: String,
-    labels_url: String,
-    comments_url: String,
-    events_url: String,
-    html_url: String,
-    number: i64,
-    state: String,
-    title: String,
-    body: String,
-    user: User,
-    labels: Vec<Label>,
-    assignee: Option<User>,
-    assignees: Vec<User>,
-    milestone: Option<Milestone>,
-    locked: bool,
-    active_lock_reason: Option<String>,
-    comments: i64,
-    pull_request: Option<PullRequest>,
-    closed_at: Option<serde_json::Value>,
-    created_at: String,
-    updated_at: String,
-    closed_by: Option<User>,
-    author_association: String,
+    pub id: i64,
+    pub node_id: String,
+    pub url: String,
+    pub repository_url: String,
+    pub labels_url: String,
+    pub comments_url: String,
+    pub events_url: String,
+    pub html_url: String,
+    pub number: i64,
+    pub state: IssueState,
+    pub title: String,
+    pub body: Option<String>,
+    pub user: Option<User>,
+    pub labels: Vec<Label>,
+    pub assignee: Option<User>,
+    pub assignees: Option<Vec<User>>,
+    pub milestone: Option<Milestone>,
+    pub locked: bool,
+    pub active_lock_reason: Option<String>,
+    pub comments: i64,
+    pub pull_request: Option<PullRequest>,
+    pub closed_at: Option<String>,
+    pub created_at: String,
+    pub updated_at: String,
+    pub closed_by: Option<User>,
+    pub author_association: Association,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Label {
-    id: i64,
-    node_id: String,
-    url: String,
-    name: String,
-    description: Option<String>,
-    color: String,
+    pub id: i64,
+    pub node_id: String,
+    pub url: String,
+    pub name: String,
+    pub description: Option<String>,
+    pub color: String,
     // 🚎
-    default: Option<bool>,
+    pub default: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct RequestedTeam {
-    id: i64,
-    node_id: String,
-    url: String,
-    html_url: String,
-    name: String,
-    slug: String,
-    description: String,
-    privacy: String,
-    permission: String,
-    members_url: String,
-    repositories_url: String,
-    parent: Option<serde_json::Value>,
+    pub id: i64,
+    pub node_id: String,
+    pub url: String,
+    pub html_url: String,
+    pub name: String,
+    pub slug: String,
+    pub description: String,
+    pub privacy: String,
+    pub permission: String,
+    pub members_url: String,
+    pub repositories_url: String,
+    pub parent: Option<serde_json::Value>,
 }
 
 pub mod nested {
@@ -69,9 +74,9 @@ pub mod nested {
 
     #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
     pub struct PullRequest {
-        url: String,
-        html_url: String,
-        diff_url: String,
-        patch_url: String,
+        pub url: String,
+        pub html_url: String,
+        pub diff_url: String,
+        pub patch_url: String,
     }
 }

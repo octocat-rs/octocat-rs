@@ -68,10 +68,6 @@ pub trait GitHubClient: Requester + Sized {
     type HttpClient: Requester + Send + Sync;
     type EventHandler: EventHandler + Send + Sync;
 
-    /// Code that the implementer wishes to be run *before* the event listener
-    /// is started.
-    async fn run(&self) -> Result<()>;
-
     fn event_handler(&self) -> &Self::EventHandler;
 
     /// Helper function to set the maximum payload size. Default is 8 MiB.
@@ -98,11 +94,6 @@ where
 {
     type HttpClient = HttpClient;
     type EventHandler = T;
-
-    // TODO: User-facing API to set this? (This can be ignored for now)
-    async fn run(&self) -> Result<()> {
-        Ok(())
-    }
 
     fn event_handler(&self) -> &T {
         &self.handler
@@ -382,8 +373,6 @@ where
 
     #[cfg(feature = "native")]
     pub async fn start(self) {
-        let _ = self.run().await.expect("Starting application: User-defined code");
-
         let self_arc = Arc::new(self);
         let thread_self = self_arc.clone();
         let thread_self_2 = self_arc.clone();
