@@ -5,7 +5,9 @@
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../../../github_rest/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../github_rest/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../github_rest/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -82,70 +84,80 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
-    <span class="ident">issues</span>::{<span class="ident">milestones::Milestone</span>, <span class="ident">nested::PullRequest</span>},
-    <span class="ident">prelude</span>::<span class="kw-2">*</span>,
-    <span class="ident">user::User</span>,
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">methods::IssueState</span>,
+    <span class="ident">model</span>::{
+        <span class="ident">commits::association::Association</span>,
+        <span class="ident">issues</span>::{<span class="ident">milestones::Milestone</span>, <span class="ident">nested::PullRequest</span>},
+        <span class="ident">prelude</span>::<span class="kw-2">*</span>,
+        <span class="ident">repositories::Repository</span>,
+        <span class="ident">user::User</span>,
+    },
 };
 
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Issues</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Issue</span><span class="op">&gt;</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Issue</span> {
-    <span class="ident">id</span>: <span class="ident">i64</span>,
-    <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="ident">repository_url</span>: <span class="ident">String</span>,
-    <span class="ident">labels_url</span>: <span class="ident">String</span>,
-    <span class="ident">comments_url</span>: <span class="ident">String</span>,
-    <span class="ident">events_url</span>: <span class="ident">String</span>,
-    <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="ident">number</span>: <span class="ident">i64</span>,
-    <span class="ident">state</span>: <span class="ident">String</span>,
-    <span class="ident">title</span>: <span class="ident">String</span>,
-    <span class="ident">body</span>: <span class="ident">String</span>,
-    <span class="ident">user</span>: <span class="ident">User</span>,
-    <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>,
-    <span class="ident">assignee</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
-    <span class="ident">assignees</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
-    <span class="ident">milestone</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Milestone</span><span class="op">&gt;</span>,
-    <span class="ident">locked</span>: <span class="ident">bool</span>,
-    <span class="ident">active_lock_reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="ident">comments</span>: <span class="ident">i64</span>,
-    <span class="ident">pull_request</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PullRequest</span><span class="op">&gt;</span>,
-    <span class="ident">closed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_json::Value</span><span class="op">&gt;</span>,
-    <span class="ident">created_at</span>: <span class="ident">String</span>,
-    <span class="ident">updated_at</span>: <span class="ident">String</span>,
-    <span class="ident">closed_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
-    <span class="ident">author_association</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">repository_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">labels_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">events_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">IssueState</span>,
+    <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">body</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">assignee</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">assignees</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">milestone</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Milestone</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">locked</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">active_lock_reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">comments</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">pull_request</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PullRequest</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">closed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">closed_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">Association</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Label</span> {
-    <span class="ident">id</span>: <span class="ident">i64</span>,
-    <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="ident">color</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">color</span>: <span class="ident">String</span>,
     <span class="comment">// 🚎</span>
-    <span class="ident">default</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">default</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RequestedTeam</span> {
-    <span class="ident">id</span>: <span class="ident">i64</span>,
-    <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="ident">slug</span>: <span class="ident">String</span>,
-    <span class="ident">description</span>: <span class="ident">String</span>,
-    <span class="ident">privacy</span>: <span class="ident">String</span>,
-    <span class="ident">permission</span>: <span class="ident">String</span>,
-    <span class="ident">members_url</span>: <span class="ident">String</span>,
-    <span class="ident">repositories_url</span>: <span class="ident">String</span>,
-    <span class="ident">parent</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_json::Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">slug</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">privacy</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">permission</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">members_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">repositories_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">parent</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_json::Value</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
@@ -153,12 +165,12 @@
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PullRequest</span> {
-        <span class="ident">url</span>: <span class="ident">String</span>,
-        <span class="ident">html_url</span>: <span class="ident">String</span>,
-        <span class="ident">diff_url</span>: <span class="ident">String</span>,
-        <span class="ident">patch_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">diff_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">patch_url</span>: <span class="ident">String</span>,
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (3f391b845 2022-04-15)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
 </body></html>
