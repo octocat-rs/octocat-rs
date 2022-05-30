@@ -24,7 +24,7 @@
 <span id="15">15</span>
 <span id="16">16</span>
 <span id="17">17</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">reactions::Reactions</span>, <span class="ident">user::User</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">reactions::Reactions</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IssueComment</span> {
@@ -33,7 +33,7 @@
     <span class="kw">pub</span> <span class="ident">issue_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
     <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">String</span>,
@@ -42,5 +42,5 @@
     <span class="kw">pub</span> <span class="ident">performed_via_github_app</span>: <span class="ident">Value</span>,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

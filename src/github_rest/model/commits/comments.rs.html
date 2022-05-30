@@ -56,7 +56,7 @@
         <span class="ident">commits::association::Association</span>,
         <span class="ident">prelude</span>::<span class="kw-2">*</span>,
         <span class="ident">reactions</span>::{<span class="ident">CommitCommentReactionCreated</span>, <span class="ident">Reaction</span>, <span class="ident">Reactions</span>},
-        <span class="ident">user::User</span>,
+        <span class="ident">user::SimpleUser</span>,
     },
     <span class="ident">GithubRestError</span>, <span class="ident">Requester</span>,
 };
@@ -73,7 +73,7 @@
     <span class="kw">pub</span> <span class="ident">line</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">commit_id</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">Association</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">reactions</span>: <span class="ident">Reactions</span>,
@@ -94,5 +94,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

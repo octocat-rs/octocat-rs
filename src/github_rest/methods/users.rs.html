@@ -162,10 +162,29 @@
 <span id="153">153</span>
 <span id="154">154</span>
 <span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
     <span class="ident">keys</span>::{<span class="ident">GpgKey</span>, <span class="ident">SshKey</span>},
     <span class="ident">organizations::Organization</span>,
-    <span class="ident">user::User</span>,
+    <span class="ident">user::SimpleUser</span>,
 };
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
@@ -176,12 +195,12 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// List followers of the authenticated user</span>
 <span class="doccomment">/// Lists the people following the authenticated user.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_followers</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>, <span class="ident">params</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Pagination</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>, <span class="ident">GithubRestError</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_followers</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>, <span class="ident">params</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Pagination</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>, <span class="ident">GithubRestError</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Requester</span>,
 {
     <span class="ident">client</span>
-        .<span class="ident">req</span>::<span class="op">&lt;</span><span class="ident">Pagination</span>, <span class="ident">String</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">EndPoints::GetUserFollowers</span>(), <span class="ident">params</span>, <span class="prelude-val">None</span>)
+        .<span class="ident">req</span>::<span class="op">&lt;</span><span class="ident">Pagination</span>, <span class="ident">String</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">EndPoints::GetUserFollowers</span>(), <span class="ident">params</span>, <span class="prelude-val">None</span>)
         .<span class="kw">await</span>
 }
 
@@ -191,12 +210,12 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// List the people the authenticated user follows</span>
 <span class="doccomment">/// Lists the people who the authenticated user follows.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_following</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>, <span class="ident">params</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Pagination</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>, <span class="ident">GithubRestError</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_following</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>, <span class="ident">params</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Pagination</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>, <span class="ident">GithubRestError</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Requester</span>,
 {
     <span class="ident">client</span>
-        .<span class="ident">req</span>::<span class="op">&lt;</span><span class="ident">Pagination</span>, <span class="ident">String</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">EndPoints::GetUserFollowing</span>(), <span class="ident">params</span>, <span class="prelude-val">None</span>)
+        .<span class="ident">req</span>::<span class="op">&lt;</span><span class="ident">Pagination</span>, <span class="ident">String</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">EndPoints::GetUserFollowing</span>(), <span class="ident">params</span>, <span class="prelude-val">None</span>)
         .<span class="kw">await</span>
 }
 
@@ -239,7 +258,7 @@
     <span class="doccomment">/// Lists the people who the specified user follows.</span>
     <span class="ident">get_user_following</span>,
     <span class="ident">EndPoints::GetUsersusernameFollowing</span>,
-    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
+    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
     <span class="doccomment">/// * tags users</span>
     <span class="doccomment">/// * get `/users/{username}/followers`</span>
     <span class="doccomment">/// * docs &lt;https://docs.github.com/rest/reference/users#list-followers-of-a-user&gt;</span>
@@ -248,7 +267,7 @@
     <span class="doccomment">/// Lists the people following the specified user.</span>
     <span class="ident">get_user_followers</span>,
     <span class="ident">EndPoints::GetUsersusernameFollowers</span>,
-    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>
+    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>
 );
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
@@ -285,14 +304,33 @@
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_user_following</span>() {
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_following</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="string">&quot;proudmuslim-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_following</span>(
+            <span class="kw-2">&amp;</span><span class="ident">client</span>,
+            <span class="string">&quot;proudmuslim-dev&quot;</span>,
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">Pagination</span> {
+                <span class="ident">per_page</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;2&quot;</span>.<span class="ident">to_owned</span>()),
+                <span class="ident">page</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;1&quot;</span>.<span class="ident">to_owned</span>()),
+            }),
+        )
+        .<span class="kw">await</span>
+        .<span class="ident">unwrap</span>();
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_user_followers</span>() {
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_followers</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="string">&quot;proudmuslim-dev&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_user_followers</span>(
+            <span class="kw-2">&amp;</span><span class="ident">client</span>,
+            <span class="string">&quot;proudmuslim-dev&quot;</span>,
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">Pagination</span> {
+                <span class="ident">per_page</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;2&quot;</span>.<span class="ident">to_owned</span>()),
+                <span class="ident">page</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;1&quot;</span>.<span class="ident">to_owned</span>()),
+            }),
+        )
+        .<span class="kw">await</span>
+        .<span class="ident">unwrap</span>();
+
         <span class="macro">dbg!</span>(<span class="ident">res</span>);
     }
 
@@ -318,5 +356,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

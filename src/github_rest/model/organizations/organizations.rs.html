@@ -53,7 +53,7 @@
 <span id="44">44</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::methods::Role</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::User</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Organization</span> {
@@ -93,8 +93,8 @@
     <span class="kw">pub</span> <span class="ident">role</span>: <span class="ident">Role</span>,
     <span class="kw">pub</span> <span class="ident">organization_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">organization</span>: <span class="ident">Organization</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

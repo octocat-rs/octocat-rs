@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Parent",""],["Tree",""],["Verification",""]]});
+initSidebarItems({"struct":[["CommitObject",""],["Parent",""],["Tree",""],["Verification",""]]});

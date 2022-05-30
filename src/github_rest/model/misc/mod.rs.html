@@ -118,7 +118,7 @@
 <span id="109">109</span>
 <span id="110">110</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">deployments</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::User</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
     <span class="doccomment">/// &lt;https://docs.github.com/en/rest/reference/deployments#get-a-deployment&gt;</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -136,7 +136,7 @@
         <span class="kw">pub</span> <span class="ident">original_environment</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">environment</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">User</span>,
+        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">SimpleUser</span>,
         <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">Value</span>,
         <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">Value</span>,
         <span class="kw">pub</span> <span class="ident">statuses_url</span>: <span class="ident">String</span>,
@@ -152,7 +152,7 @@
         <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
         <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">DeploymentState</span>,
-        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">User</span>,
+        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">SimpleUser</span>,
         <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">environment</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">target_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -192,7 +192,7 @@
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UserOrOrg</span> {
-        <span class="ident">User</span>(<span class="ident">User</span>),
+        <span class="ident">User</span>(<span class="ident">SimpleUser</span>),
         <span class="ident">Organization</span>(<span class="ident">Organization</span>),
     }
 
@@ -228,5 +228,5 @@
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">events</span>;
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

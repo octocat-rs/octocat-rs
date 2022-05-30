@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SimpleUser",""],["User",""]]});
+initSidebarItems({"struct":[["GitUser",""],["PrivateUser","Embeds [`PublicUser`]"],["PublicUser","Embeds [`SimpleUser`]"],["SimpleUser",""]],"trait":[["GitHubUser","A trait for all GitHub user structs. Intended for [`SimpleUser`], [`PublicUser`], and [`PrivateUser`]"]]});

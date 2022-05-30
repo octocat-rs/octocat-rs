@@ -208,6 +208,22 @@
 <span id="199">199</span>
 <span id="200">200</span>
 <span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
     <span class="ident">commits</span>::{<span class="ident">comments::CommitComment</span>, <span class="ident">Commit</span>, <span class="ident">Commits</span>},
     <span class="ident">reactions</span>::{<span class="ident">CommitCommentReactionCreated</span>, <span class="ident">Reaction</span>},
@@ -402,6 +418,22 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_commit</span>() {
+        <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
+
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">get_commit</span>(
+            <span class="kw-2">&amp;</span><span class="ident">requester</span>,
+            <span class="string">&quot;microsoft&quot;</span>,
+            <span class="string">&quot;vscode&quot;</span>,
+            <span class="string">&quot;80d30e41d790c774230b00dd480895d55451d967&quot;</span>,
+            <span class="prelude-val">None</span>,
+        )
+        .<span class="kw">await</span>
+        .<span class="ident">unwrap</span>();
+        <span class="macro">println!</span>(<span class="string">&quot;{res:#?}&quot;</span>)
+    }
+
+    <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_commits</span>() {
         <span class="kw">let</span> <span class="ident">requester</span> <span class="op">=</span> <span class="ident">DefaultRequester::new_none</span>();
 
@@ -410,5 +442,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

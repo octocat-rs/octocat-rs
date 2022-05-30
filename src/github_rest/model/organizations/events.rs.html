@@ -127,7 +127,7 @@
         <span class="ident">Team</span>,
     },
     <span class="ident">prelude</span>::<span class="kw-2">*</span>,
-    <span class="ident">user::User</span>,
+    <span class="ident">user::SimpleUser</span>,
 };
 
 <span class="doccomment">/// The invitation and membership fields are mutually exclusive.</span>
@@ -177,7 +177,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MembershipEvent</span> {
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">MembershipAction</span>,
     <span class="kw">pub</span> <span class="ident">scope</span>: <span class="ident">MembershipScope</span>,
-    <span class="kw">pub</span> <span class="ident">member</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">member</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">Team</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">OrgEventInfo</span>,
@@ -194,7 +194,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OrgBlockEvent</span> {
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">OrgBlockAction</span>,
-    <span class="kw">pub</span> <span class="ident">blocked_user</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">blocked_user</span>: <span class="ident">SimpleUser</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">OrgEventInfo</span>,
 }
@@ -234,5 +234,5 @@
 <span class="macro">org_origin!</span>(<span class="ident">OrgBlockEvent</span>);
 <span class="macro">org_origin!</span>(<span class="ident">TeamEvent</span>);
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

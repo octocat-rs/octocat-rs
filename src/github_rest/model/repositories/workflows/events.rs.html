@@ -338,7 +338,7 @@
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
         <span class="ident">prelude</span>::<span class="kw-2">*</span>,
         <span class="ident">repositories</span>::{<span class="ident">events::nested::HeadCommit</span>, <span class="ident">Repository</span>},
-        <span class="ident">user::User</span>,
+        <span class="ident">user::SimpleUser</span>,
     };
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
@@ -482,7 +482,7 @@
         <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
         <span class="kw">pub</span> <span class="ident">slug</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">owner</span>: <span class="ident">User</span>,
+        <span class="kw">pub</span> <span class="ident">owner</span>: <span class="ident">SimpleUser</span>,
         <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">external_url</span>: <span class="ident">String</span>,
@@ -522,5 +522,5 @@
 <span class="macro">repo_origin!</span>(<span class="ident">CheckRunEvent</span>);
 <span class="macro">repo_origin!</span>(<span class="ident">CheckSuiteEvent</span>);
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

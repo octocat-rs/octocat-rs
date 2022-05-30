@@ -81,16 +81,22 @@
 <span id="72">72</span>
 <span id="73">73</span>
 <span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">methods::util</span>,
-    <span class="ident">model</span>::{
-        <span class="ident">commits</span>::{<span class="ident">comments</span>, <span class="ident">comments::CommitComment</span>},
-        <span class="ident">user::User</span>,
-    },
+    <span class="ident">model</span>::{<span class="ident">commits::comments::CommitComment</span>, <span class="ident">user::SimpleUser</span>},
     <span class="ident">GithubRestError</span>, <span class="ident">Requester</span>,
 };
 
@@ -98,14 +104,14 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Commit</span> {
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">sha</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">commit</span>: <span class="ident">comments::CommitComment</span>,
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">User</span>,
-    <span class="kw">pub</span> <span class="ident">committer</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">commit</span>: <span class="ident">nested::CommitObject</span>,
+    <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">SimpleUser</span>,
+    <span class="kw">pub</span> <span class="ident">committer</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">parents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">nested::Parent</span><span class="op">&gt;</span>,
 }
 
@@ -132,7 +138,26 @@
 }
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::user::GitUser</span>;
     <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Parent</span> {
+        <span class="kw">pub</span> <span class="ident">sha</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CommitObject</span> {
+        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">author</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GitUser</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">committer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GitUser</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">message</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">comment_count</span>: <span class="ident">i64</span>,
+        <span class="kw">pub</span> <span class="ident">tree</span>: <span class="ident">Tree</span>,
+        <span class="kw">pub</span> <span class="ident">verification</span>: <span class="ident">Verification</span>,
+    }
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tree</span> {
@@ -147,14 +172,7 @@
         <span class="kw">pub</span> <span class="ident">signature</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">payload</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     }
-
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Parent</span> {
-        <span class="kw">pub</span> <span class="ident">sha</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

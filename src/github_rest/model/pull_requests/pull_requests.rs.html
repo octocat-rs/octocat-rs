@@ -179,7 +179,7 @@
     <span class="ident">commits::association::Association</span>,
     <span class="ident">prelude</span>::<span class="kw-2">*</span>,
     <span class="ident">pull_requests::nested</span>::{<span class="ident">HeadBase</span>, <span class="ident">Links</span>},
-    <span class="ident">user::User</span>,
+    <span class="ident">user::SimpleUser</span>,
 };
 
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pulls</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Pull</span><span class="op">&gt;</span>;
@@ -201,7 +201,7 @@
     <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">PullRequestState</span>,
     <span class="kw">pub</span> <span class="ident">locked</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">Value</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
@@ -255,7 +255,7 @@
     <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">PullRequestState</span>,
     <span class="kw">pub</span> <span class="ident">locked</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">Value</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
@@ -313,7 +313,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
     <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">repositories::Repository</span>, <span class="ident">user::User</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">repositories::Repository</span>, <span class="ident">user::SimpleUser</span>};
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HeadBase</span> {
@@ -321,7 +321,7 @@
         <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;ref&quot;</span>)]</span>
         <span class="kw">pub</span> <span class="ident">ref_field</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">sha</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">User</span>,
+        <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
         <span class="kw">pub</span> <span class="ident">repo</span>: <span class="ident">Repository</span>,
     }
 
@@ -344,5 +344,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

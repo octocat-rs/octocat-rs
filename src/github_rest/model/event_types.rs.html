@@ -154,7 +154,7 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">repositories::Repository</span>, <span class="ident">user::User</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">repositories::Repository</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="doccomment">/// Used to represent all possible values for the `x-github-event` header sent</span>
 <span class="doccomment">/// with all webhook payloads.</span>
@@ -253,7 +253,7 @@
     <span class="kw">pub</span> <span class="ident">repository</span>: <span class="ident">Repository</span>,
     <span class="kw">pub</span> <span class="ident">organization</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Organization</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">installation</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">sender</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">sender</span>: <span class="ident">SimpleUser</span>,
 }
 
 <span class="doccomment">/// Used to represent the base fields provided by events originating from</span>
@@ -262,7 +262,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OrgEventInfo</span> {
     <span class="kw">pub</span> <span class="ident">organization</span>: <span class="ident">Organization</span>,
     <span class="kw">pub</span> <span class="ident">installation</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">sender</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">sender</span>: <span class="ident">SimpleUser</span>,
 }
 
 <span class="doccomment">/// The base trait used to represent different types of events. This will</span>
@@ -302,5 +302,5 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">repo_origin</span>;
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

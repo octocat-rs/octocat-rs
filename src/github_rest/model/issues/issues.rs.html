@@ -88,15 +88,13 @@
 <span id="79">79</span>
 <span id="80">80</span>
 <span id="81">81</span>
-<span id="82">82</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">methods::IssueState</span>,
     <span class="ident">model</span>::{
         <span class="ident">commits::association::Association</span>,
         <span class="ident">issues</span>::{<span class="ident">milestones::Milestone</span>, <span class="ident">nested::PullRequest</span>},
         <span class="ident">prelude</span>::<span class="kw-2">*</span>,
-        <span class="ident">repositories::Repository</span>,
-        <span class="ident">user::User</span>,
+        <span class="ident">user::SimpleUser</span>,
     },
 };
 
@@ -116,10 +114,10 @@
     <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">IssueState</span>,
     <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">body</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">assignee</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">assignees</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">assignee</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">assignees</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">milestone</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Milestone</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">locked</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">active_lock_reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -128,7 +126,7 @@
     <span class="kw">pub</span> <span class="ident">closed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">closed_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">closed_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">Association</span>,
 }
 
@@ -172,5 +170,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

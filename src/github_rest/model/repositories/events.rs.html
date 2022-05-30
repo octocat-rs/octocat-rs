@@ -520,7 +520,7 @@
             },
             <span class="ident">CodeScanningAlert</span>, <span class="ident">DeployKey</span>, <span class="ident">Project</span>, <span class="ident">ProjectCard</span>, <span class="ident">ProjectColumn</span>, <span class="ident">Repository</span>,
         },
-        <span class="ident">user::User</span>,
+        <span class="ident">user::SimpleUser</span>,
     },
     <span class="ident">GithubRestError</span>, <span class="ident">Requester</span>,
 };
@@ -778,7 +778,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MemberEvent</span> {
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">MemberAction</span>,
-    <span class="kw">pub</span> <span class="ident">member</span>: <span class="ident">User</span>,
+    <span class="kw">pub</span> <span class="ident">member</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">changes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MemberChanges</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">RepoEventInfo</span>,
@@ -880,7 +880,7 @@
 }
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">pull_requests::events::nested::Change</span>, <span class="ident">user::SimpleUser</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">pull_requests::events::nested::Change</span>, <span class="ident">user::GitUser</span>};
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Pusher</span> {
@@ -896,8 +896,8 @@
         <span class="kw">pub</span> <span class="ident">message</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">timestamp</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">SimpleUser</span>,
-        <span class="kw">pub</span> <span class="ident">committer</span>: <span class="ident">SimpleUser</span>,
+        <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">GitUser</span>,
+        <span class="kw">pub</span> <span class="ident">committer</span>: <span class="ident">GitUser</span>,
         <span class="kw">pub</span> <span class="ident">added</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">removed</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">modified</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
@@ -911,8 +911,8 @@
         <span class="kw">pub</span> <span class="ident">message</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">timestamp</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">SimpleUser</span>,
-        <span class="kw">pub</span> <span class="ident">committer</span>: <span class="ident">SimpleUser</span>,
+        <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">GitUser</span>,
+        <span class="kw">pub</span> <span class="ident">committer</span>: <span class="ident">GitUser</span>,
         <span class="kw">pub</span> <span class="ident">added</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">removed</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">modified</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
@@ -1004,5 +1004,5 @@
 <span class="macro">repo_origin!</span>(<span class="ident">ForkEvent</span>);
 <span class="macro">repo_origin!</span>(<span class="ident">PingEvent</span>);
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>

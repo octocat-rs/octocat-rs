@@ -28,7 +28,7 @@
 <span id="19">19</span>
 <span id="20">20</span>
 <span id="21">21</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::User</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Milestone</span> {
@@ -41,7 +41,7 @@
     <span class="ident">state</span>: <span class="ident">String</span>,
     <span class="ident">title</span>: <span class="ident">String</span>,
     <span class="ident">description</span>: <span class="ident">String</span>,
-    <span class="ident">creator</span>: <span class="ident">User</span>,
+    <span class="ident">creator</span>: <span class="ident">SimpleUser</span>,
     <span class="ident">open_issues</span>: <span class="ident">i64</span>,
     <span class="ident">closed_issues</span>: <span class="ident">i64</span>,
     <span class="ident">created_at</span>: <span class="ident">String</span>,
@@ -50,5 +50,5 @@
     <span class="ident">due_on</span>: <span class="ident">String</span>,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (4cbaac699 2022-05-25)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
 </body></html>
