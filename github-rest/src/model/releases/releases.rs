@@ -1,4 +1,4 @@
-use crate::model::{prelude::*, user::User};
+use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Release {
@@ -7,7 +7,7 @@ pub struct Release {
     pub upload_url: String,
     pub html_url: String,
     pub id: i64,
-    pub author: User,
+    pub author: SimpleUser,
     pub node_id: String,
     pub tag_name: String,
     pub target_commitish: String,

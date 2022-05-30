@@ -1,4 +1,4 @@
-use crate::model::{organizations::Organization, prelude::*, repositories::Repository, user::User};
+use crate::model::{organizations::Organization, prelude::*, repositories::Repository, user::SimpleUser};
 
 /// Used to represent all possible values for the `x-github-event` header sent
 /// with all webhook payloads.
@@ -97,7 +97,7 @@ pub struct RepoEventInfo {
     pub repository: Repository,
     pub organization: Option<Organization>,
     pub installation: Option<Value>,
-    pub sender: User,
+    pub sender: SimpleUser,
 }
 
 /// Used to represent the base fields provided by events originating from
@@ -106,7 +106,7 @@ pub struct RepoEventInfo {
 pub struct OrgEventInfo {
     pub organization: Organization,
     pub installation: Option<Value>,
-    pub sender: User,
+    pub sender: SimpleUser,
 }
 
 /// The base trait used to represent different types of events. This will

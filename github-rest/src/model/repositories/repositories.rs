@@ -1,4 +1,4 @@
-use crate::model::{prelude::*, user::User};
+use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Repository {
@@ -7,7 +7,7 @@ pub struct Repository {
     pub name: String,
     pub full_name: String,
     pub private: bool,
-    pub owner: User,
+    pub owner: SimpleUser,
     pub html_url: String,
     pub description: Value,
     pub fork: bool,
@@ -104,7 +104,7 @@ pub struct ProjectCard {
     pub id: usize,
     pub node_id: String,
     pub note: String,
-    pub creator: User,
+    pub creator: SimpleUser,
     pub created_at: String,
     pub updated_at: String,
     pub archived: bool,

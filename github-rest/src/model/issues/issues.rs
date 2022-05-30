@@ -4,8 +4,7 @@ use crate::{
         commits::association::Association,
         issues::{milestones::Milestone, nested::PullRequest},
         prelude::*,
-        repositories::Repository,
-        user::User,
+        user::SimpleUser,
     },
 };
 
@@ -25,10 +24,10 @@ pub struct Issue {
     pub state: IssueState,
     pub title: String,
     pub body: Option<String>,
-    pub user: Option<User>,
+    pub user: Option<SimpleUser>,
     pub labels: Vec<Label>,
-    pub assignee: Option<User>,
-    pub assignees: Option<Vec<User>>,
+    pub assignee: Option<SimpleUser>,
+    pub assignees: Option<Vec<SimpleUser>>,
     pub milestone: Option<Milestone>,
     pub locked: bool,
     pub active_lock_reason: Option<String>,
@@ -37,7 +36,7 @@ pub struct Issue {
     pub closed_at: Option<String>,
     pub created_at: String,
     pub updated_at: String,
-    pub closed_by: Option<User>,
+    pub closed_by: Option<SimpleUser>,
     pub author_association: Association,
 }
 

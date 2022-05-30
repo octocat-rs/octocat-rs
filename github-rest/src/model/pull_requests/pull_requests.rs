@@ -2,7 +2,7 @@ use crate::model::{
     commits::association::Association,
     prelude::*,
     pull_requests::nested::{HeadBase, Links},
-    user::User,
+    user::SimpleUser,
 };
 
 pub type Pulls = Vec<Pull>;
@@ -24,7 +24,7 @@ pub struct Pull {
     pub state: PullRequestState,
     pub locked: bool,
     pub title: String,
-    pub user: User,
+    pub user: SimpleUser,
     pub body: Value,
     pub created_at: String,
     pub updated_at: String,
@@ -78,7 +78,7 @@ pub struct PullRequest {
     pub state: PullRequestState,
     pub locked: bool,
     pub title: String,
-    pub user: User,
+    pub user: SimpleUser,
     pub body: Value,
     pub created_at: String,
     pub updated_at: String,
@@ -136,7 +136,7 @@ impl Default for PullRequestState {
 pub mod nested {
     use serde::{Deserialize, Serialize};
 
-    use crate::model::{repositories::Repository, user::User};
+    use crate::model::{repositories::Repository, user::SimpleUser};
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct HeadBase {
@@ -144,7 +144,7 @@ pub mod nested {
         #[serde(rename = "ref")]
         pub ref_field: String,
         pub sha: String,
-        pub user: User,
+        pub user: SimpleUser,
         pub repo: Repository,
     }
 

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::model::{prelude::*, user::User};
+use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Gist {
@@ -20,7 +20,7 @@ pub struct Gist {
     pub comments: i64,
     pub user: Value,
     pub comments_url: String,
-    pub owner: User,
+    pub owner: SimpleUser,
     pub truncated: bool,
 }
 

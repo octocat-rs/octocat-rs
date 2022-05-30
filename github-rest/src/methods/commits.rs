@@ -192,6 +192,22 @@ mod tests {
     use super::*;
 
     #[tokio::test]
+    async fn test_get_commit() {
+        let requester = DefaultRequester::new_none();
+
+        let res = get_commit(
+            &requester,
+            "microsoft",
+            "vscode",
+            "80d30e41d790c774230b00dd480895d55451d967",
+            None,
+        )
+        .await
+        .unwrap();
+        println!("{res:#?}")
+    }
+
+    #[tokio::test]
     async fn test_get_commits() {
         let requester = DefaultRequester::new_none();
 

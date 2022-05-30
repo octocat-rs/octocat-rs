@@ -5,7 +5,7 @@ use crate::model::{
         Team,
     },
     prelude::*,
-    user::User,
+    user::SimpleUser,
 };
 
 /// The invitation and membership fields are mutually exclusive.
@@ -55,7 +55,7 @@ pub enum TeamAction {
 pub struct MembershipEvent {
     pub action: MembershipAction,
     pub scope: MembershipScope,
-    pub member: User,
+    pub member: SimpleUser,
     pub team: Team,
     #[serde(flatten)]
     pub event_info: OrgEventInfo,
@@ -72,7 +72,7 @@ pub enum MembershipAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OrgBlockEvent {
     pub action: OrgBlockAction,
-    pub blocked_user: User,
+    pub blocked_user: SimpleUser,
     #[serde(flatten)]
     pub event_info: OrgEventInfo,
 }

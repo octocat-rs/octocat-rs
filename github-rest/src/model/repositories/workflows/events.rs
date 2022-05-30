@@ -72,7 +72,7 @@ pub mod nested {
     use crate::model::{
         prelude::*,
         repositories::{events::nested::HeadCommit, Repository},
-        user::User,
+        user::SimpleUser,
     };
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -216,7 +216,7 @@ pub mod nested {
         pub id: i64,
         pub slug: String,
         pub node_id: String,
-        pub owner: User,
+        pub owner: SimpleUser,
         pub name: String,
         pub description: String,
         pub external_url: String,

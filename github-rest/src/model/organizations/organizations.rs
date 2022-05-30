@@ -1,6 +1,6 @@
 use crate::methods::Role;
 
-use crate::model::{prelude::*, user::User};
+use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Organization {
@@ -40,5 +40,5 @@ pub struct AddToOrgResponse {
     pub role: Role,
     pub organization_url: String,
     pub organization: Organization,
-    pub user: User,
+    pub user: SimpleUser,
 }

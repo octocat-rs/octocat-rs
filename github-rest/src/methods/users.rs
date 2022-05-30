@@ -1,7 +1,7 @@
 use crate::model::{
     keys::{GpgKey, SshKey},
     organizations::Organization,
-    user::User,
+    user::SimpleUser,
 };
 
 use super::prelude::*;
@@ -12,12 +12,12 @@ use super::prelude::*;
 ///
 /// List followers of the authenticated user
 /// Lists the people following the authenticated user.
-pub async fn get_followers<T>(client: &T, params: Option<&Pagination>) -> Result<Vec<User>, GithubRestError>
+pub async fn get_followers<T>(client: &T, params: Option<&Pagination>) -> Result<Vec<SimpleUser>, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<Pagination, String, Vec<User>>(EndPoints::GetUserFollowers(), params, None)
+        .req::<Pagination, String, Vec<SimpleUser>>(EndPoints::GetUserFollowers(), params, None)
         .await
 }
 
@@ -27,12 +27,12 @@ where
 ///
 /// List the people the authenticated user follows
 /// Lists the people who the authenticated user follows.
-pub async fn get_following<T>(client: &T, params: Option<&Pagination>) -> Result<Vec<User>, GithubRestError>
+pub async fn get_following<T>(client: &T, params: Option<&Pagination>) -> Result<Vec<SimpleUser>, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<Pagination, String, Vec<User>>(EndPoints::GetUserFollowing(), params, None)
+        .req::<Pagination, String, Vec<SimpleUser>>(EndPoints::GetUserFollowing(), params, None)
         .await
 }
 
@@ -75,7 +75,7 @@ user_and_pagination_methods!(
     /// Lists the people who the specified user follows.
     get_user_following,
     EndPoints::GetUsersusernameFollowing,
-    Vec<User>,
+    Vec<SimpleUser>,
     /// * tags users
     /// * get `/users/{username}/followers`
     /// * docs <https://docs.github.com/rest/reference/users#list-followers-of-a-user>
@@ -84,7 +84,7 @@ user_and_pagination_methods!(
     /// Lists the people following the specified user.
     get_user_followers,
     EndPoints::GetUsersusernameFollowers,
-    Vec<User>
+    Vec<SimpleUser>
 );
 
 #[derive(Serialize, Deserialize, Default, Clone, Debug)]
@@ -121,14 +121,33 @@ mod tests {
     #[tokio::test]
     async fn test_get_user_following() {
         let client = DefaultRequester::new_none();
-        let res = get_user_following(&client, "proudmuslim-dev", None).await.unwrap();
+        let res = get_user_following(
+            &client,
+            "proudmuslim-dev",
+            Some(&Pagination {
+                per_page: Some("2".to_owned()),
+                page: Some("1".to_owned()),
+            }),
+        )
+        .await
+        .unwrap();
         dbg!(res);
     }
 
     #[tokio::test]
     async fn test_get_user_followers() {
         let client = DefaultRequester::new_none();
-        let res = get_user_followers(&client, "proudmuslim-dev", None).await.unwrap();
+        let res = get_user_followers(
+            &client,
+            "proudmuslim-dev",
+            Some(&Pagination {
+                per_page: Some("2".to_owned()),
+                page: Some("1".to_owned()),
+            }),
+        )
+        .await
+        .unwrap();
+
         dbg!(res);
     }
 

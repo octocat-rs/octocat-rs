@@ -1,4 +1,4 @@
-use crate::model::{apps::events::nested::RepoInfo, prelude::*, user::User};
+use crate::model::{apps::events::nested::RepoInfo, prelude::*, user::SimpleUser};
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#installation>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -6,7 +6,7 @@ pub struct InstallationEvent {
     pub action: InstallationAction,
     pub repositories: Vec<RepoInfo>,
     pub installation: Value,
-    pub sender: User,
+    pub sender: SimpleUser,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -40,7 +40,7 @@ pub struct InstallationRepositoriesEvent {
     pub repositories_added: Vec<RepoInfo>,
     pub repositories_removed: Vec<RepoInfo>,
     pub installation: Value,
-    pub sender: User,
+    pub sender: SimpleUser,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -61,7 +61,7 @@ pub enum RepositorySelection {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AppAuthorizationEvent {
     pub action: String,
-    pub sender: User,
+    pub sender: SimpleUser,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]

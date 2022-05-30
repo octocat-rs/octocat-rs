@@ -4,10 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     methods::util,
-    model::{
-        commits::{comments, comments::CommitComment},
-        user::User,
-    },
+    model::{commits::comments::CommitComment, user::SimpleUser},
     GithubRestError, Requester,
 };
 
@@ -15,14 +12,14 @@ pub type Commits = Vec<Commit>;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Commit {
+    pub url: String,
     pub sha: String,
     pub node_id: String,
-    pub commit: comments::CommitComment,
-    pub url: String,
     pub html_url: String,
     pub comments_url: String,
-    pub author: User,
-    pub committer: User,
+    pub commit: nested::CommitObject,
+    pub author: SimpleUser,
+    pub committer: SimpleUser,
     pub parents: Vec<nested::Parent>,
 }
 
@@ -49,7 +46,26 @@ impl Commit {
 }
 
 pub mod nested {
+    use crate::model::user::GitUser;
     use serde::{Deserialize, Serialize};
+
+    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Parent {
+        pub sha: String,
+        pub url: String,
+        pub html_url: String,
+    }
+
+    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct CommitObject {
+        pub url: String,
+        pub author: Option<GitUser>,
+        pub committer: Option<GitUser>,
+        pub message: String,
+        pub comment_count: i64,
+        pub tree: Tree,
+        pub verification: Verification,
+    }
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Tree {
@@ -63,12 +79,5 @@ pub mod nested {
         pub reason: String,
         pub signature: Option<String>,
         pub payload: Option<String>,
-    }
-
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct Parent {
-        pub sha: String,
-        pub url: String,
-        pub html_url: String,
     }
 }

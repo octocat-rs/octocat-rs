@@ -13,7 +13,7 @@ use crate::{
             },
             CodeScanningAlert, DeployKey, Project, ProjectCard, ProjectColumn, Repository,
         },
-        user::User,
+        user::SimpleUser,
     },
     GithubRestError, Requester,
 };
@@ -271,7 +271,7 @@ pub enum DeployKeyAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MemberEvent {
     pub action: MemberAction,
-    pub member: User,
+    pub member: SimpleUser,
     pub changes: Option<MemberChanges>,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
@@ -373,7 +373,7 @@ pub struct PingEvent {
 }
 
 pub mod nested {
-    use crate::model::{prelude::*, pull_requests::events::nested::Change, user::SimpleUser};
+    use crate::model::{prelude::*, pull_requests::events::nested::Change, user::GitUser};
 
     #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
     pub struct Pusher {
@@ -389,8 +389,8 @@ pub mod nested {
         pub message: String,
         pub timestamp: String,
         pub url: String,
-        pub author: SimpleUser,
-        pub committer: SimpleUser,
+        pub author: GitUser,
+        pub committer: GitUser,
         pub added: Vec<String>,
         pub removed: Vec<Value>,
         pub modified: Vec<Value>,
@@ -404,8 +404,8 @@ pub mod nested {
         pub message: String,
         pub timestamp: String,
         pub url: String,
-        pub author: SimpleUser,
-        pub committer: SimpleUser,
+        pub author: GitUser,
+        pub committer: GitUser,
         pub added: Vec<String>,
         pub removed: Vec<Value>,
         pub modified: Vec<Value>,

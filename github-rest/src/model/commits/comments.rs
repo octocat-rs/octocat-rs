@@ -4,7 +4,7 @@ use crate::{
         commits::association::Association,
         prelude::*,
         reactions::{CommitCommentReactionCreated, Reaction, Reactions},
-        user::User,
+        user::SimpleUser,
     },
     GithubRestError, Requester,
 };
@@ -21,7 +21,7 @@ pub struct CommitComment {
     pub line: Option<i64>,
     pub commit_id: String,
     pub author_association: Association,
-    pub user: User,
+    pub user: SimpleUser,
     pub created_at: String,
     pub updated_at: String,
     pub reactions: Reactions,

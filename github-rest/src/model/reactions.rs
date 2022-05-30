@@ -1,4 +1,4 @@
-use crate::model::{prelude::*, user::User};
+use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Reactions {
@@ -42,7 +42,7 @@ impl Default for Reaction {
 pub struct CommitCommentReactionCreated {
     id: i64,
     node_id: String,
-    user: User,
+    user: SimpleUser,
     #[serde(rename = "content")]
     reaction: Reaction,
     created_at: String,

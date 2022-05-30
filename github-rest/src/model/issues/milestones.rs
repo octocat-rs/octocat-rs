@@ -1,4 +1,4 @@
-use crate::model::{prelude::*, user::User};
+use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Milestone {
@@ -11,7 +11,7 @@ pub struct Milestone {
     state: String,
     title: String,
     description: String,
-    creator: User,
+    creator: SimpleUser,
     open_issues: i64,
     closed_issues: i64,
     created_at: String,

@@ -3,7 +3,7 @@ use crate::model::{
     misc::deployments::{Deployment, DeploymentStatus, MarketplacePurchase},
     prelude::*,
     pull_requests::events::nested::Change,
-    user::User,
+    user::SimpleUser,
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deployment>
@@ -42,7 +42,7 @@ pub enum DeploymentStatusAction {
 pub struct MarketplacePurchaseEvent {
     pub action: MarketplacePurchaseAction,
     pub effective_date: String,
-    pub sender: User,
+    pub sender: SimpleUser,
     pub marketplace_purchase: MarketplacePurchase,
 }
 
@@ -62,7 +62,7 @@ pub struct SponsorshipEvent {
     pub action: SponsorshipAction,
     pub effective_date: String,
     pub changes: SponsorshipChanges,
-    pub sender: User,
+    pub sender: SimpleUser,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
@@ -84,7 +84,7 @@ pub struct SponsorshipChanges {
 }
 
 impl Event<'_> for SponsorshipEvent {
-    type Origin = User;
+    type Origin = SimpleUser;
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#meta>

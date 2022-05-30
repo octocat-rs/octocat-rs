@@ -1,4 +1,4 @@
-use crate::model::{commits::association::Association, prelude::*, user::User};
+use crate::model::{commits::association::Association, prelude::*, user::SimpleUser};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Discussion {
@@ -6,13 +6,13 @@ pub struct Discussion {
     pub repository_url: String,
     pub answer_html_url: Option<String>,
     pub answer_chosen_at: Option<String>,
-    pub answer_chosen_by: Option<User>,
+    pub answer_chosen_by: Option<SimpleUser>,
     pub html_url: String,
     pub id: usize,
     pub node_id: String,
     pub number: usize,
     pub title: String,
-    pub user: User,
+    pub user: SimpleUser,
     pub state: String,
     pub locked: bool,
     pub comments: usize,
@@ -42,7 +42,7 @@ pub struct DiscussionComment {
     pub repository_url: String,
     pub discussion_id: usize,
     pub author_association: Association,
-    pub user: User,
+    pub user: SimpleUser,
     pub created_at: String,
     pub updated_at: Option<String>,
     pub body: String,
