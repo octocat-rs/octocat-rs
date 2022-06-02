@@ -6,7 +6,6 @@ use std::str::FromStr;
 
 use std::{fmt::Debug, sync::Arc};
 
-use anyhow::Result;
 use async_trait::async_trait;
 use github_api_octocat::end_points::EndPoints;
 use serde::{de::DeserializeOwned, Serialize};
