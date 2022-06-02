@@ -178,87 +178,102 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">repositories::nested</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Repository</span> {
+    <span class="kw">pub</span> <span class="ident">archive_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">assignees_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">blobs_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">branches_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">collaborators_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">commits_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">compare_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">contents_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">contributors_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">deployments_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">downloads_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">events_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">fork</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">forks_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">full_name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">git_commits_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">git_refs_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">git_tags_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">hooks_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
     <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">full_name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">private</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">owner</span>: <span class="ident">SimpleUser</span>,
-    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">fork</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">forks_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">keys_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">collaborators_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">teams_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">hooks_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">issue_events_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">events_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">assignees_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">branches_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">tags_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">blobs_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">git_tags_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">git_refs_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">trees_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">statuses_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">languages_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">stargazers_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">contributors_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">subscribers_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">subscription_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">commits_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">git_commits_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">issue_comment_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">contents_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">compare_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">merges_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">archive_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">downloads_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">issue_events_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">issues_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">pulls_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">milestones_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">notifications_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">keys_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">labels_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">languages_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">merges_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">milestones_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">notifications_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">owner</span>: <span class="ident">SimpleUser</span>,
+    <span class="kw">pub</span> <span class="ident">private</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">pulls_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">releases_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">deployments_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">pushed_at</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">git_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">ssh_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">stargazers_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">tags_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">teams_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">trees_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">clone_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">svn_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">homepage</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">stargazers_count</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">watchers_count</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">language</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">default_branch</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">forks</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">forks_count</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">git_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">has_downloads</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">has_issues</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">has_projects</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">has_downloads</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">has_wiki</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">has_pages</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">forks_count</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">mirror_url</span>: <span class="ident">Value</span>,
+    <span class="kw">pub</span> <span class="ident">homepage</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">language</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">archived</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">disabled</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">open_issues_count</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">license</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">allow_forking</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">is_template</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">topics</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">visibility</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">forks</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">mirror_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">open_issues</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">open_issues_count</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">license</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleLicense</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">pushed_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">ssh_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">stargazers_count</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">svn_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">watchers</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">default_branch</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">watchers_count</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">network_count</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">subscribers_count</span>: <span class="ident">i64</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -272,8 +287,8 @@
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">Value</span>,
+    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">ProjectState</span>,
+    <span class="kw">pub</span> <span class="ident">creator</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
 }
@@ -317,38 +332,63 @@
     <span class="kw">pub</span> <span class="ident">read_only</span>: <span class="ident">bool</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CodeScanningAlert</span> {
     <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">instances</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">String</span>,
-    <span class="comment">// Don&#39;t know if it&#39;s unix millis or DateTime</span>
-    <span class="kw">pub</span> <span class="ident">fixed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">dismissed_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="comment">// See above</span>
-    <span class="kw">pub</span> <span class="ident">dismissed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">instances_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">CodeScanningAlertState</span>,
+    <span class="kw">pub</span> <span class="ident">fixed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">dismissed_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">dismissed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">rule</span>: <span class="ident">CodeScanningAlertRule</span>,
     <span class="kw">pub</span> <span class="ident">tool</span>: <span class="ident">Tool</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CodeScanningAlertRule</span> {
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">severity</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">full_description</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">tags</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">help</span>: <span class="ident">String</span>,
-}
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tool</span> {
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">version</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::prelude</span>::<span class="kw-2">*</span>;
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SimpleLicense</span> {
+        <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">spdx_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tool</span> {
+        <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">version</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CodeScanningAlertRule</span> {
+        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">severity</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">full_description</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">tags</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">help</span>: <span class="ident">String</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ProjectState</span> {
+        <span class="ident">Open</span>,
+        <span class="ident">Closed</span>,
+    }
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CodeScanningAlertState</span> {
+        <span class="ident">Open</span>,
+        <span class="ident">Closed</span>,
+        <span class="ident">Dismissed</span>,
+        <span class="ident">Fixed</span>,
+    }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (28b891916 2022-05-29)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (12cd71f4d 2022-06-01)" ></div>
 </body></html>

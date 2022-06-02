@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["CodeScanningAlertState",""],["ProjectState",""]],"struct":[["CodeScanningAlertRule",""],["SimpleLicense",""],["Tool",""]]});
