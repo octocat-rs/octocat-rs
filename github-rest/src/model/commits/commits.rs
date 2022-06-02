@@ -10,6 +10,7 @@ use crate::{
 
 pub type Commits = Vec<Commit>;
 
+/// <https://docs.github.com/en/rest/commits/commits#get-a-commit=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Commit {
     pub url: String,

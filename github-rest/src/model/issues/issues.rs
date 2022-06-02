@@ -46,10 +46,10 @@ pub struct Label {
     pub node_id: String,
     pub url: String,
     pub name: String,
+    // TODO: Check if this is really optional
     pub description: Option<String>,
     pub color: String,
-    // 🚎
-    pub default: Option<bool>,
+    pub default: bool,
 }
 
 #[derive(Serialize, Deserialize)]

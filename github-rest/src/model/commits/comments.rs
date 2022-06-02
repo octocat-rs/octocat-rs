@@ -3,28 +3,29 @@ use crate::{
     model::{
         commits::association::Association,
         prelude::*,
-        reactions::{CommitCommentReactionCreated, Reaction, Reactions},
+        reactions::{CommitCommentReactionCreated, Reaction, ReactionRollup},
         user::SimpleUser,
     },
     GithubRestError, Requester,
 };
 
+/// <https://docs.github.com/en/rest/commits/comments#get-a-commit-comment=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CommitComment {
-    pub html_url: String,
     pub url: String,
+    pub html_url: String,
     pub id: i64,
     pub node_id: String,
-    pub body: String,
-    pub path: Option<String>,
+    pub user: Option<SimpleUser>,
     pub position: Option<i64>,
     pub line: Option<i64>,
+    pub path: Option<String>,
     pub commit_id: String,
+    pub body: String,
     pub author_association: Association,
-    pub user: SimpleUser,
     pub created_at: String,
     pub updated_at: String,
-    pub reactions: Reactions,
+    pub reactions: Option<ReactionRollup>,
 }
 
 impl CommitComment {

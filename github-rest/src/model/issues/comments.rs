@@ -1,4 +1,4 @@
-use crate::model::{prelude::*, reactions::Reactions, user::SimpleUser};
+use crate::model::{prelude::*, reactions::ReactionRollup, user::SimpleUser};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IssueComment {
@@ -12,6 +12,6 @@ pub struct IssueComment {
     pub updated_at: String,
     pub author_association: String,
     pub body: String,
-    pub reactions: Reactions,
+    pub reactions: ReactionRollup,
     pub performed_via_github_app: Value,
 }

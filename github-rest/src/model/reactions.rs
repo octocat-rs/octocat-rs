@@ -1,7 +1,7 @@
 use crate::model::{prelude::*, user::SimpleUser};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Reactions {
+pub struct ReactionRollup {
     pub url: String,
     pub total_count: i64,
     #[serde(rename = "+1")]

@@ -1,5 +1,6 @@
 use crate::model::{prelude::*, repositories::nested::*, user::SimpleUser};
 
+/// <https://docs.github.com/en/rest/repos/repos#get-a-repository=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Repository {
     pub archive_url: String,
@@ -76,51 +77,52 @@ pub struct Repository {
     pub subscribers_count: i64,
 }
 
+/// <https://docs.github.com/en/rest/projects/projects#get-a-project=>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Project {
-    pub owner_url: String,
-    pub url: String,
-    pub html_url: String,
-    pub columns_url: String,
     pub id: usize,
     pub node_id: String,
-    pub name: String,
-    pub body: String,
     pub number: usize,
+    pub name: String,
+    pub body: Option<String>,
     pub state: ProjectState,
+    pub url: String,
+    pub html_url: String,
+    pub owner_url: String,
+    pub creator: Option<SimpleUser>,
+    pub columns_url: String,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+/// <https://docs.github.com/en/rest/projects/cards#get-a-project-card=>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectCard {
+    pub id: usize,
+    pub node_id: String,
+    pub note: Option<String>,
+    pub url: String,
+    pub column_url: String,
+    pub project_url: String,
     pub creator: Option<SimpleUser>,
     pub created_at: String,
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ProjectCard {
-    pub url: String,
-    pub id: usize,
-    pub node_id: String,
-    pub note: String,
-    pub creator: SimpleUser,
-    pub created_at: String,
-    pub updated_at: String,
-    pub archived: bool,
-    pub column_url: String,
-    pub content_url: String,
-    pub project_url: String,
-}
-
+/// <https://docs.github.com/en/rest/projects/columns#get-a-project-column=>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectColumn {
+    pub id: usize,
+    pub node_id: String,
     pub url: String,
     pub project_url: String,
     pub cards_url: String,
-    pub id: usize,
-    pub node_id: String,
     pub name: String,
     pub created_at: String,
     pub updated_at: String,
 }
 
-/// <https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key>
+/// <https://docs.github.com/en/rest/deploy-keys#get-a-deploy-key=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeployKey {
     pub id: usize,
@@ -132,6 +134,7 @@ pub struct DeployKey {
     pub read_only: bool,
 }
 
+/// <https://docs.github.com/en/rest/code-scanning#get-a-code-scanning-alert=>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeScanningAlert {
     pub number: usize,
@@ -177,11 +180,14 @@ pub mod nested {
     }
 
     #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[serde(rename_all = "lowercase")]
     pub enum ProjectState {
         Open,
         Closed,
     }
+
     #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[serde(rename_all = "lowercase")]
     pub enum CodeScanningAlertState {
         Open,
         Closed,
