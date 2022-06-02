@@ -30,28 +30,86 @@
 <span id="21">21</span>
 <span id="22">22</span>
 <span id="23">23</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">releases::nested</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/releases/releases#get-a-release=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Release</span> {
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">assets_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">upload_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">SimpleUser</span>,
-    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">tag_name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">target_commitish</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">draft</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">prerelease</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">tarball_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">zipball_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">published_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">assets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">tarball_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">zipball_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">draft</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">author</span>: <span class="ident">SimpleUser</span>,
+    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">prerelease</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">tag_name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">target_commitish</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">assets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ReleaseAsset</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">body</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ReleaseAsset</span> {
+        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
+        <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">content_type</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">i64</span>,
+        <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">ReleaseAssetState</span>,
+        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">download_count</span>: <span class="ident">i64</span>,
+        <span class="kw">pub</span> <span class="ident">label</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">uploader</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">browser_download_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;lowercase&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ReleaseAssetState</span> {
+        <span class="ident">Uploaded</span>,
+        <span class="ident">Open</span>,
+    }
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (12cd71f4d 2022-06-01)" ></div>

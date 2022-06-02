@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["HRef",""],["HeadBase",""],["Links",""]]});
+initSidebarItems({"struct":[["AutoMerge",""],["HRef",""],["HeadBase",""],["Links",""]]});

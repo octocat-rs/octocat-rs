@@ -24,7 +24,7 @@
 <span id="15">15</span>
 <span id="16">16</span>
 <span id="17">17</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">reactions::Reactions</span>, <span class="ident">user::SimpleUser</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">reactions::ReactionRollup</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IssueComment</span> {
@@ -38,7 +38,7 @@
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">reactions</span>: <span class="ident">Reactions</span>,
+    <span class="kw">pub</span> <span class="ident">reactions</span>: <span class="ident">ReactionRollup</span>,
     <span class="kw">pub</span> <span class="ident">performed_via_github_app</span>: <span class="ident">Value</span>,
 }
 </code></pre></div>

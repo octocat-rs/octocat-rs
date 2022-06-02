@@ -198,8 +198,15 @@
 <span id="189">189</span>
 <span id="190">190</span>
 <span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">repositories::nested</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/repos/repos#get-a-repository=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Repository</span> {
     <span class="kw">pub</span> <span class="ident">archive_url</span>: <span class="ident">String</span>,
@@ -276,51 +283,52 @@
     <span class="kw">pub</span> <span class="ident">subscribers_count</span>: <span class="ident">i64</span>,
 }
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/projects/projects#get-a-project=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Project</span> {
-    <span class="kw">pub</span> <span class="ident">owner_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">columns_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">body</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">ProjectState</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">owner_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">creator</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">columns_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
+}
+
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/projects/cards#get-a-project-card=&gt;</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ProjectCard</span> {
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">note</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">column_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">project_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">creator</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ProjectCard</span> {
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">note</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">SimpleUser</span>,
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">archived</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">column_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">content_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">project_url</span>: <span class="ident">String</span>,
-}
-
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/projects/columns#get-a-project-column=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ProjectColumn</span> {
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">project_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">cards_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
 }
 
-<span class="doccomment">/// &lt;https://docs.github.com/en/rest/reference/deployments#get-a-deploy-key&gt;</span>
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/deploy-keys#get-a-deploy-key=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeployKey</span> {
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
@@ -332,6 +340,7 @@
     <span class="kw">pub</span> <span class="ident">read_only</span>: <span class="ident">bool</span>,
 }
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/code-scanning#get-a-code-scanning-alert=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CodeScanningAlert</span> {
     <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">usize</span>,
@@ -377,11 +386,14 @@
     }
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;lowercase&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ProjectState</span> {
         <span class="ident">Open</span>,
         <span class="ident">Closed</span>,
     }
+
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;lowercase&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CodeScanningAlertState</span> {
         <span class="ident">Open</span>,
         <span class="ident">Closed</span>,

@@ -59,7 +59,7 @@
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Reactions</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ReactionRollup</span> {
     <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">total_count</span>: <span class="ident">i64</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;+1&quot;</span>)]</span>

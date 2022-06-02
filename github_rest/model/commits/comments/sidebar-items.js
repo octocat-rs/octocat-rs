@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["CommitComment",""]]});
+initSidebarItems({"struct":[["CommitComment","https://docs.github.com/en/rest/commits/comments#get-a-commit-comment="]]});

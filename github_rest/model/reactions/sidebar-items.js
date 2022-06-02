@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Reaction","See also: https://docs.github.com/en/rest/reference/reactions#reaction-types"]],"struct":[["CommitCommentReactionCreated",""],["Reactions",""]]});
+initSidebarItems({"enum":[["Reaction","See also: https://docs.github.com/en/rest/reference/reactions#reaction-types"]],"struct":[["CommitCommentReactionCreated",""],["ReactionRollup",""]]});

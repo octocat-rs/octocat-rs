@@ -90,6 +90,7 @@
 <span id="81">81</span>
 <span id="82">82</span>
 <span id="83">83</span>
+<span id="84">84</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
@@ -102,6 +103,7 @@
 
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Commits</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Commit</span><span class="op">&gt;</span>;
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/commits/commits#get-a-commit=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Commit</span> {
     <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,

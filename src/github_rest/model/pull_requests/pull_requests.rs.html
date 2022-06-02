@@ -132,175 +132,81 @@
 <span id="123">123</span>
 <span id="124">124</span>
 <span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
     <span class="ident">commits::association::Association</span>,
+    <span class="ident">issues</span>::{<span class="ident">milestones::Milestone</span>, <span class="ident">Label</span>},
     <span class="ident">prelude</span>::<span class="kw-2">*</span>,
-    <span class="ident">pull_requests::nested</span>::{<span class="ident">HeadBase</span>, <span class="ident">Links</span>},
+    <span class="ident">pull_requests::nested</span>::{<span class="ident">AutoMerge</span>, <span class="ident">HeadBase</span>, <span class="ident">Links</span>},
     <span class="ident">user::SimpleUser</span>,
 };
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pulls</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Pull</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pulls</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimplePullRequest</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// Only used when getting pull requests in a list.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If you aren&#39;t listing multiple pull requests, please use [`PullRequest`]</span>
 <span class="doccomment">/// instead.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/pulls/pulls#list-pull-requests=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Pull</span> {
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SimplePullRequest</span> {
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;_links&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">links</span>: <span class="ident">Links</span>,
+    <span class="kw">pub</span> <span class="ident">assignee</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">base</span>: <span class="ident">HeadBase</span>,
+    <span class="kw">pub</span> <span class="ident">body</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">closed_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">commits_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">diff_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">head</span>: <span class="ident">HeadBase</span>,
+    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
     <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">diff_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">patch_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">issue_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">merge_commit_sha</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">merged_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">milestone</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Milestone</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">patch_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">review_comment_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">review_comments_url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">statuses_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">PullRequestState</span>,
     <span class="kw">pub</span> <span class="ident">locked</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
-    <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">closed_at</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">merged_at</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">merge_commit_sha</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">assignee</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">assignees</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">requested_reviewers</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">requested_teams</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">milestone</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">draft</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">commits_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">review_comments_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">review_comment_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">statuses_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">head</span>: <span class="ident">HeadBase</span>,
-    <span class="kw">pub</span> <span class="ident">base</span>: <span class="ident">HeadBase</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;_links&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">links</span>: <span class="ident">Links</span>,
+    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
     <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">Association</span>,
-    <span class="kw">pub</span> <span class="ident">auto_merge</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">active_lock_reason</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">mergeable</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="comment">// Don&#39;t know if these two can be null so just to be safe(?)</span>
-    <span class="kw">pub</span> <span class="ident">rebaseable</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">mergeable_state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="comment">// Docs really didn&#39;t help me when I attempted to create an enum for this</span>
-    <span class="kw">pub</span> <span class="ident">merged_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">comments</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">review_comments</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">maintainer_can_modify</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">commits</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">additions</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">deletions</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">changed_files</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">auto_merge</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AutoMerge</span><span class="op">&gt;</span>,
 }
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PullRequest</span> {
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">html_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">diff_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">patch_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">issue_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">number</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">PullRequestState</span>,
-    <span class="kw">pub</span> <span class="ident">locked</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">title</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
-    <span class="kw">pub</span> <span class="ident">body</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">closed_at</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">merged_at</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">merge_commit_sha</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">assignee</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">assignees</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">requested_reviewers</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">requested_teams</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">milestone</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">draft</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">commits_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">review_comments_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">review_comment_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">comments_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">statuses_url</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">head</span>: <span class="ident">HeadBase</span>,
-    <span class="kw">pub</span> <span class="ident">base</span>: <span class="ident">HeadBase</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;_links&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">links</span>: <span class="ident">Links</span>,
-    <span class="kw">pub</span> <span class="ident">author_association</span>: <span class="ident">Association</span>,
-    <span class="kw">pub</span> <span class="ident">auto_merge</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">active_lock_reason</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">mergeable</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="comment">// Don&#39;t know if these two can be null so just to be safe(?)</span>
-    <span class="kw">pub</span> <span class="ident">rebaseable</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">mergeable_state</span>: <span class="ident">String</span>,
-    <span class="comment">// Docs really didn&#39;t help me when I attempted to create an enum for this</span>
-    <span class="kw">pub</span> <span class="ident">merged_by</span>: <span class="ident">Value</span>,
-    <span class="kw">pub</span> <span class="ident">comments</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">review_comments</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">maintainer_can_modify</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">commits</span>: <span class="ident">i64</span>,
     <span class="kw">pub</span> <span class="ident">additions</span>: <span class="ident">i64</span>,
-    <span class="kw">pub</span> <span class="ident">deletions</span>: <span class="ident">i64</span>,
     <span class="kw">pub</span> <span class="ident">changed_files</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">comments</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">commits</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">deletions</span>: <span class="ident">i64</span>,
+    <span class="kw">pub</span> <span class="ident">mergeable</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
+    <span class="comment">// Variants are not documented</span>
+    <span class="kw">pub</span> <span class="ident">mergeable_state</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">merged</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">maintainer_can_modify</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">merged_by</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">review_comments</span>: <span class="ident">i64</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">shared</span>: <span class="ident">SimplePullRequest</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;lowercase&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PullRequestState</span> {
     <span class="ident">Closed</span>,
-    <span class="ident">Merged</span>,
     <span class="ident">Open</span>,
 }
 
@@ -320,27 +226,35 @@
         <span class="kw">pub</span> <span class="ident">label</span>: <span class="ident">String</span>,
         <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;ref&quot;</span>)]</span>
         <span class="kw">pub</span> <span class="ident">ref_field</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">repo</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Repository</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">sha</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">SimpleUser</span>,
-        <span class="kw">pub</span> <span class="ident">repo</span>: <span class="ident">Repository</span>,
     }
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Links</span> {
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;self&quot;</span>)]</span>
-        <span class="kw">pub</span> <span class="ident">self_field</span>: <span class="ident">HRef</span>,
-        <span class="kw">pub</span> <span class="ident">html</span>: <span class="ident">HRef</span>,
-        <span class="kw">pub</span> <span class="ident">issue</span>: <span class="ident">HRef</span>,
         <span class="kw">pub</span> <span class="ident">comments</span>: <span class="ident">HRef</span>,
-        <span class="kw">pub</span> <span class="ident">review_comments</span>: <span class="ident">HRef</span>,
-        <span class="kw">pub</span> <span class="ident">review_comment</span>: <span class="ident">HRef</span>,
         <span class="kw">pub</span> <span class="ident">commits</span>: <span class="ident">HRef</span>,
         <span class="kw">pub</span> <span class="ident">statuses</span>: <span class="ident">HRef</span>,
+        <span class="kw">pub</span> <span class="ident">html</span>: <span class="ident">HRef</span>,
+        <span class="kw">pub</span> <span class="ident">issue</span>: <span class="ident">HRef</span>,
+        <span class="kw">pub</span> <span class="ident">review_comments</span>: <span class="ident">HRef</span>,
+        <span class="kw">pub</span> <span class="ident">review_comment</span>: <span class="ident">HRef</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;self&quot;</span>)]</span>
+        <span class="kw">pub</span> <span class="ident">self_field</span>: <span class="ident">HRef</span>,
     }
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HRef</span> {
         <span class="kw">pub</span> <span class="ident">href</span>: <span class="ident">String</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AutoMerge</span> {
+        <span class="ident">enabled_by</span>: <span class="ident">SimpleUser</span>,
+        <span class="ident">merge_method</span>: <span class="ident">String</span>,
+        <span class="ident">commit_title</span>: <span class="ident">String</span>,
+        <span class="ident">commit_message</span>: <span class="ident">String</span>,
     }
 }
 </code></pre></div>
