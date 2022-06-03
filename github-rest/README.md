@@ -3,7 +3,7 @@
 A github api wrapper written in rust
 
 ```toml
-github-rest = { git = "https://github.com/octocat-rs/github-rest" }
+github-rest = { git = "https://github.com/octocat-rs/octocat-rs" }
 ```
 
 ## Simple example
