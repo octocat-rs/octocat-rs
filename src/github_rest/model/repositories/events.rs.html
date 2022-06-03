@@ -511,7 +511,7 @@
         <span class="ident">commits::comments::CommitComment</span>,
         <span class="ident">event_types</span>::{<span class="ident">macros::repo_origin</span>, <span class="ident">RepoEventInfo</span>},
         <span class="ident">issues::milestones::Milestone</span>,
-        <span class="ident">organizations::Team</span>,
+        <span class="ident">organizations::SimpleTeam</span>,
         <span class="ident">prelude</span>::<span class="kw-2">*</span>,
         <span class="ident">repositories</span>::{
             <span class="ident">events::nested</span>::{
@@ -550,7 +550,7 @@
 <span class="doccomment">/// &lt;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#team_add&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TeamAddEvent</span> {
-    <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">Team</span>,
+    <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">SimpleTeam</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">RepoEventInfo</span>,
 }

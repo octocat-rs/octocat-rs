@@ -118,7 +118,7 @@
 <span id="109">109</span>
 <span id="110">110</span>
 </pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">deployments</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::SimpleOrganization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
 
     <span class="doccomment">/// &lt;https://docs.github.com/en/rest/reference/deployments#get-a-deployment&gt;</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -193,7 +193,7 @@
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UserOrOrg</span> {
         <span class="ident">User</span>(<span class="ident">SimpleUser</span>),
-        <span class="ident">Organization</span>(<span class="ident">Organization</span>),
+        <span class="ident">Organization</span>(<span class="ident">SimpleOrganization</span>),
     }
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>

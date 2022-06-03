@@ -154,7 +154,7 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::Organization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">repositories::Repository</span>, <span class="ident">user::SimpleUser</span>};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::SimpleOrganization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">repositories::Repository</span>, <span class="ident">user::SimpleUser</span>};
 
 <span class="doccomment">/// Used to represent all possible values for the `x-github-event` header sent</span>
 <span class="doccomment">/// with all webhook payloads.</span>
@@ -251,7 +251,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RepoEventInfo</span> {
     <span class="kw">pub</span> <span class="ident">repository</span>: <span class="ident">Repository</span>,
-    <span class="kw">pub</span> <span class="ident">organization</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Organization</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">organization</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleOrganization</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">installation</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">sender</span>: <span class="ident">SimpleUser</span>,
 }
@@ -260,7 +260,7 @@
 <span class="doccomment">/// organizations.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OrgEventInfo</span> {
-    <span class="kw">pub</span> <span class="ident">organization</span>: <span class="ident">Organization</span>,
+    <span class="kw">pub</span> <span class="ident">organization</span>: <span class="ident">SimpleOrganization</span>,
     <span class="kw">pub</span> <span class="ident">installation</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">sender</span>: <span class="ident">SimpleUser</span>,
 }

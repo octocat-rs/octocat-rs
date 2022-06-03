@@ -124,7 +124,7 @@
     <span class="ident">event_types</span>::{<span class="ident">macros::org_origin</span>, <span class="ident">OrgEventInfo</span>},
     <span class="ident">organizations</span>::{
         <span class="ident">events::nested</span>::{<span class="ident">MembershipScope</span>, <span class="ident">TeamChanges</span>},
-        <span class="ident">Team</span>,
+        <span class="ident">SimpleTeam</span>,
     },
     <span class="ident">prelude</span>::<span class="kw-2">*</span>,
     <span class="ident">user::SimpleUser</span>,
@@ -156,7 +156,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TeamEvent</span> {
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">TeamAction</span>,
-    <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">Team</span>,
+    <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">SimpleTeam</span>,
     <span class="kw">pub</span> <span class="ident">changes</span>: <span class="ident">TeamChanges</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">OrgEventInfo</span>,
@@ -178,7 +178,7 @@
     <span class="kw">pub</span> <span class="ident">action</span>: <span class="ident">MembershipAction</span>,
     <span class="kw">pub</span> <span class="ident">scope</span>: <span class="ident">MembershipScope</span>,
     <span class="kw">pub</span> <span class="ident">member</span>: <span class="ident">SimpleUser</span>,
-    <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">Team</span>,
+    <span class="kw">pub</span> <span class="ident">team</span>: <span class="ident">SimpleTeam</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">event_info</span>: <span class="ident">OrgEventInfo</span>,
 }

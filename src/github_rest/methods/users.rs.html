@@ -183,7 +183,7 @@
 <span id="174">174</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{
     <span class="ident">keys</span>::{<span class="ident">GpgKey</span>, <span class="ident">SshKey</span>},
-    <span class="ident">organizations::Organization</span>,
+    <span class="ident">organizations::SimpleOrganization</span>,
     <span class="ident">user::SimpleUser</span>,
 };
 
@@ -249,7 +249,7 @@
     <span class="doccomment">/// This method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/rest/reference/orgs#list-organizations-for-the-authenticated-user) API instead.</span>
     <span class="ident">get_user_organizations</span>,
     <span class="ident">EndPoints::GetUsersusernameOrgs</span>,
-    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Organization</span><span class="op">&gt;</span>,
+    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleOrganization</span><span class="op">&gt;</span>,
     <span class="doccomment">/// * tags users</span>
     <span class="doccomment">/// * get `/users/{username}/following`</span>
     <span class="doccomment">/// * docs &lt;https://docs.github.com/rest/reference/users#list-the-people-a-user-follows&gt;</span>

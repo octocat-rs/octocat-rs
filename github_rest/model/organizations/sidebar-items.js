@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["events",""]],"struct":[["AddToOrgResponse",""],["Organization",""],["Team",""]]});
+initSidebarItems({"mod":[["events",""],["nested",""]],"struct":[["AddToOrgResponse",""],["Organization","https://docs.github.com/en/rest/orgs/orgs#get-an-organization="],["SimpleOrganization","https://docs.github.com/en/rest/orgs/orgs#list-organizations="],["SimpleTeam","https://docs.github.com/en/rest/teams/teams#list-teams="],["Team","https://docs.github.com/en/rest/teams/teams#get-a-team-by-name="]]});
