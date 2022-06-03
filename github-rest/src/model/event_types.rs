@@ -1,4 +1,4 @@
-use crate::model::{organizations::Organization, prelude::*, repositories::Repository, user::SimpleUser};
+use crate::model::{organizations::SimpleOrganization, prelude::*, repositories::Repository, user::SimpleUser};
 
 /// Used to represent all possible values for the `x-github-event` header sent
 /// with all webhook payloads.
@@ -95,7 +95,7 @@ pub enum EventTypes {
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RepoEventInfo {
     pub repository: Repository,
-    pub organization: Option<Organization>,
+    pub organization: Option<SimpleOrganization>,
     pub installation: Option<Value>,
     pub sender: SimpleUser,
 }
@@ -104,7 +104,7 @@ pub struct RepoEventInfo {
 /// organizations.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct OrgEventInfo {
-    pub organization: Organization,
+    pub organization: SimpleOrganization,
     pub installation: Option<Value>,
     pub sender: SimpleUser,
 }

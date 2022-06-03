@@ -2,7 +2,7 @@ use crate::model::{
     event_types::{macros::org_origin, OrgEventInfo},
     organizations::{
         events::nested::{MembershipScope, TeamChanges},
-        Team,
+        SimpleTeam,
     },
     prelude::*,
     user::SimpleUser,
@@ -34,7 +34,7 @@ pub enum OrganizationAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TeamEvent {
     pub action: TeamAction,
-    pub team: Team,
+    pub team: SimpleTeam,
     pub changes: TeamChanges,
     #[serde(flatten)]
     pub event_info: OrgEventInfo,
@@ -56,7 +56,7 @@ pub struct MembershipEvent {
     pub action: MembershipAction,
     pub scope: MembershipScope,
     pub member: SimpleUser,
-    pub team: Team,
+    pub team: SimpleTeam,
     #[serde(flatten)]
     pub event_info: OrgEventInfo,
 }

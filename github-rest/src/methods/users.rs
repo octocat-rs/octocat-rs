@@ -1,6 +1,6 @@
 use crate::model::{
     keys::{GpgKey, SshKey},
-    organizations::Organization,
+    organizations::SimpleOrganization,
     user::SimpleUser,
 };
 
@@ -66,7 +66,7 @@ user_and_pagination_methods!(
     /// This method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/rest/reference/orgs#list-organizations-for-the-authenticated-user) API instead.
     get_user_organizations,
     EndPoints::GetUsersusernameOrgs,
-    Vec<Organization>,
+    Vec<SimpleOrganization>,
     /// * tags users
     /// * get `/users/{username}/following`
     /// * docs <https://docs.github.com/rest/reference/users#list-the-people-a-user-follows>

@@ -1,5 +1,5 @@
 pub mod deployments {
-    use crate::model::{organizations::Organization, prelude::*, user::SimpleUser};
+    use crate::model::{organizations::SimpleOrganization, prelude::*, user::SimpleUser};
 
     /// <https://docs.github.com/en/rest/reference/deployments#get-a-deployment>
     #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -74,7 +74,7 @@ pub mod deployments {
     #[serde(untagged)]
     pub enum UserOrOrg {
         User(SimpleUser),
-        Organization(Organization),
+        Organization(SimpleOrganization),
     }
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]

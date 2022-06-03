@@ -4,7 +4,7 @@ use crate::{
         commits::comments::CommitComment,
         event_types::{macros::repo_origin, RepoEventInfo},
         issues::milestones::Milestone,
-        organizations::Team,
+        organizations::SimpleTeam,
         prelude::*,
         repositories::{
             events::nested::{
@@ -43,7 +43,7 @@ pub enum RepositoryAction {
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#team_add>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TeamAddEvent {
-    pub team: Team,
+    pub team: SimpleTeam,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
