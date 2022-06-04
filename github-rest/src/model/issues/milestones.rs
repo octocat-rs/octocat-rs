@@ -1,21 +1,35 @@
 use crate::model::{prelude::*, user::SimpleUser};
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+/// <https://docs.github.com/en/rest/issues/milestones#get-a-milestone=>
+#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq)]
 pub struct Milestone {
-    url: String,
-    html_url: String,
-    labels_url: String,
-    id: i64,
-    node_id: String,
-    number: i64,
-    state: String,
-    title: String,
-    description: String,
-    creator: SimpleUser,
-    open_issues: i64,
-    closed_issues: i64,
-    created_at: String,
-    updated_at: String,
-    closed_at: String,
-    due_on: String,
+    pub closed_issues: i64,
+    pub creator: Option<SimpleUser>,
+    pub description: Option<String>,
+    pub due_on: Option<String>,
+    pub closed_at: Option<String>,
+    pub id: i64,
+    pub node_id: String,
+    pub labels_url: String,
+    pub html_url: String,
+    pub number: i64,
+    pub open_issues: i64,
+    pub state: MilestoneState,
+    pub title: String,
+    pub url: String,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[serde(rename_all = "snake_case")]
+pub enum MilestoneState {
+    Open,
+    Closed,
+}
+
+impl Default for MilestoneState {
+    fn default() -> Self {
+        Self::Open
+    }
 }

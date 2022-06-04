@@ -1,6 +1,6 @@
 use crate::model::{
     event_types::{macros::repo_origin, Event, RepoEventInfo},
-    misc::deployments::{Deployment, DeploymentStatus, MarketplacePurchase},
+    misc::deployments::{nested::MarketplacePurchase, Deployment, DeploymentStatus},
     prelude::*,
     pull_requests::events::nested::Change,
     user::SimpleUser,
