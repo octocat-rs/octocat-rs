@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["IssueComment",""]]});
+initSidebarItems({"struct":[["IssueComment","https://docs.github.com/en/rest/issues/comments#get-an-issue-comment="]]});

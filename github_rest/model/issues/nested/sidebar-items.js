@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PullRequest",""]]});
+initSidebarItems({"enum":[["IssueState",""],["StringOrLabel",""]]});

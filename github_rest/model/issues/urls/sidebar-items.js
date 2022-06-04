@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["EventsUrl",""],["FollowingUrl",""],["GistsUrl",""],["StarredUrl",""]]});

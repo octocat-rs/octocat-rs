@@ -117,116 +117,122 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">deployments</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::SimpleOrganization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">events</span>;
 
-    <span class="doccomment">/// &lt;https://docs.github.com/en/rest/reference/deployments#get-a-deployment&gt;</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">deployments</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">misc::deployments::nested</span>::<span class="kw-2">*</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+
+    <span class="doccomment">/// &lt;https://docs.github.com/en/rest/deployments/deployments#get-a-deployment=&gt;</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Deployment</span> {
-        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
+        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
         <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">sha</span>: <span class="ident">String</span>,
         <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;ref&quot;</span>)]</span>
         <span class="kw">pub</span> <span class="ident">ref_field</span>: <span class="ident">String</span>,
-        <span class="comment">// unfortunately don&#39;t have possible variants so I can&#39;t make an enum</span>
         <span class="kw">pub</span> <span class="ident">task</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">payload</span>: <span class="ident">Value</span>,
-        <span class="comment">// see above</span>
-        <span class="kw">pub</span> <span class="ident">original_environment</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">environment</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
+        <span class="doccomment">/// No example given by GitHub&#39;s docs. Good luck.</span>
+        <span class="kw">pub</span> <span class="ident">payload</span>: <span class="ident">Value</span>,
         <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">SimpleUser</span>,
-        <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">Value</span>,
-        <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">Value</span>,
         <span class="kw">pub</span> <span class="ident">statuses_url</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">repository_url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">transient_environment</span>: <span class="ident">bool</span>,
-        <span class="kw">pub</span> <span class="ident">production_environment</span>: <span class="ident">bool</span>,
-    }
-
-    <span class="doccomment">/// &lt;https://docs.github.com/en/rest/reference/deployments#list-deployment-statuses&gt;</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeploymentStatus</span> {
         <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
-        <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">DeploymentState</span>,
-        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="ident">SimpleUser</span>,
-        <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="kw">pub</span> <span class="ident">environment</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">target_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
         <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">deployment_url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">repository_url</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">log_url</span>: <span class="ident">String</span>,
     }
 
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DeploymentState</span> {
-        <span class="ident">Pending</span>,
-        <span class="ident">Success</span>,
-        <span class="ident">Failure</span>,
-        <span class="ident">Error</span>,
-    }
-
-    <span class="doccomment">/// See this documentation page for a detailed overview of what this struct can contain: &lt;https://docs.github.com/en/developers/github-marketplace/using-the-github-marketplace-api-in-your-app/webhook-events-for-the-github-marketplace-api#github-marketplace-purchase-webhook-payload&gt;</span>
+    <span class="doccomment">/// &lt;https://docs.github.com/en/rest/deployments/statuses#get-a-deployment-status=&gt;</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MarketplacePurchase</span> {
-        <span class="doccomment">/// Can either be a [`User`] or [`Organization`]</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// [`User`]: crate::model::user::User</span>
-        <span class="doccomment">/// [`Organization`]: crate::model::organizations::Organization</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-        <span class="kw">pub</span> <span class="ident">account</span>: <span class="ident">UserOrOrg</span>,
-        <span class="kw">pub</span> <span class="ident">billing_cycle</span>: <span class="ident">MarketplaceBillingCycle</span>,
-        <span class="kw">pub</span> <span class="ident">unit_count</span>: <span class="ident">usize</span>,
-        <span class="kw">pub</span> <span class="ident">on_free_trial</span>: <span class="ident">bool</span>,
-        <span class="kw">pub</span> <span class="ident">free_trial_ends_on</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">next_billing_date</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">plan</span>: <span class="ident">MarketplacePlan</span>,
-    }
-
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UserOrOrg</span> {
-        <span class="ident">User</span>(<span class="ident">SimpleUser</span>),
-        <span class="ident">Organization</span>(<span class="ident">SimpleOrganization</span>),
-    }
-
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MarketplaceBillingCycle</span> {
-        <span class="ident">Yearly</span>,
-        <span class="ident">Monthly</span>,
-        <span class="ident">Nil</span>,
-    }
-
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MarketplacePlan</span> {
-        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
-        <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeploymentStatus</span> {
+        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">i64</span>,
+        <span class="kw">pub</span> <span class="ident">node_id</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">DeploymentState</span>,
+        <span class="kw">pub</span> <span class="ident">creator</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SimpleUser</span><span class="op">&gt;</span>,
         <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">monthly_price_in_cents</span>: <span class="ident">usize</span>,
-        <span class="kw">pub</span> <span class="ident">yearly_price_in_cents</span>: <span class="ident">usize</span>,
-        <span class="kw">pub</span> <span class="ident">price_model</span>: <span class="ident">MarketplacePriceModel</span>,
-        <span class="kw">pub</span> <span class="ident">has_free_trial</span>: <span class="ident">bool</span>,
-        <span class="kw">pub</span> <span class="ident">unit_name</span>: <span class="ident">String</span>,
-        <span class="kw">pub</span> <span class="ident">bullet</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">deployment_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">target_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">repository_url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">url</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">updated_at</span>: <span class="ident">String</span>,
     }
 
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MarketplacePriceModel</span> {
-        <span class="ident">FlatRate</span>,
-        <span class="ident">PerUnit</span>,
-        <span class="ident">Free</span>,
+    <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
+        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">organizations::SimpleOrganization</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">user::SimpleUser</span>};
+
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DeploymentState</span> {
+            <span class="ident">Error</span>,
+            <span class="ident">Failure</span>,
+            <span class="ident">Inactive</span>,
+            <span class="ident">Pending</span>,
+            <span class="ident">Success</span>,
+            <span class="ident">Queued</span>,
+            <span class="ident">InProgress</span>,
+        }
+
+        <span class="doccomment">/// See this documentation page for a detailed overview of what this struct can contain: &lt;https://docs.github.com/en/developers/github-marketplace/using-the-github-marketplace-api-in-your-app/webhook-events-for-the-github-marketplace-api#github-marketplace-purchase-webhook-payload&gt;</span>
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MarketplacePurchase</span> {
+            <span class="doccomment">/// Can either be a [`User`] or [`Organization`]</span>
+            <span class="doccomment">///</span>
+            <span class="doccomment">/// [`User`]: crate::model::user::User</span>
+            <span class="doccomment">/// [`Organization`]: crate::model::organizations::Organization</span>
+            <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
+            <span class="kw">pub</span> <span class="ident">account</span>: <span class="ident">UserOrOrg</span>,
+            <span class="kw">pub</span> <span class="ident">billing_cycle</span>: <span class="ident">MarketplaceBillingCycle</span>,
+            <span class="kw">pub</span> <span class="ident">unit_count</span>: <span class="ident">usize</span>,
+            <span class="kw">pub</span> <span class="ident">on_free_trial</span>: <span class="ident">bool</span>,
+            <span class="kw">pub</span> <span class="ident">free_trial_ends_on</span>: <span class="ident">String</span>,
+            <span class="kw">pub</span> <span class="ident">next_billing_date</span>: <span class="ident">String</span>,
+            <span class="kw">pub</span> <span class="ident">plan</span>: <span class="ident">MarketplacePlan</span>,
+        }
+
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UserOrOrg</span> {
+            <span class="ident">User</span>(<span class="ident">SimpleUser</span>),
+            <span class="ident">Organization</span>(<span class="ident">SimpleOrganization</span>),
+        }
+
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MarketplaceBillingCycle</span> {
+            <span class="ident">Yearly</span>,
+            <span class="ident">Monthly</span>,
+            <span class="doccomment">/// Account owner has a free GitHub plan and has purchased a free</span>
+            <span class="doccomment">/// GitHub Marketplace plan.</span>
+            <span class="ident">Nil</span>,
+        }
+
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MarketplacePlan</span> {
+            <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
+            <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+            <span class="kw">pub</span> <span class="ident">description</span>: <span class="ident">String</span>,
+            <span class="kw">pub</span> <span class="ident">monthly_price_in_cents</span>: <span class="ident">usize</span>,
+            <span class="kw">pub</span> <span class="ident">yearly_price_in_cents</span>: <span class="ident">usize</span>,
+            <span class="kw">pub</span> <span class="ident">price_model</span>: <span class="ident">MarketplacePriceModel</span>,
+            <span class="kw">pub</span> <span class="ident">has_free_trial</span>: <span class="ident">bool</span>,
+            <span class="kw">pub</span> <span class="ident">unit_name</span>: <span class="ident">String</span>,
+            <span class="kw">pub</span> <span class="ident">bullet</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        }
+
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">EnumString</span>, <span class="ident">EnumVariantNames</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MarketplacePriceModel</span> {
+            <span class="ident">FlatRate</span>,
+            <span class="ident">PerUnit</span>,
+            <span class="ident">Free</span>,
+        }
     }
 }
-
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">events</span>;
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (e71440575 2022-06-02)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (a6b8c6954 2022-06-03)" ></div>
 </body></html>

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["File",""],["Gist",""]]});
+initSidebarItems({"struct":[["BaseGist","https://docs.github.com/en/rest/gists/gists#list-gists-for-the-authenticated-user="],["File",""],["Gist","https://docs.github.com/en/rest/gists/gists#get-a-gist="]]});
