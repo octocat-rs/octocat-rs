@@ -3,7 +3,7 @@ use crate::{
         builder, builder_nested_setters_non_optional, builder_nested_string_setters, builder_string_setters, Builder,
     },
     methods::{create_gist, get_user_gists, patch_gist, CreateGistBody, FileContents, Pagination, PatchGistBody},
-    model::gists::Gist,
+    model::gists::{Gist, SimpleGist},
     GithubRestError, Requester,
 };
 use async_trait::async_trait;
@@ -27,7 +27,7 @@ builder_nested_string_setters!(GetGistsBuilder { options { per_page, page } });
 
 #[async_trait]
 impl Builder for GetGistsBuilder {
-    type Response = Vec<Gist>;
+    type Response = Vec<SimpleGist>;
 
     async fn execute<T>(self, client: &T) -> Result<Self::Response, GithubRestError>
     where

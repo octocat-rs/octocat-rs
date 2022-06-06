@@ -32,7 +32,7 @@ where
         .await
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct GetCommitsBody {
     ///SHA or branch to start listing commits from. Default: the repository’s
     /// default branch (usually master).

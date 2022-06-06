@@ -1,8 +1,9 @@
 use crate::model::{prelude::*, user::SimpleUser};
+use std::collections::HashMap;
 
 /// <https://docs.github.com/en/rest/gists/gists#list-gists-for-the-authenticated-user=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BaseGist {
+pub struct SimpleGist {
     pub id: String,
     pub node_id: String,
     pub url: String,
@@ -16,7 +17,7 @@ pub struct BaseGist {
     pub description: Option<String>,
     pub comments: usize,
     pub user: Option<SimpleUser>,
-    pub files: Vec<File>,
+    pub files: HashMap<String, File>,
     pub created_at: String,
     pub updated_at: String,
 }
@@ -27,7 +28,7 @@ pub struct Gist {
     pub owner: SimpleUser,
     pub truncated: bool,
     #[serde(flatten)]
-    pub shared: BaseGist,
+    pub shared: SimpleGist,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

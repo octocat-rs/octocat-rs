@@ -1,5 +1,8 @@
 use super::prelude::*;
-use crate::{methods::Pagination, model::gists::Gist};
+use crate::{
+    methods::Pagination,
+    model::gists::{Gist, SimpleGist},
+};
 use std::{collections::HashMap, fmt::Display};
 
 user_and_pagination_methods!(
@@ -11,7 +14,7 @@ user_and_pagination_methods!(
     /// Lists public gists for the specified user:
     get_user_gists,
     EndPoints::GetUsersusernameGists,
-    Vec<Gist>
+    Vec<SimpleGist>
 );
 
 /// * tags gists

@@ -149,6 +149,7 @@ pub struct CodeScanningAlert {
     pub dismissed_at: Option<String>,
     pub rule: CodeScanningAlertRule,
     pub tool: Tool,
+    pub most_recent_instance: MostRecentInstance,
 }
 
 pub mod nested {
@@ -166,7 +167,26 @@ pub mod nested {
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Tool {
         pub name: String,
-        pub version: Option<Value>,
+        pub version: Option<String>,
+        pub guid: Option<String>,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct MostRecentInstance {
+        #[serde(rename = "ref")]
+        pub ref_field: String,
+        pub analysis_key: String,
+        pub environment: String,
+        pub category: String,
+        pub state: CodeScanningAlertState,
+        pub commit_sha: String,
+        pub message: Message,
+        pub html_url: String,
+    }
+
+    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Message {
+        pub text: String,
     }
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

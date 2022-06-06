@@ -51,6 +51,7 @@ pub mod nested {
     use crate::model::{issues::Label, prelude::*};
 
     #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[serde(rename_all = "lowercase")]
     pub enum IssueState {
         Open,
         Closed,
