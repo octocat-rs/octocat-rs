@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["CodeScanningAlertState",""],["ProjectState",""]],"struct":[["CodeScanningAlertRule",""],["SimpleLicense",""],["Tool",""]]});
+initSidebarItems({"enum":[["CodeScanningAlertState",""],["ProjectState",""]],"struct":[["CodeScanningAlertRule",""],["Message",""],["MostRecentInstance",""],["SimpleLicense",""],["Tool",""]]});

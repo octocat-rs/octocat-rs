@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Email",""],["GpgKey",""],["KeyInfo","Contains general info about a key, including:"],["SshKey",""],["SubKey",""]]});
+initSidebarItems({"mod":[["nested",""]],"struct":[["GpgKey","https://docs.github.com/en/rest/users/gpg-keys#list-gpg-keys-for-a-user="],["SshKey","https://docs.github.com/en/rest/users/keys#list-public-keys-for-a-user="]]});

@@ -58,57 +58,69 @@
 <span id="49">49</span>
 <span id="50">50</span>
 <span id="51">51</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::prelude</span>::<span class="kw-2">*</span>;
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model</span>::{<span class="ident">keys::nested</span>::<span class="kw-2">*</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>};
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/users/keys#list-public-keys-for-a-user=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SshKey</span> {
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">String</span>,
 }
 
+<span class="doccomment">/// &lt;https://docs.github.com/en/rest/users/gpg-keys#list-gpg-keys-for-a-user=&gt;</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GpgKey</span> {
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">key_info</span>: <span class="ident">KeyInfo</span>,
     <span class="kw">pub</span> <span class="ident">emails</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Email</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">subkeys</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SubKey</span><span class="op">&gt;</span>,
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SubKey</span> {
+    <span class="kw">pub</span> <span class="ident">revoked</span>: <span class="ident">bool</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="kw">pub</span> <span class="ident">key_info</span>: <span class="ident">KeyInfo</span>,
-    <span class="kw">pub</span> <span class="ident">emails</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Email</span><span class="op">&gt;</span>,
-    <span class="comment">// TODO: Verify that this is indeed the correct type.</span>
-    <span class="kw">pub</span> <span class="ident">subkeys</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SubKey</span><span class="op">&gt;</span>,
 }
 
-<span class="doccomment">/// Contains general info about a key, including:</span>
-<span class="doccomment">/// * The public key,</span>
-<span class="doccomment">/// * Its creation and (optional) expiration date,</span>
-<span class="doccomment">/// * Whether it can sign,</span>
-<span class="doccomment">/// * What it can (and can&#39;t) encrypt,</span>
-<span class="doccomment">/// * etc.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KeyInfo</span> {
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span> <span class="ident">primary_key_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">key_id</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">public_key</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">can_sign</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">can_encrypt_comms</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">can_encrypt_storage</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">can_certify</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">expires_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">raw_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-}
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">nested</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::prelude</span>::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Email</span> {
-    <span class="kw">pub</span> <span class="ident">email</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">verified</span>: <span class="ident">bool</span>,
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SubKey</span> {
+        <span class="kw">pub</span> <span class="ident">emails</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Email</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">subkeys</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SubKey</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
+        <span class="kw">pub</span> <span class="ident">key_info</span>: <span class="ident">KeyInfo</span>,
+    }
+
+    <span class="doccomment">/// Contains general info about a key, including:</span>
+    <span class="doccomment">/// * The public key,</span>
+    <span class="doccomment">/// * Its creation and (optional) expiration date,</span>
+    <span class="doccomment">/// * Whether it can sign,</span>
+    <span class="doccomment">/// * What it can (and can&#39;t) encrypt,</span>
+    <span class="doccomment">/// * etc.</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KeyInfo</span> {
+        <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">usize</span>,
+        <span class="kw">pub</span> <span class="ident">primary_key_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">key_id</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">raw_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">public_key</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">expires_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="kw">pub</span> <span class="ident">can_sign</span>: <span class="ident">bool</span>,
+        <span class="kw">pub</span> <span class="ident">can_encrypt_comms</span>: <span class="ident">bool</span>,
+        <span class="kw">pub</span> <span class="ident">can_encrypt_storage</span>: <span class="ident">bool</span>,
+        <span class="kw">pub</span> <span class="ident">can_certify</span>: <span class="ident">bool</span>,
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Email</span> {
+        <span class="kw">pub</span> <span class="ident">email</span>: <span class="ident">String</span>,
+        <span class="kw">pub</span> <span class="ident">verified</span>: <span class="ident">bool</span>,
+    }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (a6b8c6954 2022-06-03)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (fee3a459d 2022-06-05)" ></div>
 </body></html>

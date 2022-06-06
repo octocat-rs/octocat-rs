@@ -170,8 +170,14 @@
 <span id="161">161</span>
 <span id="162">162</span>
 <span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">methods::Pagination</span>, <span class="ident">model::gists::Gist</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">methods::Pagination</span>,
+    <span class="ident">model::gists</span>::{<span class="ident">Gist</span>, <span class="ident">SimpleGist</span>},
+};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">fmt::Display</span>};
 
 <span class="macro">user_and_pagination_methods!</span>(
@@ -183,7 +189,7 @@
     <span class="doccomment">/// Lists public gists for the specified user:</span>
     <span class="ident">get_user_gists</span>,
     <span class="ident">EndPoints::GetUsersusernameGists</span>,
-    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Gist</span><span class="op">&gt;</span>
+    <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SimpleGist</span><span class="op">&gt;</span>
 );
 
 <span class="doccomment">/// * tags gists</span>
@@ -334,5 +340,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (a6b8c6954 2022-06-03)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="github_rest" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (fee3a459d 2022-06-05)" ></div>
 </body></html>
