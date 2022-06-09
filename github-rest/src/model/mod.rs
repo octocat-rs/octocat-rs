@@ -23,6 +23,7 @@ pub mod pull_requests;
 pub mod reactions;
 pub mod releases;
 pub mod repositories;
+pub mod search;
 pub mod user;
 
 pub(crate) mod prelude {
