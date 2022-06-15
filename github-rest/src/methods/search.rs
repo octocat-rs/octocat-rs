@@ -1,7 +1,15 @@
+use crate::{methods::prelude::*, model::search::RepoSearchResultItem};
 use std::ops::Range;
 
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+pub struct SearchRepositoriesResponse {
+    pub total_count: usize,
+    pub incomplete_results: bool,
+    pub items: Vec<RepoSearchResultItem>,
+}
+
 #[derive(Debug, Default, Clone)]
-pub struct SearchRepositoryBody {
+pub struct SearchRepositoriesBody {
     /// Size of repository in kilobytes.
     pub size: Option<Range<usize>>,
     pub followers: Option<Range<usize>>,
@@ -9,7 +17,7 @@ pub struct SearchRepositoryBody {
     pub stars: Option<Range<usize>>,
 }
 
-impl SearchRepositoryBody {
+impl SearchRepositoriesBody {
     pub(crate) fn into_query(self) -> String {
         let mut ret = "".to_owned();
 

@@ -103,7 +103,7 @@ impl Requester for DefaultRequester {
         }
         let txt = res.text().await?;
 
-        Ok(txt)
+        Ok(dbg!(txt))
     }
 
     async fn req<T, V, A: DeserializeOwned>(
