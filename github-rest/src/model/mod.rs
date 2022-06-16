@@ -23,6 +23,7 @@ pub mod pull_requests;
 pub mod reactions;
 pub mod releases;
 pub mod repositories;
+#[cfg(feature = "search")]
 pub mod search;
 pub mod user;
 

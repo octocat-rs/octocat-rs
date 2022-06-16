@@ -1,12 +1,11 @@
 use crate::{
-    builders::{builder, builder_nested_setters, builder_string_setters, Builder},
-    methods::SearchRepositoriesBody,
-    model::search::RepoSearchResultItem,
+    builders::{builder, builder_nested_setters, Builder},
+    methods::{SearchRepositoriesBody, SearchRepositoriesResponse},
     GithubRestError, Requester,
 };
 use async_trait::async_trait;
 use github_api_octocat::end_points::EndPoints;
-use std::ops::Range;
+use std::{fmt::Display, ops::Range};
 
 builder!(
     /// * tags search
@@ -34,19 +33,46 @@ builder!(
     }
 );
 
-builder_string_setters!(SearchRepositoriesBuilder { query });
 builder_nested_setters!(SearchRepositoriesBuilder {
     body {
         size: Range<usize>,
         followers: Range<usize>,
         forks: Range<usize>,
-        stars: Range<usize>
+        stars: Range<usize>,
+        topics: Range<usize>,
+        help_wanted_issues: Range<usize>,
+        good_first_issues: Range<usize>
     }
 });
 
+impl SearchRepositoriesBuilder {
+    pub fn query<T: Into<String>>(mut self, query: T) -> Self {
+        self.query = {
+            serde_urlencoded::to_string(
+                serde_urlencoded::from_str::<Vec<(String, String)>>(query.into().as_str()).expect("Invalid query!"),
+            )
+            .unwrap()
+        };
+
+        self
+    }
+
+    pub fn language<T: Display>(mut self, val: T) -> Self {
+        self.query.push_str(format!("&language:{val}").as_str());
+
+        self
+    }
+
+    pub fn topic<T: Display>(mut self, val: T) -> Self {
+        self.query.push_str(format!("&topic:{val}").as_str());
+
+        self
+    }
+}
+
 #[async_trait]
 impl Builder for SearchRepositoriesBuilder {
-    type Response = RepoSearchResultItem;
+    type Response = SearchRepositoriesResponse;
 
     async fn execute<T>(mut self, client: &T) -> Result<Self::Response, GithubRestError>
     where
@@ -55,7 +81,7 @@ impl Builder for SearchRepositoriesBuilder {
         self.query.push_str(self.body.into_query().as_str());
 
         client
-            .req::<_, String, RepoSearchResultItem>(
+            .req::<_, String, SearchRepositoriesResponse>(
                 EndPoints::GetSearchRepositories(),
                 Some(&[("q", self.query)]),
                 None,
@@ -72,11 +98,23 @@ mod tests {
 
     #[tokio::test]
     async fn test_search_repositories_builder() -> Result<(), GithubRestError> {
+        let requester = DefaultRequester::new_none();
+
         let res = SearchRepositoriesBuilder::new()
-            // TODO: Human readable input
-            .query("tetris+language:assembly&sort=stars&order=desc")
-            .stars(4..6)
-            .execute(&DefaultRequester::new_none())
+            .query("tetris")
+            .language("assembly")
+            .stars(20..30)
+            .execute(&requester)
+            .await?;
+
+        dbg!(res);
+
+        let res = SearchRepositoriesBuilder::new()
+            .query("doom")
+            .language("rust")
+            .topic("game")
+            .stars(1000..usize::MAX)
+            .execute(&requester)
             .await?;
 
         dbg!(res);

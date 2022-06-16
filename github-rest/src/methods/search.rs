@@ -15,6 +15,12 @@ pub struct SearchRepositoriesBody {
     pub followers: Option<Range<usize>>,
     pub forks: Option<Range<usize>>,
     pub stars: Option<Range<usize>>,
+    /// Number of repository topics.
+    pub topics: Option<Range<usize>>,
+    /// Number of issues with the "help wanted" label.
+    pub help_wanted_issues: Option<Range<usize>>,
+    /// Number of issues with the "good first issue" label.
+    pub good_first_issues: Option<Range<usize>>,
 }
 
 impl SearchRepositoriesBody {
@@ -27,21 +33,27 @@ impl SearchRepositoriesBody {
                     $(
                         match &self.$field {
                             Some(range) => {
-                                let mut val = stringify!($field).to_owned();
+                                let mut val = format!("&{}", stringify!($field));
                                 val.push_str(format!(":{range:?}").as_str());
 
                                 ret.push_str(val.as_str())
                             },
                             None => {}
                         }
-
-                        ret.push_str(" ");
                     )*
                 }
             }
         }
 
-        push_or_skip!(size, followers, forks, stars);
+        push_or_skip!(
+            size,
+            followers,
+            forks,
+            stars,
+            topics,
+            help_wanted_issues,
+            good_first_issues
+        );
 
         ret
     }

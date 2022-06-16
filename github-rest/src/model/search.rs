@@ -1,4 +1,4 @@
-use crate::model::{prelude::*, repositories::nested::SimpleLicense};
+use crate::model::{prelude::*, repositories::nested::SimpleLicense, user::SimpleUser};
 
 /// Descending is the default.
 ///
@@ -26,11 +26,10 @@ pub enum Sort {
     UpdatedAsc,
 }
 
-// TODO: Verify this because the docs suck apparently
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RepoSearchResultItem {
-    pub archive_url: Option<String>,
-    pub assignees_url: Option<String>,
+    pub archive_url: String,
+    pub assignees_url: String,
     pub blobs_url: String,
     pub branches_url: String,
     pub collaborators_url: String,
@@ -63,7 +62,7 @@ pub struct RepoSearchResultItem {
     pub milestones_url: String,
     pub name: String,
     pub notifications_url: String,
-    pub owner: String,
+    pub owner: Option<SimpleUser>,
     pub private: bool,
     pub pulls_url: String,
     pub releases_url: String,
@@ -89,7 +88,7 @@ pub struct RepoSearchResultItem {
     pub language: Option<String>,
     pub archived: bool,
     pub disabled: bool,
-    pub mirror_url: String,
+    pub mirror_url: Option<String>,
     pub open_issues: usize,
     pub open_issues_count: usize,
     pub license: Option<SimpleLicense>,
@@ -102,5 +101,5 @@ pub struct RepoSearchResultItem {
     pub watchers_count: usize,
     pub created_at: String,
     pub updated_at: String,
-    pub score: usize,
+    pub score: f64,
 }

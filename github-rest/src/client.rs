@@ -26,7 +26,7 @@ impl DefaultRequester {
         {
             let mut encoder = Base64Encoder::new(&mut auth_header, base64::STANDARD);
 
-            write!(encoder, "{}", auth).unwrap();
+            write!(encoder, "{auth}").unwrap();
         }
 
         let mut headers = header::HeaderMap::new();
@@ -103,7 +103,7 @@ impl Requester for DefaultRequester {
         }
         let txt = res.text().await?;
 
-        Ok(dbg!(txt))
+        Ok(txt)
     }
 
     async fn req<T, V, A: DeserializeOwned>(

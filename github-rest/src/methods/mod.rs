@@ -4,6 +4,7 @@ pub use commits::*;
 pub use gists::*;
 pub use issues::*;
 pub use misc::*;
+#[cfg(feature = "search")]
 pub use search::*;
 pub use users::*;
 
@@ -11,6 +12,7 @@ mod commits;
 mod gists;
 mod issues;
 mod misc;
+#[cfg(feature = "search")]
 mod search;
 mod users;
 pub(crate) mod util;
