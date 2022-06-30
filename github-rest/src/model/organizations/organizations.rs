@@ -4,7 +4,7 @@ use crate::{
 };
 
 /// <https://docs.github.com/en/rest/orgs/orgs#get-an-organization=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Organization {
     pub html_url: String,
     pub has_organization_projects: bool,
@@ -22,7 +22,7 @@ pub struct Organization {
 }
 
 /// <https://docs.github.com/en/rest/orgs/orgs#list-organizations=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SimpleOrganization {
     pub login: String,
     pub url: String,
@@ -39,7 +39,7 @@ pub struct SimpleOrganization {
 }
 
 /// <https://docs.github.com/en/rest/teams/teams#get-a-team-by-name=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Team {
     pub created_at: String,
     pub updated_at: String,
@@ -51,7 +51,7 @@ pub struct Team {
 }
 
 /// <https://docs.github.com/en/rest/teams/teams#list-teams=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SimpleTeam {
     pub id: usize,
     pub node_id: String,
@@ -79,7 +79,7 @@ pub struct AddToOrgResponse {
 pub mod nested {
     use crate::model::prelude::*;
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ParentTeam {
         pub id: usize,
         pub node_id: String,

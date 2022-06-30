@@ -13,7 +13,7 @@ pub struct ReleaseEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
 pub enum ReleaseAction {
     Published,
@@ -50,7 +50,7 @@ pub struct DeleteEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
 pub enum RefType {
     Branch,

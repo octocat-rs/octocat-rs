@@ -10,7 +10,7 @@ use crate::{
 };
 
 /// <https://docs.github.com/en/rest/commits/comments#get-a-commit-comment=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CommitComment {
     pub url: String,
     pub html_url: String,

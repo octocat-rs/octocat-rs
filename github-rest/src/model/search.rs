@@ -4,7 +4,7 @@ use crate::model::{prelude::*, repositories::nested::SimpleLicense, user::Simple
 ///
 /// -Desc variants: Descending order.
 /// -Asc variants: Ascending order.
-#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Sort {
     InteractionsDesc,

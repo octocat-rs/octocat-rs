@@ -26,7 +26,7 @@ pub struct RepositoryEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryAction {
     Created,
@@ -66,7 +66,7 @@ pub struct RepositoryImportEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryImportAction {
     Success,
@@ -83,7 +83,7 @@ pub struct RepositoryVulnerabilityAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryVulnerabilityAlertAction {
     Create,
@@ -137,7 +137,7 @@ pub struct BranchProtectionRuleEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum BranchProtectionRuleAction {
     Created,
@@ -154,7 +154,7 @@ pub struct StarEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum StarAction {
     Created,
@@ -169,7 +169,7 @@ pub struct WatchEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum WatchAction {
     Started,
@@ -184,7 +184,7 @@ pub struct SecretScanningAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum SecretScanningAlertAction {
     Created,
@@ -204,7 +204,7 @@ pub struct CodeScanningAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum CodeScanningAlertAction {
     Created,
@@ -240,7 +240,7 @@ pub struct MilestoneEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MilestoneAction {
     Created,
@@ -260,7 +260,7 @@ pub struct DeployKeyEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum DeployKeyAction {
     Created,
@@ -277,7 +277,7 @@ pub struct MemberEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MemberAction {
     Added,
@@ -295,7 +295,7 @@ pub struct ProjectEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectAction {
     Created,
@@ -316,7 +316,7 @@ pub struct ProjectCardEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectCardAction {
     Created,
@@ -337,7 +337,7 @@ pub struct ProjectColumnEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectColumnAction {
     Created,
@@ -355,7 +355,7 @@ pub struct PackageEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum PackageAction {
     Published,
@@ -375,13 +375,13 @@ pub struct PingEvent {
 pub mod nested {
     use crate::model::{prelude::*, pull_requests::events::nested::Change, user::GitUser};
 
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
     pub struct Pusher {
         pub name: String,
         pub email: String,
     }
 
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
     pub struct Commit {
         pub id: String,
         pub tree_id: String,
@@ -396,7 +396,7 @@ pub mod nested {
         pub modified: Vec<Value>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
     pub struct HeadCommit {
         pub id: String,
         pub tree_id: String,
@@ -411,7 +411,7 @@ pub mod nested {
         pub modified: Vec<Value>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct BranchProtectionRule {
         pub id: usize,
         pub repository_id: usize,
@@ -439,7 +439,7 @@ pub mod nested {
         pub authorized_actor_names: Vec<String>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[serde(rename_all = "snake_case")]
     pub enum MultiLevelConfiguration {
         Off,
@@ -447,30 +447,30 @@ pub mod nested {
         Everyone,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct MemberChanges {
         pub old_permission: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct MilestoneChanges {
         pub title: Option<Change>,
         pub description: Option<Change>,
         pub due_on: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ProjectChanges {
         pub name: Option<Change>,
         pub body: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ProjectCardChanges {
         pub note: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ProjectColumnChanges {
         pub name: Option<Change>,
     }

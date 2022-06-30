@@ -1,7 +1,7 @@
 use crate::model::{prelude::*, releases::nested::*, user::SimpleUser};
 
 /// <https://docs.github.com/en/rest/releases/releases#get-a-release=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Release {
     pub assets_url: String,
     pub upload_url: String,
@@ -26,7 +26,7 @@ pub struct Release {
 pub mod nested {
     use crate::model::{prelude::*, user::SimpleUser};
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ReleaseAsset {
         pub id: i64,
         pub name: String,
@@ -43,7 +43,7 @@ pub mod nested {
         pub updated_at: String,
     }
 
-    #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "lowercase")]
     pub enum ReleaseAssetState {
         Uploaded,

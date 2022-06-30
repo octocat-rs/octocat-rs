@@ -11,8 +11,3 @@ build-release:
 check:
 	cargo clippy --all-targets --features client,secrets,search
 	cargo clippy --all-targets --target wasm32-unknown-unknown --no-default-features --features builders,workers,secrets,search
-
-
-
-
-

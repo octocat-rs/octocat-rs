@@ -51,7 +51,7 @@ pub struct CheckSuiteEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum CheckSuiteAction {
     Completed,
@@ -75,7 +75,7 @@ pub mod nested {
         user::SimpleUser,
     };
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[strum(serialize_all = "snake_case")]
     pub enum WorkflowRunAction {
         Requested,
@@ -116,7 +116,7 @@ pub mod nested {
         pub head_repository: Repository,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[strum(serialize_all = "snake_case")]
     pub enum WorkflowJobAction {
         Queued,
@@ -124,7 +124,7 @@ pub mod nested {
         InProgress,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct WorkflowJob {
         pub id: i64,
         pub run_id: i64,
@@ -148,7 +148,7 @@ pub mod nested {
         pub runner_group_name: String,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[strum(serialize_all = "snake_case")]
     pub enum CheckRunAction {
         Completed,
@@ -175,7 +175,7 @@ pub mod nested {
         pub pull_requests: Vec<Value>,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Step {
         pub name: String,
         pub status: String,
@@ -185,7 +185,7 @@ pub mod nested {
         pub completed_at: Value,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Output {
         pub title: Value,
         pub summary: Value,
@@ -194,7 +194,7 @@ pub mod nested {
         pub annotations_url: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct CheckSuite {
         pub id: i64,
         pub node_id: String,
@@ -211,7 +211,7 @@ pub mod nested {
         pub updated_at: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct App {
         pub id: i64,
         pub slug: String,
@@ -227,7 +227,7 @@ pub mod nested {
         pub events: Vec<String>,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Permissions {
         pub actions: String,
         pub administration: String,

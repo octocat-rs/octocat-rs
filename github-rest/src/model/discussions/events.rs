@@ -13,7 +13,7 @@ pub struct DiscussionEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum DiscussionAction {
     Created,
@@ -41,7 +41,7 @@ pub struct DiscussionCommentEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum DiscussionCommentAction {
     Created,

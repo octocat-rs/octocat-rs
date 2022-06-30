@@ -18,7 +18,7 @@ pub mod events {
     repo_origin!(GollumEvent);
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Page {
     pub page_name: String,
     pub title: String,

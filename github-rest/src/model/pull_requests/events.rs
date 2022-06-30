@@ -19,7 +19,7 @@ pub struct PullRequestEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum PullRequestAction {
     Assigned,
@@ -53,7 +53,7 @@ pub struct PullRequestReviewEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
 pub enum PullRequestReviewAction {
     Submitted,
@@ -75,13 +75,13 @@ pub struct PullRequestReviewCommentEvent {
 pub mod nested {
     use crate::model::prelude::*;
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct IssueChanges {
         pub title: Option<Change>,
         pub body: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Change {
         pub from: String,
     }

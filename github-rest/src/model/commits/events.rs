@@ -17,9 +17,10 @@ pub struct CommitCommentEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum CommitCommentAction {
+    #[default]
     Created,
 }
 
@@ -58,7 +59,7 @@ pub struct StatusEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum StatusState {
     Pending,
@@ -70,23 +71,17 @@ pub enum StatusState {
 pub mod nested {
     use crate::model::prelude::*;
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Branch {
         pub name: String,
         pub commit: NestedCommit,
         pub protected: bool,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct NestedCommit {
         pub sha: String,
         pub url: String,
-    }
-}
-
-impl Default for CommitCommentAction {
-    fn default() -> Self {
-        Self::Created
     }
 }
 

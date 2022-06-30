@@ -1,6 +1,6 @@
 use crate::model::prelude::*;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum Association {
     Collaborator,
@@ -9,12 +9,7 @@ pub enum Association {
     FirstTimeContributor,
     Mannequin,
     Member,
+    #[default]
     None,
     Owner,
-}
-
-impl Default for Association {
-    fn default() -> Self {
-        Association::None
-    }
 }

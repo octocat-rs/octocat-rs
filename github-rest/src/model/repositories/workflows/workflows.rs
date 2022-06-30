@@ -1,6 +1,6 @@
 use crate::model::{prelude::*, user::SimpleUser};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Workflow {
     pub id: i64,
     pub node_id: String,
@@ -14,7 +14,7 @@ pub struct Workflow {
     pub badge_url: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PageBuild {
     pub id: usize,
     pub status: String,
