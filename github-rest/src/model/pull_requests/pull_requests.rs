@@ -14,7 +14,7 @@ pub type Pulls = Vec<SimplePullRequest>;
 /// instead.
 ///
 /// <https://docs.github.com/en/rest/pulls/pulls#list-pull-requests=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SimplePullRequest {
     #[serde(rename = "_links")]
     pub links: Links,
@@ -51,7 +51,7 @@ pub struct SimplePullRequest {
 }
 
 /// <https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PullRequest {
     pub additions: i64,
     pub changed_files: i64,

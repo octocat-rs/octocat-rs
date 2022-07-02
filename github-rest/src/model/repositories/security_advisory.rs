@@ -3,7 +3,7 @@ use crate::model::prelude::*;
 pub mod events {
     use crate::model::{prelude::*, repositories::security_advisory::SecurityAdvisory};
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct SecurityAdvisoryEvent {
         pub action: SecurityAdvisoryAction,
         pub security_advisory: SecurityAdvisory,

@@ -5,7 +5,7 @@ use crate::model::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_dispatch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WorkflowDispatchEvent {
     pub inputs: Option<Value>,
     #[serde(rename = "ref")]
@@ -43,7 +43,7 @@ pub struct CheckRunEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#check_suite>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CheckSuiteEvent {
     pub action: CheckSuiteAction,
     pub check_suite: CheckSuite,
@@ -60,7 +60,7 @@ pub enum CheckSuiteAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#page_build>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PageBuildEvent {
     pub id: usize,
     pub build: PageBuild,
@@ -155,7 +155,7 @@ pub mod nested {
         Created,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct CheckRun {
         pub id: i64,
         pub name: String,

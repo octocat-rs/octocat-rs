@@ -5,7 +5,7 @@ use crate::model::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DiscussionEvent {
     pub action: DiscussionAction,
     pub discussion: Discussion,
@@ -32,7 +32,7 @@ pub enum DiscussionAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion_comment>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DiscussionCommentEvent {
     pub action: DiscussionCommentAction,
     pub comment: DiscussionComment,

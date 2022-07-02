@@ -97,11 +97,12 @@ pub struct GetIssuesBody {
 ///
 /// Represents the state of an issue. Possible variants are open, closed, and
 /// all.
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum IssueState {
     Open,
     Closed,
+    #[default]
     All,
 }
 

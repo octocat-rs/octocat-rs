@@ -19,7 +19,7 @@ use crate::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryEvent {
     pub action: RepositoryAction,
     #[serde(flatten)]
@@ -41,7 +41,7 @@ pub enum RepositoryAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#team_add>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TeamAddEvent {
     pub team: SimpleTeam,
     #[serde(flatten)]
@@ -49,7 +49,7 @@ pub struct TeamAddEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryDispatchEvent {
     pub action: String,
     #[serde(flatten)]
@@ -59,7 +59,7 @@ pub struct RepositoryDispatchEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryImportEvent {
     pub action: RepositoryImportAction,
     #[serde(flatten)]
@@ -75,7 +75,7 @@ pub enum RepositoryImportAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_vulnerability_alert>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryVulnerabilityAlertEvent {
     pub action: RepositoryVulnerabilityAlertAction,
     pub alert: Value,
@@ -92,7 +92,7 @@ pub enum RepositoryVulnerabilityAlertAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#push>
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct PushEvent {
     #[serde(rename = "ref")]
     pub ref_field: String,
@@ -128,7 +128,7 @@ impl PushEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#branch_protection_rule>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BranchProtectionRuleEvent {
     pub action: BranchProtectionRuleAction,
     pub rule: BranchProtectionRule,
@@ -146,7 +146,7 @@ pub enum BranchProtectionRuleAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StarEvent {
     pub action: StarAction,
     pub starred_at: Option<String>,
@@ -162,7 +162,7 @@ pub enum StarAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#watch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WatchEvent {
     pub action: WatchAction,
     #[serde(flatten)]
@@ -176,7 +176,7 @@ pub enum WatchAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#secret_scanning_alert>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SecretScanningAlertEvent {
     pub action: SecretScanningAlertAction,
     pub alert: Value,
@@ -193,7 +193,7 @@ pub enum SecretScanningAlertAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#code_scanning_alert>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CodeScanningAlertEvent {
     pub action: CodeScanningAlertAction,
     pub alert: CodeScanningAlert,
@@ -216,7 +216,7 @@ pub enum CodeScanningAlertAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#fork>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForkEvent {
     pub forkee: Repository,
     #[serde(flatten)]
@@ -224,14 +224,14 @@ pub struct ForkEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#public>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PublicEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#milestone>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MilestoneEvent {
     pub action: MilestoneAction,
     pub milestone: Milestone,
@@ -252,7 +252,7 @@ pub enum MilestoneAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deploy_key>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DeployKeyEvent {
     pub action: DeployKeyAction,
     pub key: DeployKey,
@@ -268,7 +268,7 @@ pub enum DeployKeyAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#member>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MemberEvent {
     pub action: MemberAction,
     pub member: SimpleUser,
@@ -286,7 +286,7 @@ pub enum MemberAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectEvent {
     pub action: ProjectAction,
     pub project: Project,
@@ -306,7 +306,7 @@ pub enum ProjectAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_card>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectCardEvent {
     pub action: ProjectCardAction,
     pub changes: Option<ProjectCardChanges>,
@@ -327,7 +327,7 @@ pub enum ProjectCardAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_column>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectColumnEvent {
     pub action: ProjectColumnAction,
     pub changes: Option<ProjectColumnChanges>,
@@ -347,7 +347,7 @@ pub enum ProjectColumnAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PackageEvent {
     pub action: PackageAction,
     pub package: Value,
@@ -363,7 +363,7 @@ pub enum PackageAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#ping>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PingEvent {
     pub zen: String,
     pub hook_id: usize,

@@ -8,7 +8,7 @@ pub mod events {
     use super::Page;
 
     /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#gollum>
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct GollumEvent {
         pub pages: Vec<Page>,
         #[serde(flatten)]

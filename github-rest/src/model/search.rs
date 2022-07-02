@@ -1,4 +1,13 @@
-use crate::model::{prelude::*, repositories::nested::SimpleLicense, user::SimpleUser};
+use crate::{
+    methods::IssueState,
+    model::{
+        commits::association::Association,
+        issues::{milestones::Milestone, Label},
+        prelude::*,
+        repositories::nested::SimpleLicense,
+        user::SimpleUser,
+    },
+};
 
 /// Descending is the default.
 ///
@@ -99,6 +108,32 @@ pub struct RepoSearchResultItem {
     pub svn_url: String,
     pub watchers: usize,
     pub watchers_count: usize,
+    pub created_at: String,
+    pub updated_at: String,
+    pub score: f64,
+}
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+pub struct IssueSearchResultItem {
+    pub assignee: Option<SimpleUser>,
+    pub closed_at: Option<String>,
+    pub comments: usize,
+    pub comments_url: String,
+    pub events_url: String,
+    pub html_url: String,
+    pub id: usize,
+    pub node_id: String,
+    pub labels: Vec<Label>,
+    pub labels_url: String,
+    pub milestone: Option<Milestone>,
+    pub number: usize,
+    pub repository_url: String,
+    pub state: IssueState,
+    pub locked: bool,
+    pub title: String,
+    pub url: String,
+    pub user: Option<SimpleUser>,
+    pub author_association: Association,
     pub created_at: String,
     pub updated_at: String,
     pub score: f64,

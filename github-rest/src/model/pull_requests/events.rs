@@ -9,7 +9,7 @@ use crate::model::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PullRequestEvent {
     pub action: PullRequestAction,
     pub number: i64,
@@ -43,7 +43,7 @@ pub enum PullRequestAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PullRequestReviewEvent {
     pub action: PullRequestAction,
     pub changes: Option<CommentChanges>,
@@ -62,7 +62,7 @@ pub enum PullRequestReviewAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request_review_comment>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PullRequestReviewCommentEvent {
     pub action: IssueCommentAction,
     pub changes: Option<CommentChanges>,

@@ -7,7 +7,7 @@ use crate::model::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deployment>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DeploymentEvent {
     pub action: DeploymentAction,
     pub deployment: Deployment,
@@ -22,7 +22,7 @@ pub enum DeploymentAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deployment_status>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DeploymentStatusEvent {
     pub action: DeploymentStatusAction,
     pub deployment_status: DeploymentStatus,
@@ -38,7 +38,7 @@ pub enum DeploymentStatusAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#marketplace_purchase>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MarketplacePurchaseEvent {
     pub action: MarketplacePurchaseAction,
     pub effective_date: String,
@@ -88,7 +88,7 @@ impl Event<'_> for SponsorshipEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#meta>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MetaEvent {
     pub action: MetaAction,
     pub hook_id: usize,
