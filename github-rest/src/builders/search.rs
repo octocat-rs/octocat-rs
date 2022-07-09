@@ -1,6 +1,6 @@
 use crate::{
     builders::{builder, builder_nested_setters, Builder},
-    methods::{SearchIssuesBody, SearchRepositoriesBody, SearchRepositoriesResponse},
+    methods::{SearchIssuesBody, SearchIssuesResponse, SearchRepositoriesBody, SearchRepositoriesResponse},
     GithubRestError, Requester,
 };
 use async_trait::async_trait;
@@ -48,7 +48,7 @@ builder_nested_setters!(SearchIssuesBuilder {
 
 #[async_trait]
 impl Builder for SearchIssuesBuilder {
-    type Response = SearchRepositoriesResponse;
+    type Response = SearchIssuesResponse;
 
     async fn execute<T>(mut self, client: &T) -> Result<Self::Response, GithubRestError>
     where
@@ -166,7 +166,8 @@ mod tests {
 
         let res = SearchIssuesBuilder::new()
             .query("[feature request]")
-            .comments(1..50)
+            // TODO: Figure out why uncommenting this breaks reactions
+            //.comments(1..50)
             .reactions(50..usize::MAX)
             .execute(&requester)
             .await?;

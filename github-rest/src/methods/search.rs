@@ -65,7 +65,7 @@ impl SearchRepositoriesBody {
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SearchIssuesResponse {
     pub total_count: usize,
-    pub incomplete_result: bool,
+    pub incomplete_results: bool,
     pub items: Vec<IssueSearchResultItem>,
 }
 
