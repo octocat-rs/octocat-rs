@@ -87,7 +87,7 @@ impl SearchIssuesBody {
                         match &self.$field {
                             Some(range) => {
                                 let mut val = format!("&{}", stringify!($field));
-                                val.push_str(format!(":{range:?}").as_str());
+                                val.push_str(format!(":{}..{}", range.start, range.end).as_str());
 
                                 ret.push_str(val.as_str())
                             },

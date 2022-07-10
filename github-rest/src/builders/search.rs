@@ -166,9 +166,10 @@ mod tests {
 
         let res = SearchIssuesBuilder::new()
             .query("[feature request]")
-            // TODO: Figure out why uncommenting this breaks reactions
-            //.comments(1..50)
-            .reactions(50..usize::MAX)
+            // TODO: Figure out why using more than one of the range helpers causes errors despite
+            // the query itself turning out fine.
+            .comments(1..50)
+            .reactions(50..150)
             .execute(&requester)
             .await?;
 
