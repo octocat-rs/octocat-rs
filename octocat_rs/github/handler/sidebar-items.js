@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DefaultEventHandler",""]],"trait":[["EventHandler","An event handler that is used in all clients. For end users, an implementer of this trait is passed to a `ClientBuilder` instance when creating the client in your main function."]]});
+window.SIDEBAR_ITEMS = {"struct":[["DefaultEventHandler",""]],"trait":[["EventHandler","An event handler that is used in all clients. For end users, an implementer of this trait is passed to a `ClientBuilder` instance when creating the client in your main function."]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["IssueState",""],["StringOrLabel",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["IssueState",""],["StringOrLabel",""]]};

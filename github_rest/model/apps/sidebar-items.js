@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["events",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["events",""]]};

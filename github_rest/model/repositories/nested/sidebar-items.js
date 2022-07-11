@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["CodeScanningAlertState",""],["ProjectState",""]],"struct":[["CodeScanningAlertRule",""],["Message",""],["MostRecentInstance",""],["SimpleLicense",""],["Tool",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["CodeScanningAlertState",""],["ProjectState",""]],"struct":[["CodeScanningAlertRule",""],["Message",""],["MostRecentInstance",""],["SimpleLicense",""],["Tool",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Client","Where the magic happens."]],"trait":[["GitHubClient",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["Client","Where the magic happens."]],"trait":[["GitHubClient",""]]};

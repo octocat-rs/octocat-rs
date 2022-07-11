@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["github",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["github",""]]};

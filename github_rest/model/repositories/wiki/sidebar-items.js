@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["events",""]],"struct":[["Page",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["events",""]],"struct":[["Page",""]]};

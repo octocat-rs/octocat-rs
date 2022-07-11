@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["EndPoints",""],["Methods",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["EndPoints",""],["Methods",""]]};

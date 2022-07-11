@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["events",""],["nested",""]],"struct":[["Release","https://docs.github.com/en/rest/releases/releases#get-a-release="]]});
+window.SIDEBAR_ITEMS = {"mod":[["events",""],["nested",""]],"struct":[["Release","https://docs.github.com/en/rest/releases/releases#get-a-release="]]};

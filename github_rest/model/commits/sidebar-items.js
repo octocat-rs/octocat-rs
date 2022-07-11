@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["association",""],["comments",""],["events",""],["nested",""]],"struct":[["Commit","https://docs.github.com/en/rest/commits/commits#get-a-commit="]],"type":[["Commits",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["association",""],["comments",""],["events",""],["nested",""]],"struct":[["Commit","https://docs.github.com/en/rest/commits/commits#get-a-commit="]],"type":[["Commits",""]]};

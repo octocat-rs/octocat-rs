@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Branch",""],["NestedCommit",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["Branch",""],["NestedCommit",""]]};
