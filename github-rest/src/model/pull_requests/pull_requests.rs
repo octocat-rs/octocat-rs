@@ -14,7 +14,7 @@ pub type Pulls = Vec<SimplePullRequest>;
 /// instead.
 ///
 /// <https://docs.github.com/en/rest/pulls/pulls#list-pull-requests=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SimplePullRequest {
     #[serde(rename = "_links")]
     pub links: Links,
@@ -51,7 +51,7 @@ pub struct SimplePullRequest {
 }
 
 /// <https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PullRequest {
     pub additions: i64,
     pub changed_files: i64,
@@ -69,17 +69,12 @@ pub struct PullRequest {
     pub shared: SimplePullRequest,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum PullRequestState {
+    #[default]
     Closed,
     Open,
-}
-
-impl Default for PullRequestState {
-    fn default() -> Self {
-        PullRequestState::Open
-    }
 }
 
 pub mod nested {
@@ -87,7 +82,7 @@ pub mod nested {
 
     use crate::model::{repositories::Repository, user::SimpleUser};
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct HeadBase {
         pub label: String,
         #[serde(rename = "ref")]
@@ -97,7 +92,7 @@ pub mod nested {
         pub user: SimpleUser,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Links {
         pub comments: HRef,
         pub commits: HRef,
@@ -110,12 +105,12 @@ pub mod nested {
         pub self_field: HRef,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct HRef {
         pub href: String,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct AutoMerge {
         enabled_by: SimpleUser,
         merge_method: String,

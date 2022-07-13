@@ -2,7 +2,7 @@ use crate::model::{prelude::*, user::SimpleUser};
 use std::collections::HashMap;
 
 /// <https://docs.github.com/en/rest/gists/gists#list-gists-for-the-authenticated-user=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SimpleGist {
     pub id: String,
     pub node_id: String,
@@ -23,7 +23,7 @@ pub struct SimpleGist {
 }
 
 /// <https://docs.github.com/en/rest/gists/gists#get-a-gist=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Gist {
     pub owner: SimpleUser,
     pub truncated: bool,
@@ -31,7 +31,7 @@ pub struct Gist {
     pub shared: SimpleGist,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct File {
     pub filename: String,
     #[serde(rename = "type")]

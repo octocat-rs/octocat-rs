@@ -74,12 +74,12 @@ where
     pub fn credentials_env_var<K: AsRef<OsStr>>(self, username_var: K, token_var: K) -> Self {
         let username = match std::env::var(username_var) {
             Ok(u) => u,
-            Err(e) => panic!("{}", e),
+            Err(e) => panic!("{e}"),
         };
 
         let token = match std::env::var(token_var) {
             Ok(t) => t,
-            Err(e) => panic!("{}", e),
+            Err(e) => panic!("{e}"),
         };
 
         let auth = Some(Authorization::PersonalToken { username, token });

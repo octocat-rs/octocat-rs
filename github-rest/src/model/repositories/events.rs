@@ -19,14 +19,14 @@ use crate::{
 };
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryEvent {
     pub action: RepositoryAction,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryAction {
     Created,
@@ -41,7 +41,7 @@ pub enum RepositoryAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#team_add>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TeamAddEvent {
     pub team: SimpleTeam,
     #[serde(flatten)]
@@ -49,7 +49,7 @@ pub struct TeamAddEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryDispatchEvent {
     pub action: String,
     #[serde(flatten)]
@@ -59,14 +59,14 @@ pub struct RepositoryDispatchEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryImportEvent {
     pub action: RepositoryImportAction,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryImportAction {
     Success,
@@ -75,7 +75,7 @@ pub enum RepositoryImportAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_vulnerability_alert>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RepositoryVulnerabilityAlertEvent {
     pub action: RepositoryVulnerabilityAlertAction,
     pub alert: Value,
@@ -83,7 +83,7 @@ pub struct RepositoryVulnerabilityAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryVulnerabilityAlertAction {
     Create,
@@ -92,7 +92,7 @@ pub enum RepositoryVulnerabilityAlertAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#push>
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct PushEvent {
     #[serde(rename = "ref")]
     pub ref_field: String,
@@ -128,7 +128,7 @@ impl PushEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#branch_protection_rule>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BranchProtectionRuleEvent {
     pub action: BranchProtectionRuleAction,
     pub rule: BranchProtectionRule,
@@ -137,7 +137,7 @@ pub struct BranchProtectionRuleEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum BranchProtectionRuleAction {
     Created,
@@ -146,7 +146,7 @@ pub enum BranchProtectionRuleAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StarEvent {
     pub action: StarAction,
     pub starred_at: Option<String>,
@@ -154,7 +154,7 @@ pub struct StarEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum StarAction {
     Created,
@@ -162,21 +162,21 @@ pub enum StarAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#watch>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WatchEvent {
     pub action: WatchAction,
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum WatchAction {
     Started,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#secret_scanning_alert>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SecretScanningAlertEvent {
     pub action: SecretScanningAlertAction,
     pub alert: Value,
@@ -184,7 +184,7 @@ pub struct SecretScanningAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum SecretScanningAlertAction {
     Created,
@@ -193,7 +193,7 @@ pub enum SecretScanningAlertAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#code_scanning_alert>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CodeScanningAlertEvent {
     pub action: CodeScanningAlertAction,
     pub alert: CodeScanningAlert,
@@ -204,7 +204,7 @@ pub struct CodeScanningAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum CodeScanningAlertAction {
     Created,
@@ -216,7 +216,7 @@ pub enum CodeScanningAlertAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#fork>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForkEvent {
     pub forkee: Repository,
     #[serde(flatten)]
@@ -224,14 +224,14 @@ pub struct ForkEvent {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#public>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PublicEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#milestone>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MilestoneEvent {
     pub action: MilestoneAction,
     pub milestone: Milestone,
@@ -240,7 +240,7 @@ pub struct MilestoneEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MilestoneAction {
     Created,
@@ -252,7 +252,7 @@ pub enum MilestoneAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#deploy_key>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DeployKeyEvent {
     pub action: DeployKeyAction,
     pub key: DeployKey,
@@ -260,7 +260,7 @@ pub struct DeployKeyEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum DeployKeyAction {
     Created,
@@ -268,7 +268,7 @@ pub enum DeployKeyAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#member>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MemberEvent {
     pub action: MemberAction,
     pub member: SimpleUser,
@@ -277,7 +277,7 @@ pub struct MemberEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MemberAction {
     Added,
@@ -286,7 +286,7 @@ pub enum MemberAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectEvent {
     pub action: ProjectAction,
     pub project: Project,
@@ -295,7 +295,7 @@ pub struct ProjectEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectAction {
     Created,
@@ -306,7 +306,7 @@ pub enum ProjectAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_card>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectCardEvent {
     pub action: ProjectCardAction,
     pub changes: Option<ProjectCardChanges>,
@@ -316,7 +316,7 @@ pub struct ProjectCardEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectCardAction {
     Created,
@@ -327,7 +327,7 @@ pub enum ProjectCardAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_column>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectColumnEvent {
     pub action: ProjectColumnAction,
     pub changes: Option<ProjectColumnChanges>,
@@ -337,7 +337,7 @@ pub struct ProjectColumnEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectColumnAction {
     Created,
@@ -347,7 +347,7 @@ pub enum ProjectColumnAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PackageEvent {
     pub action: PackageAction,
     pub package: Value,
@@ -355,7 +355,7 @@ pub struct PackageEvent {
     pub event_info: RepoEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum PackageAction {
     Published,
@@ -363,7 +363,7 @@ pub enum PackageAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#ping>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PingEvent {
     pub zen: String,
     pub hook_id: usize,
@@ -375,13 +375,13 @@ pub struct PingEvent {
 pub mod nested {
     use crate::model::{prelude::*, pull_requests::events::nested::Change, user::GitUser};
 
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
     pub struct Pusher {
         pub name: String,
         pub email: String,
     }
 
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
     pub struct Commit {
         pub id: String,
         pub tree_id: String,
@@ -396,7 +396,7 @@ pub mod nested {
         pub modified: Vec<Value>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
     pub struct HeadCommit {
         pub id: String,
         pub tree_id: String,
@@ -411,7 +411,7 @@ pub mod nested {
         pub modified: Vec<Value>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct BranchProtectionRule {
         pub id: usize,
         pub repository_id: usize,
@@ -439,7 +439,7 @@ pub mod nested {
         pub authorized_actor_names: Vec<String>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[serde(rename_all = "snake_case")]
     pub enum MultiLevelConfiguration {
         Off,
@@ -447,30 +447,30 @@ pub mod nested {
         Everyone,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct MemberChanges {
         pub old_permission: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct MilestoneChanges {
         pub title: Option<Change>,
         pub description: Option<Change>,
         pub due_on: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ProjectChanges {
         pub name: Option<Change>,
         pub body: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ProjectCardChanges {
         pub note: Option<Change>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct ProjectColumnChanges {
         pub name: Option<Change>,
     }

@@ -6,7 +6,7 @@ use crate::{
 use async_trait::async_trait;
 
 /// Embeds [`PublicUser`]
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PrivateUser {
     pub collaborators: i64,
     pub disk_usage: i64,
@@ -59,7 +59,7 @@ impl GitHubUser for PrivateUser {
 }
 
 /// Embeds [`SimpleUser`]
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PublicUser {
     pub received_events_url: String,
     pub bio: Option<String>,
@@ -119,7 +119,7 @@ impl GitHubUser for PublicUser {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SimpleUser {
     pub avatar_url: String,
     pub events_url: String,
@@ -257,7 +257,7 @@ pub trait GitHubUser {
         T: Requester;
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GitUser {
     pub name: String,
     pub email: String,

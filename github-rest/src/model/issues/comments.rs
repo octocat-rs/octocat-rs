@@ -1,7 +1,7 @@
 use crate::model::{commits::association::Association, prelude::*, reactions::ReactionRollup, user::SimpleUser};
 
 /// <https://docs.github.com/en/rest/issues/comments#get-an-issue-comment=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct IssueComment {
     pub id: i64,
     pub node_id: String,

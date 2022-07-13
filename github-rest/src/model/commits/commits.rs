@@ -11,7 +11,7 @@ use crate::{
 pub type Commits = Vec<Commit>;
 
 /// <https://docs.github.com/en/rest/commits/commits#get-a-commit=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Commit {
     pub url: String,
     pub sha: String,
@@ -50,14 +50,14 @@ pub mod nested {
     use crate::model::user::GitUser;
     use serde::{Deserialize, Serialize};
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Parent {
         pub sha: String,
         pub url: String,
         pub html_url: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct CommitObject {
         pub url: String,
         pub author: Option<GitUser>,
@@ -68,13 +68,13 @@ pub mod nested {
         pub verification: Verification,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Tree {
         pub sha: String,
         pub url: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Verification {
         pub verified: bool,
         pub reason: String,

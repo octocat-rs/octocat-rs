@@ -11,7 +11,7 @@ use crate::model::{
 pub type Issues = Vec<Issue>;
 
 /// <https://docs.github.com/en/rest/issues/issues#get-an-issue=>
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Issue {
     pub assignee: Option<SimpleUser>,
     pub closed_at: Option<String>,
@@ -36,7 +36,7 @@ pub struct Issue {
     pub updated_at: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Label {
     pub id: i64,
     pub node_id: String,
@@ -50,14 +50,14 @@ pub struct Label {
 pub mod nested {
     use crate::model::{issues::Label, prelude::*};
 
-    #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "lowercase")]
     pub enum IssueState {
         Open,
         Closed,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(untagged)]
     pub enum StringOrLabel {
         String(String),

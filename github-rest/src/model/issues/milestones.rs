@@ -1,7 +1,7 @@
 use crate::model::{prelude::*, user::SimpleUser};
 
 /// <https://docs.github.com/en/rest/issues/milestones#get-a-milestone=>
-#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq, Eq)]
 pub struct Milestone {
     pub closed_issues: i64,
     pub creator: Option<SimpleUser>,
@@ -21,15 +21,10 @@ pub struct Milestone {
     pub updated_at: String,
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MilestoneState {
+    #[default]
     Open,
     Closed,
-}
-
-impl Default for MilestoneState {
-    fn default() -> Self {
-        Self::Open
-    }
 }

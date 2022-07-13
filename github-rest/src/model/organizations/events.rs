@@ -11,7 +11,7 @@ use crate::model::{
 /// The invitation and membership fields are mutually exclusive.
 ///
 /// [Read more](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#organization)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct OrganizationEvent {
     pub action: OrganizationAction,
     pub invitation: Option<Value>,
@@ -20,7 +20,7 @@ pub struct OrganizationEvent {
     pub event_info: OrgEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum OrganizationAction {
     Deleted,
@@ -31,7 +31,7 @@ pub enum OrganizationAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#team>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TeamEvent {
     pub action: TeamAction,
     pub team: SimpleTeam,
@@ -40,7 +40,7 @@ pub struct TeamEvent {
     pub event_info: OrgEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum TeamAction {
     Created,
@@ -51,7 +51,7 @@ pub enum TeamAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#membership>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MembershipEvent {
     pub action: MembershipAction,
     pub scope: MembershipScope,
@@ -61,7 +61,7 @@ pub struct MembershipEvent {
     pub event_info: OrgEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MembershipAction {
     Added,
@@ -69,7 +69,7 @@ pub enum MembershipAction {
 }
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#org_block>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct OrgBlockEvent {
     pub action: OrgBlockAction,
     pub blocked_user: SimpleUser,
@@ -77,7 +77,7 @@ pub struct OrgBlockEvent {
     pub event_info: OrgEventInfo,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum OrgBlockAction {
     Blocked,
@@ -87,13 +87,13 @@ pub enum OrgBlockAction {
 pub mod nested {
     use crate::model::{prelude::*, pull_requests::events::nested::Change};
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
     #[serde(rename_all = "snake_case")]
     pub enum MembershipScope {
         Team,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct TeamChanges {
         pub description: Option<Change>,
         pub name: Option<Change>,

@@ -8,6 +8,8 @@ pub use gists::*;
 pub use issues::*;
 pub use pull_requests::*;
 pub use reactions::*;
+#[cfg(feature = "search")]
+pub use search::*;
 use serde::de::DeserializeOwned;
 
 mod commits;
@@ -15,6 +17,8 @@ mod gists;
 mod issues;
 mod pull_requests;
 mod reactions;
+#[cfg(feature = "search")]
+mod search;
 
 #[async_trait]
 pub trait Builder {

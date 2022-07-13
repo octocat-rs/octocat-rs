@@ -1,6 +1,6 @@
 use crate::model::{commits::association::Association, prelude::*, user::SimpleUser};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Discussion {
     pub lock_reason: Option<LockReason>,
     pub repository_url: String,
@@ -23,7 +23,7 @@ pub struct Discussion {
     pub body: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum LockReason {
     OffTopic,
@@ -32,7 +32,7 @@ pub enum LockReason {
     TooHeated,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DiscussionComment {
     pub id: usize,
     pub node_id: String,

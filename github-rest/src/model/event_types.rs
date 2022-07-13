@@ -92,7 +92,7 @@ pub enum EventTypes {
 
 /// Used to represent the base fields provided by events originating from
 /// repositories.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct RepoEventInfo {
     pub repository: Repository,
     pub organization: Option<SimpleOrganization>,
@@ -102,7 +102,7 @@ pub struct RepoEventInfo {
 
 /// Used to represent the base fields provided by events originating from
 /// organizations.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct OrgEventInfo {
     pub organization: SimpleOrganization,
     pub installation: Option<Value>,

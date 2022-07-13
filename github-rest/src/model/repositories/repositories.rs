@@ -1,7 +1,7 @@
 use crate::model::{prelude::*, repositories::nested::*, user::SimpleUser};
 
 /// <https://docs.github.com/en/rest/repos/repos#get-a-repository=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Repository {
     pub archive_url: String,
     pub assignees_url: String,
@@ -78,7 +78,7 @@ pub struct Repository {
 }
 
 /// <https://docs.github.com/en/rest/projects/projects#get-a-project=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Project {
     pub id: usize,
     pub node_id: String,
@@ -96,7 +96,7 @@ pub struct Project {
 }
 
 /// <https://docs.github.com/en/rest/projects/cards#get-a-project-card=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectCard {
     pub id: usize,
     pub node_id: String,
@@ -110,7 +110,7 @@ pub struct ProjectCard {
 }
 
 /// <https://docs.github.com/en/rest/projects/columns#get-a-project-column=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProjectColumn {
     pub id: usize,
     pub node_id: String,
@@ -123,7 +123,7 @@ pub struct ProjectColumn {
 }
 
 /// <https://docs.github.com/en/rest/deploy-keys#get-a-deploy-key=>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DeployKey {
     pub id: usize,
     pub key: String,
@@ -135,7 +135,7 @@ pub struct DeployKey {
 }
 
 /// <https://docs.github.com/en/rest/code-scanning#get-a-code-scanning-alert=>
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CodeScanningAlert {
     pub number: usize,
     pub created_at: String,
@@ -155,7 +155,7 @@ pub struct CodeScanningAlert {
 pub mod nested {
     use crate::model::prelude::*;
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct SimpleLicense {
         pub key: String,
         pub name: String,
@@ -164,14 +164,14 @@ pub mod nested {
         pub node_id: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Tool {
         pub name: String,
         pub version: Option<String>,
         pub guid: Option<String>,
     }
 
-    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct MostRecentInstance {
         #[serde(rename = "ref")]
         pub ref_field: String,
@@ -184,12 +184,12 @@ pub mod nested {
         pub html_url: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Message {
         pub text: String,
     }
 
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     pub struct CodeScanningAlertRule {
         pub id: String,
         pub severity: String,
@@ -199,14 +199,14 @@ pub mod nested {
         pub help: String,
     }
 
-    #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "lowercase")]
     pub enum ProjectState {
         Open,
         Closed,
     }
 
-    #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+    #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "lowercase")]
     pub enum CodeScanningAlertState {
         Open,
