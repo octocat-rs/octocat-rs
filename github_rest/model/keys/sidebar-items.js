@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["nested",""]],"struct":[["GpgKey","https://docs.github.com/en/rest/users/gpg-keys#list-gpg-keys-for-a-user="],["SshKey","https://docs.github.com/en/rest/users/keys#list-public-keys-for-a-user="]]};
+window.SIDEBAR_ITEMS = {"mod":["nested"],"struct":["GpgKey","SshKey"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["MultiLevelConfiguration",""]],"struct":[["BranchProtectionRule",""],["Commit",""],["HeadCommit",""],["MemberChanges",""],["MilestoneChanges",""],["ProjectCardChanges",""],["ProjectChanges",""],["ProjectColumnChanges",""],["Pusher",""]]};
+window.SIDEBAR_ITEMS = {"enum":["MultiLevelConfiguration"],"struct":["BranchProtectionRule","Commit","HeadCommit","MemberChanges","MilestoneChanges","ProjectCardChanges","ProjectChanges","ProjectColumnChanges","Pusher"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["IssueComment","https://docs.github.com/en/rest/issues/comments#get-an-issue-comment="]]};
+window.SIDEBAR_ITEMS = {"struct":["IssueComment"]};

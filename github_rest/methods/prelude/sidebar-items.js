@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":[["Deserialize",""],["Serialize",""]],"enum":[["EndPoints",""],["Methods",""]],"struct":[["Body","An asynchronous request body."]],"trait":[["Deserialize","A data structure that can be deserialized from any data format supported by Serde."],["Serialize","A data structure that can be serialized into any data format supported by Serde."]]};
+window.SIDEBAR_ITEMS = {"derive":["Deserialize","Serialize"],"enum":["EndPoints","Methods"],"struct":["Body"],"trait":["Deserialize","Serialize"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["GitUser",""],["PrivateUser","Embeds [`PublicUser`]"],["PublicUser","Embeds [`SimpleUser`]"],["SimpleUser",""]],"trait":[["GitHubUser","A trait for all GitHub user structs. Intended for [`SimpleUser`], [`PublicUser`], and [`PrivateUser`]"]]};
+window.SIDEBAR_ITEMS = {"struct":["GitUser","PrivateUser","PublicUser","SimpleUser"],"trait":["GitHubUser"]};

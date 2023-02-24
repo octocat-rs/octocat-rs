@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["LockReason",""]],"mod":[["events",""]],"struct":[["Discussion",""],["DiscussionComment",""]]};
+window.SIDEBAR_ITEMS = {"enum":["LockReason"],"mod":["events"],"struct":["Discussion","DiscussionComment"]};

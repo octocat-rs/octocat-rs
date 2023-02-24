@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["PullRequestState",""]],"mod":[["events",""],["nested",""]],"struct":[["PullRequest","https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request="],["SimplePullRequest","Only used when getting pull requests in a list."]],"type":[["Pulls",""]]};
+window.SIDEBAR_ITEMS = {"enum":["PullRequestState"],"mod":["events","nested"],"struct":["PullRequest","SimplePullRequest"],"type":["Pulls"]};

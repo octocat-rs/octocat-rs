@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["MembershipScope",""]],"struct":[["TeamChanges",""]]};
+window.SIDEBAR_ITEMS = {"enum":["MembershipScope"],"struct":["TeamChanges"]};

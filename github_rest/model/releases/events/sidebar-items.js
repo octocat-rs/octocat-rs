@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["RefType",""],["ReleaseAction",""]],"struct":[["CreateEvent","https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#create"],["DeleteEvent","https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#delete"],["ReleaseEvent","https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release"]]};
+window.SIDEBAR_ITEMS = {"enum":["RefType","ReleaseAction"],"struct":["CreateEvent","DeleteEvent","ReleaseEvent"]};

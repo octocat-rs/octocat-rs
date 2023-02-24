@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Reaction","See also: https://docs.github.com/en/rest/reference/reactions#reaction-types"]],"struct":[["CommitCommentReactionCreated",""],["ReactionRollup",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Reaction"],"struct":["CommitCommentReactionCreated","ReactionRollup"]};

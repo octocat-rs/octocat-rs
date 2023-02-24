@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["SecurityAdvisoryAction",""]],"struct":[["SecurityAdvisoryEvent",""]]};
+window.SIDEBAR_ITEMS = {"enum":["SecurityAdvisoryAction"],"struct":["SecurityAdvisoryEvent"]};
