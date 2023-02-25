@@ -39,6 +39,10 @@ impl DefaultRequester {
             header::HeaderValue::from_str("application/vnd.github.v3+json").unwrap(),
         );
         headers.insert(
+            "X-GitHub-Api-Version",
+            header::HeaderValue::from_str("2022-11-28").unwrap(),
+        );
+        headers.insert(
             header::AUTHORIZATION,
             header::HeaderValue::from_str(std::str::from_utf8(&auth_header).expect("Failed to parse authorization!"))
                 .unwrap(),
@@ -72,7 +76,7 @@ impl Requester for DefaultRequester {
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Self::Body> + std::marker::Send,
     {
-        let path = format!("https://api.github.com{}", url.path());
+        let path = dbg!(format!("https://api.github.com{}", url.path()));
 
         let mut req = match url.method() {
             Methods::Get => self.client.get(path),
@@ -87,7 +91,7 @@ impl Requester for DefaultRequester {
         }
 
         if let Some(body) = body {
-            req = req.body(body)
+            req = dbg!(req.body(body))
         }
 
         let res = req.send().await?;

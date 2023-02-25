@@ -12,7 +12,3 @@ check:
 	cargo clippy --all-targets --features client,secrets
 	cargo clippy --all-targets --target wasm32-unknown-unknown --no-default-features --features builders,workers,secrets
 
-
-
-
-

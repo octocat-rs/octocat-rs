@@ -127,7 +127,9 @@ mod tests {
         methods::util,
     };
 
-    const GIST_ID: &str = "";
+    // You will need to change this to your own thing. The gist method tests have
+    // the same issue. TODO: Work out a better system
+    const GIST_ID: &str = "c2196b06d002d4ee278175bb82454a95";
 
     #[tokio::test]
     async fn test_get_gists_builder() {

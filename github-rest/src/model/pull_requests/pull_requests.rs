@@ -84,17 +84,37 @@ impl Default for PullRequestState {
 
 pub mod nested {
     use serde::{Deserialize, Serialize};
+    use std::ops::Deref;
 
-    use crate::model::{repositories::Repository, user::SimpleUser};
+    use crate::model::{
+        repositories::{nested::RepoBase, Repository},
+        user::SimpleUser,
+    };
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct HeadBase {
         pub label: String,
         #[serde(rename = "ref")]
         pub ref_field: String,
-        pub repo: Option<Repository>,
+        pub repo: HeadRepo,
         pub sha: String,
         pub user: SimpleUser,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct HeadRepo {
+        pub subscribers_url: String,
+        pub subscription_url: String,
+        #[serde(flatten)]
+        pub common: RepoBase,
+    }
+
+    impl Deref for HeadRepo {
+        type Target = RepoBase;
+
+        fn deref(&self) -> &Self::Target {
+            &self.common
+        }
     }
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

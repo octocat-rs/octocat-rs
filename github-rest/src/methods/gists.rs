@@ -125,7 +125,7 @@ mod tests {
 
     use super::*;
 
-    const GIST_ID: &str = "";
+    const GIST_ID: &str = "c2196b06d002d4ee278175bb82454a95";
 
     #[tokio::test]
     async fn test_get_user_gists() {

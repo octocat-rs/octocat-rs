@@ -57,19 +57,19 @@ impl Builder for CommitCommentBuilder {
 mod tests {
     use crate::{
         builders::{Builder, CommitCommentBuilder},
-        client::DefaultRequester,
+        methods::util,
     };
 
     #[tokio::test]
     async fn test_comment_on_commit() {
         let comment = CommitCommentBuilder::new()
             .owner("octocat-rs")
-            .repo("github-rest")
-            .sha("2eb7eeba66a6adf2168391d0cd6dcac995a34489")
-            .body("Losing my mind");
+            .repo("octocat-rs")
+            .sha("04235f407fbe0cde62b36335965ca48ae099da9f")
+            .body("Testing, ignore");
 
         // You'll need to add your auth to get this to pass
-        let a = comment.execute(&DefaultRequester::new_none()).await.unwrap();
+        let a = comment.execute(&util::github_auth()).await.unwrap();
 
         dbg!(a);
     }
