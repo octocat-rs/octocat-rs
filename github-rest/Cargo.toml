@@ -29,9 +29,6 @@ reqwest = "0.11.14"
 [target.'cfg(target_family = "wasm")'.dependencies]
 worker = "0.0.13"
 
-[target.'cfg(target_family = "wasm")'.patch.crates-io]
-num-integer = { git = "https://github.com/rust-num/num-integer", rev = "683903c" }
-
 [features]
 default = ["builders"]
 full = ["builders", "client"]

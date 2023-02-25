@@ -28,9 +28,6 @@ async-trait = "0.1"
 wasm-bindgen-futures = "0.4"
 anyhow = "1"
 
-[patch.crates-io]
-num-integer = { git = "https://github.com/rust-num/num-integer", rev = "683903c" }
-
 [profile.release]
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
