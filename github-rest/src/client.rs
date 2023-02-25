@@ -24,7 +24,7 @@ impl DefaultRequester {
         let mut auth_header = b"Basic ".to_vec();
 
         {
-            let mut encoder = Base64Encoder::new(&mut auth_header, base64::STANDARD);
+            let mut encoder = Base64Encoder::new(&mut auth_header, &base64::engine::general_purpose::STANDARD);
 
             write!(encoder, "{}", auth).unwrap();
         }
