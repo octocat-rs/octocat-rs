@@ -26,6 +26,8 @@ pub struct RepositoryEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(RepositoryEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryAction {
@@ -48,6 +50,8 @@ pub struct TeamAddEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(TeamAddEvent, RepoEventInfo, event_info);
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository_dispatch>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepositoryDispatchEvent {
@@ -66,6 +70,8 @@ pub struct RepositoryImportEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(RepositoryImportEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryImportAction {
@@ -82,6 +88,8 @@ pub struct RepositoryVulnerabilityAlertEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(RepositoryVulnerabilityAlertEvent, RepoEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
@@ -110,6 +118,8 @@ pub struct PushEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(PushEvent, RepoEventInfo, event_info);
+
 impl PushEvent {
     /// Adds a comment to the commit that triggered the event.
     ///
@@ -137,6 +147,8 @@ pub struct BranchProtectionRuleEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(BranchProtectionRuleEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum BranchProtectionRuleAction {
@@ -154,6 +166,8 @@ pub struct StarEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(StarEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum StarAction {
@@ -169,6 +183,8 @@ pub struct WatchEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(WatchEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum WatchAction {
@@ -183,6 +199,8 @@ pub struct SecretScanningAlertEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(SecretScanningAlertEvent, RepoEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
@@ -204,6 +222,8 @@ pub struct CodeScanningAlertEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(CodeScanningAlertEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum CodeScanningAlertAction {
@@ -223,12 +243,16 @@ pub struct ForkEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(ForkEvent, RepoEventInfo, event_info);
+
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#public>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PublicEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(PublicEvent, RepoEventInfo, event_info);
 
 /// <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#milestone>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -239,6 +263,8 @@ pub struct MilestoneEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(MilestoneEvent, RepoEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
@@ -260,6 +286,8 @@ pub struct DeployKeyEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(DeployKeyEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum DeployKeyAction {
@@ -276,6 +304,8 @@ pub struct MemberEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(MemberEvent, RepoEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
@@ -294,6 +324,8 @@ pub struct ProjectEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(ProjectEvent, RepoEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
@@ -316,6 +348,8 @@ pub struct ProjectCardEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(ProjectCardEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectCardAction {
@@ -337,6 +371,8 @@ pub struct ProjectColumnEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(ProjectColumnEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum ProjectColumnAction {
@@ -355,6 +391,8 @@ pub struct PackageEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(PackageEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum PackageAction {
@@ -371,6 +409,8 @@ pub struct PingEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(PingEvent, RepoEventInfo, event_info);
 
 pub mod nested {
     use crate::model::{prelude::*, pull_requests::events::nested::Change, user::GitUser};

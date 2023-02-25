@@ -19,6 +19,8 @@ pub struct PullRequestEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(PullRequestEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum PullRequestAction {
@@ -53,6 +55,8 @@ pub struct PullRequestReviewEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(PullRequestReviewEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
 pub enum PullRequestReviewAction {
@@ -71,6 +75,8 @@ pub struct PullRequestReviewCommentEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(PullRequestReviewCommentEvent, RepoEventInfo, event_info);
 
 pub mod nested {
     use crate::model::prelude::*;

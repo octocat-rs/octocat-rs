@@ -14,8 +14,10 @@ pub struct GpgKey {
     pub subkeys: Vec<SubKey>,
     pub revoked: bool,
     #[serde(flatten)]
-    pub key_info: KeyInfo,
+    pub shared: KeyInfo,
 }
+
+as_ref_and_deref!(GpgKey, KeyInfo, shared);
 
 pub mod nested {
     use crate::model::prelude::*;
@@ -25,8 +27,10 @@ pub mod nested {
         pub emails: Vec<Email>,
         pub subkeys: Vec<SubKey>,
         #[serde(flatten)]
-        pub key_info: KeyInfo,
+        pub shared: KeyInfo,
     }
+
+    as_ref_and_deref!(SubKey, KeyInfo, shared);
 
     /// Contains general info about a key, including:
     /// * The public key,

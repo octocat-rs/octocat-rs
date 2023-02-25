@@ -3,25 +3,6 @@ use crate::{
     model::{organizations::AddToOrgResponse, prelude::*},
     GithubRestError, Requester,
 };
-use std::ops::Deref;
-
-macro_rules! as_ref_and_deref {
-    ($from:ty, $to:ty, $field:ident) => {
-        impl AsRef<$to> for $from {
-            fn as_ref(&self) -> &$to {
-                &self.$field
-            }
-        }
-
-        impl Deref for $from {
-            type Target = $to;
-
-            fn deref(&self) -> &Self::Target {
-                &self.$field
-            }
-        }
-    };
-}
 
 /// Embeds [`PublicUser`]
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

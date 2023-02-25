@@ -31,6 +31,8 @@ pub struct Gist {
     pub shared: SimpleGist,
 }
 
+as_ref_and_deref!(Gist, SimpleGist, shared);
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct File {
     pub filename: String,

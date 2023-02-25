@@ -25,7 +25,28 @@ pub mod releases;
 pub mod repositories;
 pub mod user;
 
+macro_rules! as_ref_and_deref {
+    ($from:ty, $to:ty, $field:ident) => {
+        impl AsRef<$to> for $from {
+            fn as_ref(&self) -> &$to {
+                &self.$field
+            }
+        }
+
+        impl std::ops::Deref for $from {
+            type Target = $to;
+
+            fn deref(&self) -> &Self::Target {
+                &self.$field
+            }
+        }
+    };
+}
+
+pub(crate) use as_ref_and_deref;
+
 pub(crate) mod prelude {
+    pub(crate) use super::as_ref_and_deref;
     pub use serde::{Deserialize, Serialize};
     pub use serde_json::Value;
     pub use strum::{EnumString, EnumVariantNames};

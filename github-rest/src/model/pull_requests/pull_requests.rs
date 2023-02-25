@@ -69,6 +69,8 @@ pub struct PullRequest {
     pub shared: SimplePullRequest,
 }
 
+as_ref_and_deref!(PullRequest, SimplePullRequest, shared);
+
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum PullRequestState {
@@ -79,9 +81,8 @@ pub enum PullRequestState {
 
 pub mod nested {
     use serde::{Deserialize, Serialize};
-    use std::ops::Deref;
 
-    use crate::model::{repositories::nested::RepoBase, user::SimpleUser};
+    use crate::model::{as_ref_and_deref, repositories::nested::Repo, user::SimpleUser};
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct HeadBase {
@@ -98,16 +99,10 @@ pub mod nested {
         pub subscribers_url: String,
         pub subscription_url: String,
         #[serde(flatten)]
-        pub common: RepoBase,
+        pub common: Repo,
     }
 
-    impl Deref for HeadRepo {
-        type Target = RepoBase;
-
-        fn deref(&self) -> &Self::Target {
-            &self.common
-        }
-    }
+    as_ref_and_deref!(HeadRepo, Repo, common);
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Links {

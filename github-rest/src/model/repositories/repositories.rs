@@ -1,5 +1,4 @@
 use crate::model::{prelude::*, repositories::nested::*, user::SimpleUser};
-use std::ops::Deref;
 
 /// <https://docs.github.com/en/rest/repos/repos#get-a-repository=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -7,16 +6,10 @@ pub struct Repository {
     pub network_count: i64,
     pub subscribers_count: i64,
     #[serde(flatten)]
-    pub common: RepoBase,
+    pub common: Repo,
 }
 
-impl Deref for Repository {
-    type Target = RepoBase;
-
-    fn deref(&self) -> &Self::Target {
-        &self.common
-    }
-}
+as_ref_and_deref!(Repository, Repo, common);
 
 /// <https://docs.github.com/en/rest/projects/projects#get-a-project=>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -97,7 +90,7 @@ pub mod nested {
     use crate::model::{prelude::*, user::SimpleUser};
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct RepoBase {
+    pub struct Repo {
         pub archive_url: String,
         pub assignees_url: String,
         pub blobs_url: String,

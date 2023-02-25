@@ -226,7 +226,7 @@ mod tests {
         let requester = DefaultRequester::new_none();
 
         let res = get_issues(&requester, "microsoft", "vscode", None).await.unwrap();
-        println!("{:#?}", res)
+        println!("{res:#?}")
     }
 
     #[tokio::test]

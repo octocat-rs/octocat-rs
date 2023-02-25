@@ -21,6 +21,8 @@ pub struct Organization {
     pub shared: SimpleOrganization,
 }
 
+as_ref_and_deref!(Organization, SimpleOrganization, shared);
+
 /// <https://docs.github.com/en/rest/orgs/orgs#list-organizations=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimpleOrganization {
@@ -49,6 +51,8 @@ pub struct Team {
     #[serde(flatten)]
     pub shared: SimpleTeam,
 }
+
+as_ref_and_deref!(Team, SimpleTeam, shared);
 
 /// <https://docs.github.com/en/rest/teams/teams#list-teams=>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

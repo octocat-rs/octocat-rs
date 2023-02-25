@@ -20,6 +20,8 @@ pub struct OrganizationEvent {
     pub event_info: OrgEventInfo,
 }
 
+as_ref_and_deref!(OrganizationEvent, OrgEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum OrganizationAction {
@@ -39,6 +41,8 @@ pub struct TeamEvent {
     #[serde(flatten)]
     pub event_info: OrgEventInfo,
 }
+
+as_ref_and_deref!(TeamEvent, OrgEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
@@ -61,6 +65,8 @@ pub struct MembershipEvent {
     pub event_info: OrgEventInfo,
 }
 
+as_ref_and_deref!(MembershipEvent, OrgEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum MembershipAction {
@@ -76,6 +82,8 @@ pub struct OrgBlockEvent {
     #[serde(flatten)]
     pub event_info: OrgEventInfo,
 }
+
+as_ref_and_deref!(OrgBlockEvent, OrgEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]

@@ -13,6 +13,8 @@ pub struct DiscussionEvent {
     pub event_info: RepoEventInfo,
 }
 
+as_ref_and_deref!(DiscussionEvent, RepoEventInfo, event_info);
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 pub enum DiscussionAction {
@@ -40,6 +42,8 @@ pub struct DiscussionCommentEvent {
     #[serde(flatten)]
     pub event_info: RepoEventInfo,
 }
+
+as_ref_and_deref!(DiscussionCommentEvent, RepoEventInfo, event_info);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
