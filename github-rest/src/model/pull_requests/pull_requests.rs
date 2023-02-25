@@ -81,10 +81,7 @@ pub mod nested {
     use serde::{Deserialize, Serialize};
     use std::ops::Deref;
 
-    use crate::model::{
-        repositories::{nested::RepoBase},
-        user::SimpleUser,
-    };
+    use crate::model::{repositories::nested::RepoBase, user::SimpleUser};
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct HeadBase {

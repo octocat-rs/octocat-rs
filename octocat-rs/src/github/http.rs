@@ -198,7 +198,8 @@ impl github_rest::Requester for HttpClient {
                         let mut header_value = b"Basic ".to_vec();
 
                         {
-                            let mut encoder = Base64Encoder::new(&mut header_value, &base64::engine::general_purpose::STANDARD);
+                            let mut encoder =
+                                Base64Encoder::new(&mut header_value, &base64::engine::general_purpose::STANDARD);
 
                             write!(encoder, "{username}:").unwrap();
                             write!(encoder, "{token}").unwrap();
