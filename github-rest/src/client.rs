@@ -26,7 +26,7 @@ impl DefaultRequester {
         {
             let mut encoder = Base64Encoder::new(&mut auth_header, &base64::engine::general_purpose::STANDARD);
 
-            write!(encoder, "{}", auth).unwrap();
+            write!(encoder, "{auth}").unwrap();
         }
 
         let mut headers = header::HeaderMap::new();

@@ -3,7 +3,25 @@ use crate::{
     model::{organizations::AddToOrgResponse, prelude::*},
     GithubRestError, Requester,
 };
-use async_trait::async_trait;
+use std::ops::Deref;
+
+macro_rules! as_ref_and_deref {
+    ($from:ty, $to:ty, $field:ident) => {
+        impl AsRef<$to> for $from {
+            fn as_ref(&self) -> &$to {
+                &self.$field
+            }
+        }
+
+        impl Deref for $from {
+            type Target = $to;
+
+            fn deref(&self) -> &Self::Target {
+                &self.$field
+            }
+        }
+    };
+}
 
 /// Embeds [`PublicUser`]
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -14,47 +32,15 @@ pub struct PrivateUser {
     pub owned_private_repos: i64,
     pub private_gists: i64,
     pub two_factor_authentication: i64,
-    #[serde(flatten)] // TODO: Document the `shared` fields in the book & come up with a better name for them
+    #[serde(flatten)]
     pub shared: PublicUser,
 }
 
-#[async_trait]
-impl GitHubUser for PrivateUser {
-    async fn add_to_org<T, A>(
-        &self,
-        client: &T,
-        org: A,
-        role: Option<Role>,
-    ) -> Result<AddToOrgResponse, GithubRestError>
-    where
-        T: Requester,
-        A: Into<String> + Send,
-    {
-        self.shared.add_to_org(client, org, role).await
-    }
+as_ref_and_deref!(PrivateUser, PublicUser, shared);
 
-    async fn get_following<T>(
-        &self,
-        client: &T,
-        followers_per_page: Option<u8>,
-        page_number: Option<u8>,
-    ) -> Result<Vec<SimpleUser>, GithubRestError>
-    where
-        T: Requester,
-    {
-        self.shared.get_following(client, followers_per_page, page_number).await
-    }
-
-    async fn get_followers<T>(
-        self,
-        client: &T,
-        followers_per_page: Option<u8>,
-        page_number: Option<u8>,
-    ) -> Result<Vec<SimpleUser>, GithubRestError>
-    where
-        T: Requester,
-    {
-        self.shared.get_followers(client, followers_per_page, page_number).await
+impl AsRef<SimpleUser> for PrivateUser {
+    fn as_ref(&self) -> &SimpleUser {
+        &self.shared.shared
     }
 }
 
@@ -79,45 +65,7 @@ pub struct PublicUser {
     pub shared: SimpleUser,
 }
 
-#[async_trait]
-impl GitHubUser for PublicUser {
-    async fn add_to_org<T, A>(
-        &self,
-        client: &T,
-        org: A,
-        role: Option<Role>,
-    ) -> Result<AddToOrgResponse, GithubRestError>
-    where
-        T: Requester,
-        A: Into<String> + Send,
-    {
-        self.shared.add_to_org(client, org, role).await
-    }
-
-    async fn get_following<T>(
-        &self,
-        client: &T,
-        followers_per_page: Option<u8>,
-        page_number: Option<u8>,
-    ) -> Result<Vec<SimpleUser>, GithubRestError>
-    where
-        T: Requester,
-    {
-        self.shared.get_following(client, followers_per_page, page_number).await
-    }
-
-    async fn get_followers<T>(
-        self,
-        client: &T,
-        followers_per_page: Option<u8>,
-        page_number: Option<u8>,
-    ) -> Result<Vec<SimpleUser>, GithubRestError>
-    where
-        T: Requester,
-    {
-        self.shared.get_followers(client, followers_per_page, page_number).await
-    }
-}
+as_ref_and_deref!(PublicUser, SimpleUser, shared);
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimpleUser {
@@ -142,9 +90,8 @@ pub struct SimpleUser {
     pub type_field: String,
 }
 
-#[async_trait]
-impl GitHubUser for SimpleUser {
-    async fn add_to_org<T, A>(
+impl SimpleUser {
+    pub async fn add_to_org<T, A>(
         &self,
         client: &T,
         org: A,
@@ -157,7 +104,7 @@ impl GitHubUser for SimpleUser {
         add_to_org(client, org, self.login.as_str(), role).await
     }
 
-    async fn get_following<T>(
+    pub async fn get_following<T>(
         &self,
         client: &T,
         followers_per_page: Option<u8>,
@@ -166,9 +113,9 @@ impl GitHubUser for SimpleUser {
     where
         T: Requester,
     {
-        let followers_per_page = Self::get_num_or_default(followers_per_page, 30u8);
+        let followers_per_page = get_num_or_default(followers_per_page, 30u8);
 
-        let page_number = Self::get_num_or_default(page_number, 1u8);
+        let page_number = get_num_or_default(page_number, 1u8);
 
         get_user_followers(
             client,
@@ -181,7 +128,7 @@ impl GitHubUser for SimpleUser {
         .await
     }
 
-    async fn get_followers<T>(
+    pub async fn get_followers<T>(
         self,
         client: &T,
         followers_per_page: Option<u8>,
@@ -190,9 +137,9 @@ impl GitHubUser for SimpleUser {
     where
         T: Requester,
     {
-        let followers_per_page = Self::get_num_or_default(followers_per_page, 30u8);
+        let followers_per_page = get_num_or_default(followers_per_page, 30u8);
 
-        let page_number = Self::get_num_or_default(page_number, 1u8);
+        let page_number = get_num_or_default(page_number, 1u8);
 
         get_user_following(
             client,
@@ -206,55 +153,10 @@ impl GitHubUser for SimpleUser {
     }
 }
 
-impl SimpleUser {
-    fn get_num_or_default(val: Option<u8>, default: u8) -> String {
-        let n = val.unwrap_or(default);
+fn get_num_or_default(val: Option<u8>, default: u8) -> String {
+    let n = val.unwrap_or(default);
 
-        n.to_string()
-    }
-}
-// TODO: Document this further, explain in book, explore possible methods
-/// A trait for all GitHub user structs. Intended for [`SimpleUser`],
-/// [`PublicUser`], and [`PrivateUser`]
-#[async_trait]
-pub trait GitHubUser {
-    async fn add_to_org<T, A>(
-        &self,
-        client: &T,
-        org: A,
-        role: Option<Role>,
-    ) -> Result<AddToOrgResponse, GithubRestError>
-    where
-        T: Requester,
-        A: Into<String> + Send;
-
-    /// Get a list of the users that the user in question is following.
-    ///
-    /// * `followers_per_page` - The number of users to get per page. Default is
-    ///   30.
-    /// * `page_number` - The page number of the result to return. Default is 1.
-    async fn get_following<T>(
-        &self,
-        client: &T,
-        followers_per_page: Option<u8>,
-        page_number: Option<u8>,
-    ) -> Result<Vec<SimpleUser>, GithubRestError>
-    where
-        T: Requester;
-
-    /// Get a list of the users that are following the user in question.
-    ///
-    /// * `followers_per_page` - The number of followers to get per page.
-    ///   Default is 30.
-    /// * `page_number` - The page number of the result to return. Default is 1.
-    async fn get_followers<T>(
-        self,
-        client: &T,
-        followers_per_page: Option<u8>,
-        page_number: Option<u8>,
-    ) -> Result<Vec<SimpleUser>, GithubRestError>
-    where
-        T: Requester;
+    n.to_string()
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
