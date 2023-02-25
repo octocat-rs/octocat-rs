@@ -307,6 +307,7 @@
 <a href="#305" id="305">305</a>
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Contains [`HttpClient`].
 
 </span><span class="attr">#[cfg(all(target_family = <span class="string">&quot;wasm&quot;</span>, feature = <span class="string">&quot;workers&quot;</span>))]
@@ -507,7 +508,8 @@
                         <span class="kw">let </span><span class="kw-2">mut </span>header_value = <span class="string">b&quot;Basic &quot;</span>.to_vec();
 
                         {
-                            <span class="kw">let </span><span class="kw-2">mut </span>encoder = Base64Encoder::new(<span class="kw-2">&amp;mut </span>header_value, <span class="kw-2">&amp;</span>base64::engine::general_purpose::STANDARD);
+                            <span class="kw">let </span><span class="kw-2">mut </span>encoder =
+                                Base64Encoder::new(<span class="kw-2">&amp;mut </span>header_value, <span class="kw-2">&amp;</span>base64::engine::general_purpose::STANDARD);
 
                             <span class="macro">write!</span>(encoder, <span class="string">&quot;{username}:&quot;</span>).unwrap();
                             <span class="macro">write!</span>(encoder, <span class="string">&quot;{token}&quot;</span>).unwrap();
