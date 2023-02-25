@@ -484,7 +484,7 @@
         <span class="kw">let </span>requester = DefaultRequester::new_none();
 
         <span class="kw">let </span>res = get_issues(<span class="kw-2">&amp;</span>requester, <span class="string">&quot;microsoft&quot;</span>, <span class="string">&quot;vscode&quot;</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>.unwrap();
-        <span class="macro">println!</span>(<span class="string">&quot;{:#?}&quot;</span>, res)
+        <span class="macro">println!</span>(<span class="string">&quot;{res:#?}&quot;</span>)
     }
 
     <span class="attr">#[tokio::test]

@@ -94,6 +94,10 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
 </pre><pre class="rust"><code><span class="kw">use crate</span>::{
     methods::{get_commit, GetCommitBody},
     model::{
@@ -112,6 +116,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>event_info: RepoEventInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(CommitCommentEvent, RepoEventInfo, event_info);
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
@@ -153,6 +159,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>event_info: RepoEventInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(StatusEvent, RepoEventInfo, event_info);
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]

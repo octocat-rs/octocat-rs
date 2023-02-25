@@ -225,15 +225,7 @@
 <a href="#223" id="223">223</a>
 <a href="#224" id="224">224</a>
 <a href="#225" id="225">225</a>
-<a href="#226" id="226">226</a>
-<a href="#227" id="227">227</a>
-<a href="#228" id="228">228</a>
-<a href="#229" id="229">229</a>
-<a href="#230" id="230">230</a>
-<a href="#231" id="231">231</a>
-<a href="#232" id="232">232</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{prelude::<span class="kw-2">*</span>, repositories::nested::<span class="kw-2">*</span>, user::SimpleUser};
-<span class="kw">use </span>std::ops::Deref;
 
 <span class="doccomment">/// &lt;https://docs.github.com/en/rest/repos/repos#get-a-repository=&gt;
 </span><span class="attr">#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -241,16 +233,10 @@
     <span class="kw">pub </span>network_count: i64,
     <span class="kw">pub </span>subscribers_count: i64,
     <span class="attr">#[serde(flatten)]
-    </span><span class="kw">pub </span>common: RepoBase,
+    </span><span class="kw">pub </span>common: Repo,
 }
 
-<span class="kw">impl </span>Deref <span class="kw">for </span>Repository {
-    <span class="kw">type </span>Target = RepoBase;
-
-    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.common
-    }
-}
+<span class="macro">as_ref_and_deref!</span>(Repository, Repo, common);
 
 <span class="doccomment">/// &lt;https://docs.github.com/en/rest/projects/projects#get-a-project=&gt;
 </span><span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -331,7 +317,7 @@
     <span class="kw">use </span><span class="kw">crate</span>::model::{prelude::<span class="kw-2">*</span>, user::SimpleUser};
 
     <span class="attr">#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    </span><span class="kw">pub struct </span>RepoBase {
+    </span><span class="kw">pub struct </span>Repo {
         <span class="kw">pub </span>archive_url: String,
         <span class="kw">pub </span>assignees_url: String,
         <span class="kw">pub </span>blobs_url: String,

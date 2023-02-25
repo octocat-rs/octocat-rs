@@ -95,6 +95,10 @@
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
 <a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
 </pre><pre class="rust"><code><span class="kw">use crate</span>::{
     methods::Role,
     model::{prelude::<span class="kw-2">*</span>, user::SimpleUser},
@@ -117,6 +121,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>shared: SimpleOrganization,
 }
+
+<span class="macro">as_ref_and_deref!</span>(Organization, SimpleOrganization, shared);
 
 <span class="doccomment">/// &lt;https://docs.github.com/en/rest/orgs/orgs#list-organizations=&gt;
 </span><span class="attr">#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -146,6 +152,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>shared: SimpleTeam,
 }
+
+<span class="macro">as_ref_and_deref!</span>(Team, SimpleTeam, shared);
 
 <span class="doccomment">/// &lt;https://docs.github.com/en/rest/teams/teams#list-teams=&gt;
 </span><span class="attr">#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

@@ -57,6 +57,10 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{keys::nested::<span class="kw-2">*</span>, prelude::<span class="kw-2">*</span>};
 
 <span class="doccomment">/// &lt;https://docs.github.com/en/rest/users/keys#list-public-keys-for-a-user=&gt;
@@ -73,8 +77,10 @@
     <span class="kw">pub </span>subkeys: Vec&lt;SubKey&gt;,
     <span class="kw">pub </span>revoked: bool,
     <span class="attr">#[serde(flatten)]
-    </span><span class="kw">pub </span>key_info: KeyInfo,
+    </span><span class="kw">pub </span>shared: KeyInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(GpgKey, KeyInfo, shared);
 
 <span class="kw">pub mod </span>nested {
     <span class="kw">use </span><span class="kw">crate</span>::model::prelude::<span class="kw-2">*</span>;
@@ -84,8 +90,10 @@
         <span class="kw">pub </span>emails: Vec&lt;Email&gt;,
         <span class="kw">pub </span>subkeys: Vec&lt;SubKey&gt;,
         <span class="attr">#[serde(flatten)]
-        </span><span class="kw">pub </span>key_info: KeyInfo,
+        </span><span class="kw">pub </span>shared: KeyInfo,
     }
+
+    <span class="macro">as_ref_and_deref!</span>(SubKey, KeyInfo, shared);
 
     <span class="doccomment">/// Contains general info about a key, including:
     /// * The public key,

@@ -43,6 +43,8 @@
 <a href="#41" id="41">41</a>
 <a href="#42" id="42">42</a>
 <a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{prelude::<span class="kw-2">*</span>, user::SimpleUser};
 <span class="kw">use </span>std::collections::HashMap;
 
@@ -75,6 +77,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>shared: SimpleGist,
 }
+
+<span class="macro">as_ref_and_deref!</span>(Gist, SimpleGist, shared);
 
 <span class="attr">#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 </span><span class="kw">pub struct </span>File {

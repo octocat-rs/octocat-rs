@@ -113,6 +113,14 @@
 <a href="#111" id="111">111</a>
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{
     event_types::{macros::org_origin, OrgEventInfo},
     organizations::{
@@ -135,6 +143,8 @@
     </span><span class="kw">pub </span>event_info: OrgEventInfo,
 }
 
+<span class="macro">as_ref_and_deref!</span>(OrganizationEvent, OrgEventInfo, event_info);
+
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
 </span><span class="kw">pub enum </span>OrganizationAction {
@@ -154,6 +164,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>event_info: OrgEventInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(TeamEvent, OrgEventInfo, event_info);
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
@@ -176,6 +188,8 @@
     </span><span class="kw">pub </span>event_info: OrgEventInfo,
 }
 
+<span class="macro">as_ref_and_deref!</span>(MembershipEvent, OrgEventInfo, event_info);
+
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
 </span><span class="kw">pub enum </span>MembershipAction {
@@ -191,6 +205,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>event_info: OrgEventInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(OrgBlockEvent, OrgEventInfo, event_info);
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]

@@ -53,6 +53,10 @@
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{
     discussions::{Discussion, DiscussionComment},
     event_types::{macros::repo_origin, RepoEventInfo},
@@ -67,6 +71,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>event_info: RepoEventInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(DiscussionEvent, RepoEventInfo, event_info);
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
@@ -95,6 +101,8 @@
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>event_info: RepoEventInfo,
 }
+
+<span class="macro">as_ref_and_deref!</span>(DiscussionCommentEvent, RepoEventInfo, event_info);
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
