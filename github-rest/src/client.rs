@@ -76,7 +76,7 @@ impl Requester for DefaultRequester {
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Self::Body> + std::marker::Send,
     {
-        let path = dbg!(format!("https://api.github.com{}", url.path()));
+        let path = format!("https://api.github.com{}", url.path());
 
         let mut req = match url.method() {
             Methods::Get => self.client.get(path),
@@ -91,7 +91,7 @@ impl Requester for DefaultRequester {
         }
 
         if let Some(body) = body {
-            req = dbg!(req.body(body))
+            req = req.body(body)
         }
 
         let res = req.send().await?;
