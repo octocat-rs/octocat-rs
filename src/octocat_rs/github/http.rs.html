@@ -507,7 +507,7 @@
                         <span class="kw">let </span><span class="kw-2">mut </span>header_value = <span class="string">b&quot;Basic &quot;</span>.to_vec();
 
                         {
-                            <span class="kw">let </span><span class="kw-2">mut </span>encoder = Base64Encoder::new(<span class="kw-2">&amp;mut </span>header_value, base64::STANDARD);
+                            <span class="kw">let </span><span class="kw-2">mut </span>encoder = Base64Encoder::new(<span class="kw-2">&amp;mut </span>header_value, <span class="kw-2">&amp;</span>base64::engine::general_purpose::STANDARD);
 
                             <span class="macro">write!</span>(encoder, <span class="string">&quot;{username}:&quot;</span>).unwrap();
                             <span class="macro">write!</span>(encoder, <span class="string">&quot;{token}&quot;</span>).unwrap();
