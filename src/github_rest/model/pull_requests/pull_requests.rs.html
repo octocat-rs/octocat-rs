@@ -125,6 +125,26 @@
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{
     commits::association::Association,
     issues::{milestones::Milestone, Label},
@@ -211,17 +231,37 @@
 
 <span class="kw">pub mod </span>nested {
     <span class="kw">use </span>serde::{Deserialize, Serialize};
+    <span class="kw">use </span>std::ops::Deref;
 
-    <span class="kw">use </span><span class="kw">crate</span>::model::{repositories::Repository, user::SimpleUser};
+    <span class="kw">use </span><span class="kw">crate</span>::model::{
+        repositories::{nested::RepoBase, Repository},
+        user::SimpleUser,
+    };
 
     <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     </span><span class="kw">pub struct </span>HeadBase {
         <span class="kw">pub </span>label: String,
         <span class="attr">#[serde(rename = <span class="string">&quot;ref&quot;</span>)]
         </span><span class="kw">pub </span>ref_field: String,
-        <span class="kw">pub </span>repo: <span class="prelude-ty">Option</span>&lt;Repository&gt;,
+        <span class="kw">pub </span>repo: HeadRepo,
         <span class="kw">pub </span>sha: String,
         <span class="kw">pub </span>user: SimpleUser,
+    }
+
+    <span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    </span><span class="kw">pub struct </span>HeadRepo {
+        <span class="kw">pub </span>subscribers_url: String,
+        <span class="kw">pub </span>subscription_url: String,
+        <span class="attr">#[serde(flatten)]
+        </span><span class="kw">pub </span>common: RepoBase,
+    }
+
+    <span class="kw">impl </span>Deref <span class="kw">for </span>HeadRepo {
+        <span class="kw">type </span>Target = RepoBase;
+
+        <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+            <span class="kw-2">&amp;</span><span class="self">self</span>.common
+        }
     }
 
     <span class="attr">#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

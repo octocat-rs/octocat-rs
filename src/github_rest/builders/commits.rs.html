@@ -135,19 +135,19 @@
 </span><span class="kw">mod </span>tests {
     <span class="kw">use crate</span>::{
         builders::{Builder, CommitCommentBuilder},
-        client::DefaultRequester,
+        methods::util,
     };
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>test_comment_on_commit() {
         <span class="kw">let </span>comment = CommitCommentBuilder::new()
             .owner(<span class="string">&quot;octocat-rs&quot;</span>)
-            .repo(<span class="string">&quot;github-rest&quot;</span>)
-            .sha(<span class="string">&quot;2eb7eeba66a6adf2168391d0cd6dcac995a34489&quot;</span>)
-            .body(<span class="string">&quot;Losing my mind&quot;</span>);
+            .repo(<span class="string">&quot;octocat-rs&quot;</span>)
+            .sha(<span class="string">&quot;04235f407fbe0cde62b36335965ca48ae099da9f&quot;</span>)
+            .body(<span class="string">&quot;Testing, ignore&quot;</span>);
 
         <span class="comment">// You&#39;ll need to add your auth to get this to pass
-        </span><span class="kw">let </span>a = comment.execute(<span class="kw-2">&amp;</span>DefaultRequester::new_none()).<span class="kw">await</span>.unwrap();
+        </span><span class="kw">let </span>a = comment.execute(<span class="kw-2">&amp;</span>util::github_auth()).<span class="kw">await</span>.unwrap();
 
         <span class="macro">dbg!</span>(a);
     }
