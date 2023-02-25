@@ -140,11 +140,6 @@
 <a href="#138" id="138">138</a>
 <a href="#139" id="139">139</a>
 <a href="#140" id="140">140</a>
-<a href="#141" id="141">141</a>
-<a href="#142" id="142">142</a>
-<a href="#143" id="143">143</a>
-<a href="#144" id="144">144</a>
-<a href="#145" id="145">145</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::model::{
     commits::association::Association,
     issues::{milestones::Milestone, Label},
@@ -216,17 +211,12 @@
     </span><span class="kw">pub </span>shared: SimplePullRequest,
 }
 
-<span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+<span class="attr">#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = <span class="string">&quot;lowercase&quot;</span>)]
 </span><span class="kw">pub enum </span>PullRequestState {
     Closed,
-    Open,
-}
-
-<span class="kw">impl </span>Default <span class="kw">for </span>PullRequestState {
-    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        PullRequestState::Open
-    }
+    <span class="attr">#[default]
+    </span>Open,
 }
 
 <span class="kw">pub mod </span>nested {
@@ -234,7 +224,7 @@
     <span class="kw">use </span>std::ops::Deref;
 
     <span class="kw">use </span><span class="kw">crate</span>::model::{
-        repositories::{nested::RepoBase, Repository},
+        repositories::{nested::RepoBase},
         user::SimpleUser,
     };
 
@@ -291,4 +281,4 @@
     }
 }
 </code></pre></div>
-</section></main><div id="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="github_rest" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0-nightly (07c993eba 2023-02-23)" data-search-js="search-14421e1532aead08.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>
+</section></main><div id="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="github_rest" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0-nightly (c5c7d2b37 2023-02-24)" data-search-js="search-14421e1532aead08.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>
