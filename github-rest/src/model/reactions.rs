@@ -17,10 +17,11 @@ pub struct ReactionRollup {
 }
 
 /// See also: <https://docs.github.com/en/rest/reference/reactions#reaction-types>
-#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Default, Copy, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Reaction {
     #[serde(rename = "+1")]
+    #[default]
     ThumbsUp,
     #[serde(rename = "-1")]
     ThumbsDown,
@@ -30,12 +31,6 @@ pub enum Reaction {
     Hooray,
     Rocket,
     Eyes,
-}
-
-impl Default for Reaction {
-    fn default() -> Self {
-        Reaction::ThumbsUp
-    }
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

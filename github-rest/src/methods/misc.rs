@@ -22,18 +22,13 @@ where
 
 //Role enum used for add to org function determines the function a user has
 // within a organization
-#[derive(Deserialize, Serialize, EnumString, EnumVariantNames, Debug, Clone)]
+#[derive(Deserialize, Serialize, EnumString, EnumVariantNames, Debug, Clone, Default)]
 #[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
 pub enum Role {
     Admin,
+    #[default]
     Member,
-}
-
-impl Default for Role {
-    fn default() -> Role {
-        Role::Member
-    }
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

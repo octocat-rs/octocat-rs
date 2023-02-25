@@ -69,17 +69,12 @@ pub struct PullRequest {
     pub shared: SimplePullRequest,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum PullRequestState {
     Closed,
+    #[default]
     Open,
-}
-
-impl Default for PullRequestState {
-    fn default() -> Self {
-        PullRequestState::Open
-    }
 }
 
 pub mod nested {
@@ -87,7 +82,7 @@ pub mod nested {
     use std::ops::Deref;
 
     use crate::model::{
-        repositories::{nested::RepoBase, Repository},
+        repositories::{nested::RepoBase},
         user::SimpleUser,
     };
 
