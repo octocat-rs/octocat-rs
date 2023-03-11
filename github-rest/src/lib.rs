@@ -2,7 +2,7 @@
 #![deny(rust_2018_idioms)]
 
 use core::fmt;
-use std::error::Error;
+use thiserror::Error;
 
 use async_trait::async_trait;
 pub use github_api_octocat::end_points;
@@ -24,15 +24,18 @@ pub mod client;
 pub mod methods;
 pub mod model;
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum GithubRestError {
     #[cfg(not(target_family = "wasm"))]
-    ReqwestError(reqwest::Error),
+    #[error(transparent)]
+    ReqwestError(#[from] reqwest::Error),
     #[cfg(target_family = "wasm")]
-    WorkerError(worker::Error),
+    #[error(transparent)]
+    WorkerError(#[from] worker::Error),
     #[cfg(target_family = "wasm")]
     ResponseError(NonZeroU16, String),
-    JsonError(serde_json::Error),
+    #[error(transparent)]
+    JsonError(#[from] serde_json::Error),
     #[cfg(not(target_family = "wasm"))]
     ResponseError(StatusCode, String),
     NotAuthorized(String),
@@ -42,28 +45,6 @@ pub enum GithubRestError {
 impl fmt::Display for GithubRestError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Error occurred as you can see")
-    }
-}
-
-impl Error for GithubRestError {}
-
-#[cfg(not(target_family = "wasm"))]
-impl From<reqwest::Error> for GithubRestError {
-    fn from(e: reqwest::Error) -> Self {
-        GithubRestError::ReqwestError(e)
-    }
-}
-
-#[cfg(target_family = "wasm")]
-impl From<worker::Error> for GithubRestError {
-    fn from(e: worker::Error) -> Self {
-        GithubRestError::WorkerError(e)
-    }
-}
-
-impl From<serde_json::Error> for GithubRestError {
-    fn from(e: serde_json::Error) -> Self {
-        GithubRestError::JsonError(e)
     }
 }
 
