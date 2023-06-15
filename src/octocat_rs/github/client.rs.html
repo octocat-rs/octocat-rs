@@ -597,7 +597,7 @@ data-use_system_theme="false"></script><div id="rustdoc-vars" data-root-path="..
 <span class="doccomment">/// Where the magic happens.
 </span><span class="kw">pub struct </span>Client&lt;T&gt;
 <span class="kw">where
-    </span>T: std::fmt::Debug + EventHandler&lt;GitHubClient = Client&lt;T&gt;&gt; + Send + Sync,
+    </span>T: Debug + EventHandler&lt;GitHubClient = Client&lt;T&gt;&gt; + Send + Sync,
 {
     handler: T,
     <span class="attr">#[cfg(feature = <span class="string">&quot;native&quot;</span>)]
@@ -633,7 +633,7 @@ data-use_system_theme="false"></script><div id="rustdoc-vars" data-root-path="..
         url: EndPoints,
         query: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt;,
         body: <span class="prelude-ty">Option</span>&lt;V&gt;,
-    ) -&gt; std::result::Result&lt;String, GithubRestError&gt;
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;String, GithubRestError&gt;
     <span class="kw">where
         </span>T: Serialize + <span class="question-mark">?</span>Sized + Send + Sync,
         V: Into&lt;<span class="self">Self</span>::Body&gt; + Send,
@@ -646,7 +646,7 @@ data-use_system_theme="false"></script><div id="rustdoc-vars" data-root-path="..
         url: EndPoints,
         query: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt;,
         body: <span class="prelude-ty">Option</span>&lt;V&gt;,
-    ) -&gt; std::result::Result&lt;A, GithubRestError&gt;
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;A, GithubRestError&gt;
     <span class="kw">where
         </span>T: Serialize + <span class="question-mark">?</span>Sized + Send + Sync,
         V: Into&lt;<span class="self">Self</span>::Body&gt; + Send,

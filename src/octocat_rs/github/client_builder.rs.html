@@ -149,12 +149,6 @@ data-use_system_theme="false"></script><div id="rustdoc-vars" data-root-path="..
 <a href="#147" id="147">147</a>
 <a href="#148" id="148">148</a>
 <a href="#149" id="149">149</a>
-<a href="#150" id="150">150</a>
-<a href="#151" id="151">151</a>
-<a href="#152" id="152">152</a>
-<a href="#153" id="153">153</a>
-<a href="#154" id="154">154</a>
-<a href="#155" id="155">155</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Contains a builder for [`Client`].
 
 </span><span class="kw">use </span>std::{ffi::OsStr, fs::File, io::prelude::<span class="kw-2">*</span>, path::Path};
@@ -217,41 +211,35 @@ data-use_system_theme="false"></script><div id="rustdoc-vars" data-root-path="..
         f.read_to_string(<span class="kw-2">&amp;mut </span>contents)
             .expect(<span class="string">&quot;ClientBuilder: Reading authorization file&quot;</span>);
 
-        <span class="kw">let </span>auth: <span class="prelude-ty">Option</span>&lt;Authorization&gt; = <span class="prelude-val">Some</span>(
-            toml::from_str::&lt;OctocatConfig&gt;(contents.as_str())
-                .expect(<span class="string">&quot;ClientBuilder: Parsing authorization file&quot;</span>)
-                .to_personal_auth(),
-        );
+        <span class="kw">let </span>auth: Authorization = toml::from_str::&lt;OctocatConfig&gt;(contents.as_str())
+            .expect(<span class="string">&quot;ClientBuilder: Parsing authorization file&quot;</span>)
+            .to_personal_auth();
 
-        <span class="self">self</span>.set_auth(auth)
+        <span class="self">self</span>.set_auth(<span class="prelude-val">Some</span>(auth))
     }
 
     <span class="doccomment">/// Adds an [`Authorization`] instance to the current builder using input
     /// from an environment variable.
     </span><span class="kw">pub fn </span>credentials_env_var&lt;K: AsRef&lt;OsStr&gt;&gt;(<span class="self">self</span>, username_var: K, token_var: K) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>username = <span class="kw">match </span>std::env::var(username_var) {
-            <span class="prelude-val">Ok</span>(u) =&gt; u,
-            <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;{}&quot;</span>, e),
+        <span class="kw">let </span>auth = {
+            <span class="kw">let </span>username = std::env::var(username_var).expect(<span class="string">&quot;username not set!&quot;</span>);
+
+            <span class="kw">let </span>token = std::env::var(token_var).expect(<span class="string">&quot;token not set!&quot;</span>);
+
+            Authorization::PersonalToken { username, token }
         };
 
-        <span class="kw">let </span>token = <span class="kw">match </span>std::env::var(token_var) {
-            <span class="prelude-val">Ok</span>(t) =&gt; t,
-            <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;{}&quot;</span>, e),
-        };
-
-        <span class="kw">let </span>auth = <span class="prelude-val">Some</span>(Authorization::PersonalToken { username, token });
-
-        <span class="self">self</span>.set_auth(auth)
+        <span class="self">self</span>.set_auth(<span class="prelude-val">Some</span>(auth))
     }
 
     <span class="doccomment">/// Adds an [`Authorization`] instance to the current builder.
     </span><span class="kw">pub fn </span>personal_auth&lt;V: Into&lt;String&gt;&gt;(<span class="self">self</span>, username: V, token: V) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>auth = <span class="prelude-val">Some</span>(Authorization::PersonalToken {
+        <span class="kw">let </span>auth = Authorization::PersonalToken {
             username: username.into(),
             token: token.into(),
-        });
+        };
 
-        <span class="self">self</span>.set_auth(auth)
+        <span class="self">self</span>.set_auth(<span class="prelude-val">Some</span>(auth))
     }
 
     <span class="kw">fn </span>set_auth(<span class="kw-2">mut </span><span class="self">self</span>, auth: <span class="prelude-ty">Option</span>&lt;Authorization&gt;) -&gt; <span class="self">Self </span>{
