@@ -17,23 +17,23 @@ github-rest = { path = "../github-rest" }
 github-api-octocat = "0.1.0"
 
 ## Async
-tokio = { version = "1.25.0", features = ["full"], optional = true }
-async-trait = "0.1.64"
-futures = "0.3.26"
+tokio = { version = "1.28.2", features = ["full"], optional = true }
+async-trait = "0.1.68"
+futures = "0.3.28"
 
 ## Webserver
-warp = { version = "0.3.3", optional = true }
-worker = { version = "0.0.13", optional = true }
+warp = { version = "0.3.5", optional = true }
+worker = { version = "0.0.17", optional = true }
 
 ## Serialization/Deserialization
 serde_urlencoded = { version = "0.7.1", optional = true }
-serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.93"
-toml = "0.7.2"
+serde = { version = "1.0.164", features = ["derive"] }
+serde_json = "1.0.96"
+toml = "0.7.4"
 
 ## Error Handling
-thiserror = "1.0.38"
-anyhow = "1.0.69"
+thiserror = "1.0.40"
+anyhow = "1.0.71"
 
 ## Webhook secrets
 hmac = { version = "0.12.1", optional = true }
@@ -44,8 +44,8 @@ hex = { version = "0.4.3", optional = true }
 strum_macros = "0.24.3"
 strum = "0.24.1"
 lazy_static = { version = "1.4.0", optional = true }
-reqwest = { version = "0.11.14", optional = true }
-base64 = { version = "0.21.0", optional = true }
+reqwest = { version = "0.11.18", optional = true }
+base64 = { version = "0.21.2", optional = true }
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
 bytes = { version = "1.4.0", optional = true }
