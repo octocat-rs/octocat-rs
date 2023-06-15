@@ -78,7 +78,7 @@ pub trait GitHubClient: Requester + Sized {
 /// Where the magic happens.
 pub struct Client<T>
 where
-    T: std::fmt::Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
+    T: Debug + EventHandler<GitHubClient = Client<T>> + Send + Sync,
 {
     handler: T,
     #[cfg(feature = "native")]
@@ -114,7 +114,7 @@ where
         url: EndPoints,
         query: Option<&T>,
         body: Option<V>,
-    ) -> std::result::Result<String, GithubRestError>
+    ) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + Send + Sync,
         V: Into<Self::Body> + Send,
@@ -127,7 +127,7 @@ where
         url: EndPoints,
         query: Option<&T>,
         body: Option<V>,
-    ) -> std::result::Result<A, GithubRestError>
+    ) -> Result<A, GithubRestError>
     where
         T: Serialize + ?Sized + Send + Sync,
         V: Into<Self::Body> + Send,

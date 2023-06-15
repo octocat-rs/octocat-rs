@@ -60,41 +60,35 @@ where
         f.read_to_string(&mut contents)
             .expect("ClientBuilder: Reading authorization file");
 
-        let auth: Option<Authorization> = Some(
-            toml::from_str::<OctocatConfig>(contents.as_str())
-                .expect("ClientBuilder: Parsing authorization file")
-                .to_personal_auth(),
-        );
+        let auth: Authorization = toml::from_str::<OctocatConfig>(contents.as_str())
+            .expect("ClientBuilder: Parsing authorization file")
+            .to_personal_auth();
 
-        self.set_auth(auth)
+        self.set_auth(Some(auth))
     }
 
     /// Adds an [`Authorization`] instance to the current builder using input
     /// from an environment variable.
     pub fn credentials_env_var<K: AsRef<OsStr>>(self, username_var: K, token_var: K) -> Self {
-        let username = match std::env::var(username_var) {
-            Ok(u) => u,
-            Err(e) => panic!("{}", e),
+        let auth = {
+            let username = std::env::var(username_var).expect("username not set!");
+
+            let token = std::env::var(token_var).expect("token not set!");
+
+            Authorization::PersonalToken { username, token }
         };
 
-        let token = match std::env::var(token_var) {
-            Ok(t) => t,
-            Err(e) => panic!("{}", e),
-        };
-
-        let auth = Some(Authorization::PersonalToken { username, token });
-
-        self.set_auth(auth)
+        self.set_auth(Some(auth))
     }
 
     /// Adds an [`Authorization`] instance to the current builder.
     pub fn personal_auth<V: Into<String>>(self, username: V, token: V) -> Self {
-        let auth = Some(Authorization::PersonalToken {
+        let auth = Authorization::PersonalToken {
             username: username.into(),
             token: token.into(),
-        });
+        };
 
-        self.set_auth(auth)
+        self.set_auth(Some(auth))
     }
 
     fn set_auth(mut self, auth: Option<Authorization>) -> Self {
