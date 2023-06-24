@@ -89,12 +89,12 @@ impl HttpClient {
 
     /// Set the user agent used by the current client.
     #[cfg(feature = "native")]
-    pub fn set_ua(&mut self, user_agent: String) {
+    pub fn set_ua(&mut self, user_agent: &str) {
         let mut headers = HeaderMap::new();
 
         headers.insert(
             header::USER_AGENT,
-            HeaderValue::from_str(user_agent.as_str()).expect(USER_AGENT_PARSE_ERROR),
+            HeaderValue::from_str(user_agent).expect(USER_AGENT_PARSE_ERROR),
         );
         headers.insert(
             header::ACCEPT,
@@ -105,7 +105,7 @@ impl HttpClient {
             .default_headers(headers)
             .timeout(Duration::from_secs(30))
             .build()
-            .unwrap()
+            .unwrap();
     }
 
     /// Set the user agent used by the current client.
@@ -135,23 +135,27 @@ impl github_rest::Requester for HttpClient {
         T: Serialize + ?Sized + Send + Sync,
         V: Into<Self::Body> + Send,
     {
-        let path = format!("https://api.github.com{}", url.path());
+        let req = {
+            let path = format!("https://api.github.com{}", url.path());
 
-        let mut req = match url.method() {
-            Methods::Get => self.http_auth(self.client.get(path)),
-            Methods::Post => self.http_auth(self.client.post(path)),
-            Methods::Put => self.http_auth(self.client.put(path)),
-            Methods::Patch => self.http_auth(self.client.patch(path)),
-            Methods::Delete => self.http_auth(self.client.delete(path)),
+            let mut req = self.http_auth(match url.method() {
+                Methods::Get => self.client.get(path),
+                Methods::Post => self.client.post(path),
+                Methods::Put => self.client.put(path),
+                Methods::Patch => self.client.patch(path),
+                Methods::Delete => self.client.delete(path),
+            });
+
+            if let Some(query) = query {
+                req = req.query(query);
+            }
+
+            if let Some(body) = body {
+                req = req.body(body);
+            }
+            
+            req
         };
-
-        if let Some(query) = query {
-            req = req.query(query)
-        }
-
-        if let Some(body) = body {
-            req = req.body(body)
-        }
 
         let res = req.send().await?;
 
@@ -184,46 +188,56 @@ impl github_rest::Requester for HttpClient {
         }
 
         futures::executor::block_on(async move {
-            let mut init = RequestInit::new();
-            init.with_method(BadWrapper::new(url.method()).into());
+            let headers = {
+                let mut headers = Headers::new();
 
-            let mut headers = Headers::new();
-            headers
-                .append("accept", "application/vnd.github.v3+json")
-                .expect(ACCEPT_HEADER_PARSE_ERROR);
+                headers
+                    .append("accept", "application/vnd.github.v3+json")
+                    .expect(ACCEPT_HEADER_PARSE_ERROR);
 
-            if let Some(auth) = &self.auth {
-                match auth {
-                    Authorization::PersonalToken { username, token } => {
-                        let mut header_value = b"Basic ".to_vec();
+                if let Some(auth) = &self.auth {
+                    match auth {
+                        Authorization::PersonalToken { username, token } => {
+                            let mut header_value = b"Basic ".to_vec();
 
-                        {
-                            let mut encoder =
-                                Base64Encoder::new(&mut header_value, &base64::engine::general_purpose::STANDARD);
+                            {
+                                let mut encoder =
+                                    Base64Encoder::new(&mut header_value, &base64::engine::general_purpose::STANDARD);
 
-                            write!(encoder, "{username}:").unwrap();
-                            write!(encoder, "{token}").unwrap();
+                                write!(encoder, "{username}:").unwrap();
+                                write!(encoder, "{token}").unwrap();
+                            }
+
+                            headers
+                                .append(
+                                    "authorization",
+                                    std::str::from_utf8(&header_value).expect("Failed to parse header value"),
+                                    )
+                                .unwrap();
                         }
-
-                        headers
-                            .append(
-                                "authorization",
-                                std::str::from_utf8(&header_value).expect("Failed to parse header value"),
-                            )
-                            .unwrap();
                     }
                 }
-            }
 
-            if let Some(ua) = &self.user_agent {
-                headers.append("user-agent", ua).expect(USER_AGENT_PARSE_ERROR);
-            }
+                if let Some(ua) = &self.user_agent {
+                    headers.append("user-agent", ua).expect(USER_AGENT_PARSE_ERROR);
+                }
 
-            init.with_headers(headers);
+                headers
+            };
 
-            if let Some(body) = body {
-                init.with_body(Some(body.into()));
-            }
+            let init = {
+                let mut init = RequestInit::new();
+                // I don't want to know. To future generations: I am sorry. 
+                init.with_method(BadWrapper::new(url.method()).into());
+
+                init.with_headers(headers);
+
+                if let Some(body) = body {
+                    init.with_body(Some(body.into()));
+                }
+
+                init
+            };
 
             let req = Request::new_with_init(path.as_str(), &init)?;
 
@@ -282,6 +296,7 @@ impl github_rest::Requester for HttpClient {
     }
 }
 
+/// I would like to apologize to the world for this crime against nature. 
 #[cfg(all(target_family = "wasm", feature = "workers"))]
 struct BadWrapper<T> {
     pub(crate) inner: T,
